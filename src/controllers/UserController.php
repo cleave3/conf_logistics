@@ -9,11 +9,12 @@ class UserController extends BaseController
 
     public function index()
     {
-        return $this->response->json($_POST);
+        return $this->response->json(["status" => true, "data" => ["name" => "cleave", "age" => 27]]);
     }
 
     public function add()
     {
+        return $this->response->json($_GET);
     }
 
     public function edit()
