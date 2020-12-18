@@ -2,6 +2,8 @@
 
 namespace App\router;
 
+use const App\config\APP_NAME;
+
 class Router
 {
     public static function resolve_route()
@@ -25,7 +27,7 @@ class Router
     {
         list($request, $class, $method) = self::resolve_route();
         if ($request == "/") {
-            echo json_encode(["status" => true, "message" => "App is live"]);
+            echo json_encode(["status" => true, "message" => APP_NAME . " is live"]);
         } else {
 
             if (class_exists($class)) {
