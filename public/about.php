@@ -1,7 +1,6 @@
 <?php
 $title = "About Us";
 require("includes/header.php");
-
 ?>
 
 <body>
