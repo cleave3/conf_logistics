@@ -9,10 +9,10 @@ if (isset($_GET["token"])) {
 }
 include_once "common/header.php";
 ?>
-<div style="background: linear-gradient(#000000b3, #000000b3), url(../assets/img/truck.jpg) no-repeat; background-size:cover;background-position: center;">
-    <div class="wrap ">
+<div style="background: linear-gradient(#000000b3, #000000b3), url(../assets/img/truck.jpg) no-repeat; height: 100vh; background-size:cover;background-position: center;">
+    <div class="wrap">
         <?php if (isset($verify) && $verify["status"]) { ?>
-            <div class="animation-ctn">
+            <div class="animation-ctn bg-light p-5">
                 <div class="icon icon--order-success svg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="154px" height="154px">
                         <g fill="none" stroke="#22AE73" stroke-width="2">
@@ -22,13 +22,13 @@ include_once "common/header.php";
                         </g>
                     </svg>
                 </div>
-                <div class="bg-light p-2">
+                <div class="p-2">
                     <h3><?= $verify["message"] ?></h3>
-                    <a class='btn proceed' href="/client/login">Proceed to Login </a>
+                    <a class='btn proceed' href="/clients/login">Proceed to Login </a>
                 </div>
             </div>
         <?php } else { ?>
-            <div class="animation-ctn">
+            <div class="animation-ctn bg-light p-5">
                 <div class="icon icon--order-success svg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="154px" height="154px">
                         <g fill="none" stroke="#F44812" stroke-width="2">

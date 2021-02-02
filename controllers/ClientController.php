@@ -16,6 +16,16 @@ use App\utils\Session;
 class ClientController extends Controller
 {
 
+	public function getclientbyemail($email, $fields = "*")
+	{
+		return $this->findOne([
+			"tablename" => "clients",
+			"condition" => "email = :email",
+			"bindparam" => [":email" => $email],
+			"fields" => $fields,
+		]);
+	}
+
 	public function index()
 	{
 	}
@@ -73,11 +83,7 @@ class ClientController extends Controller
 		$decode = Auth::decodeToken($token);
 		$email = $decode["email"];
 
-		$client = $this->findOne([
-			"tablename" => "clients",
-			"condition" => "email = :email",
-			"bindparam" => [":email" => $email]
-		]);
+		$client = $this->getclientbyemail($email);
 
 		if ($client["email_verified"] === "YES") {
 			return Response::send(["status" => true, "message" => "Email is already verified"]);
@@ -114,18 +120,88 @@ class ClientController extends Controller
 
 		if (!Auth::verifyHash($password, $client["password"])) exit(Response::json(["status" => false, "message" => "Invalid email or password"]));
 
+		$token = Auth::genToken(["clientid" => $client["id"], "role" => "client", "email" => $email]);
+
 		Session::destroy();
 		Session::start();
-		$val = Session::set([
+		Session::set([
 			"clientid" => $client["id"],
-			"auth" => Auth::genToken(["clientid" => $client["id"], "role" => "client", "email" => $email]),
+			"auth" => $token,
 			"username" => $client["firstname"],
 			"companyname" => $client["companyname"],
 			"emailverified" => $client["email_verified"],
 			"profileverified" => $client["profile_complete"]
 		]);
 
-		exit(Response::json(["status" => true, "message" => "login successful", "sesss" => $val]));
+		exit(Response::json(["status" => true, "message" => "Login successful, Welcome " . $client["firstname"], "token" => $token]));
+	}
+
+	public function forgotpassword()
+	{
+		$email = $this->body["email"];
+		$client = $this->findOne([
+			"tablename" => "clients A",
+			"condition" => "email = :email",
+			"bindparam" => [":email" => $email],
+			"fields" => "A.email, B.firstname,B.companyname",
+			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
+		]);
+
+		if (!$client) exit(Response::json(["status" => false, "message" => "Email does not match any record"]));
+
+
+		$authtoken = base64_encode($email);
+		$resettoken = "CONF-" . rand(100000, 999999);
+		$exp = strtotime("+20 minutes");
+
+		$update = $this->update([
+			"tablename" => "clients",
+			"fields" => "reset_token = :resettoken, token_expiration = :tokenexpiration",
+			"condition" => "email = :email",
+			"bindparam" => [":resettoken" => $resettoken, ":tokenexpiration" => $exp, ":email" => $email]
+		]);
+
+		if (!$update) {
+			exit(Response::send(["status" => true, "message" => "Oops !!!, Something went wrong, operation failed"]));
+		}
+
+		$confirmationlink = getenv("BASE_URL") . "/clients/resetpassword?ce=$authtoken";
+
+		$template = EmailTemplate::forgotpassword($client["firstname"], $resettoken, $confirmationlink);
+		MailService::sendMail($email, "Reset Password", $template);
+
+		Session::destroy();
+		Session::start();
+		Session::set(["ce" => $authtoken]);
+
+		exit(Response::json(["status" => true, "message" => "An check your email for the password reset link"]));
+	}
+
+	public function resetpassword()
+	{
+		$email = $this->body["email"];
+		$token = $this->body["token"];
+
+		$client = $this->getclientbyemail($email, "reset_token, token_expiration");
+		if (!$client) exit(Response::json(["status" => false, "message" => "client Account not found"]));
+
+		if ($token != $client["reset_token"]) exit(Response::json(["status" => false, "message" => "invalid token"]));
+
+		$now = strtotime("now");
+		if (floatval($now) > floatval($client["token_expiration"])) exit(Response::json(["status" => false, "message" => "token expired"]));
+
+		$password = Auth::genHash($this->body["password"]);
+
+		$update = $this->update([
+			"tablename" => "clients",
+			"fields" => "password = :password, reset_token = :resettoken, token_expiration = :tokenexpiration",
+			"condition" => "email = :email",
+			"bindparam" => [":password" => $password, ":resettoken" => "", ":tokenexpiration" => "",  ":email" => $email]
+		]);
+
+		if (!$update) exit(Response::send(["status" => true, "message" => "Oops !!!, Something went wrong, operation failed"]));
+
+		exit(Response::json(["status" => true, "message" => "Password reset successful, Proceed to login"]));
 	}
 
 	public function edit()

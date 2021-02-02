@@ -61,7 +61,7 @@ $nav = "nav-item";
 
                     <div class="log-in">
                         <a class="btn text-uppercase" href="/clients/register">
-                            Creat Account</a>
+                            Create Account</a>
                     </div>
                 </div>
 

@@ -14,6 +14,6 @@
     <link rel="stylesheet" href="/assets/public/css/minimal-slider.css" type="text/css" media="all" />
     <link href="/assets/public/css/fontawesome-all.css" rel="stylesheet">
     <link href="/assets/public/css/contact.css" rel="stylesheet">
-    <!-- <link href="//fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-    <link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet"> -->
+    <link href="//fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800" rel="stylesheet">
 </head>

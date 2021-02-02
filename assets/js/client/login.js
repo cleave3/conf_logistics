@@ -24,7 +24,7 @@ document.getElementById("clientloginform").addEventListener("submit", async e =>
   } catch ({ message: error }) {
     notify("danger", error);
   } finally {
-    loginbtn.innerHTML = "Create Account";
+    loginbtn.innerHTML = "Login";
     loginbtn.disabled = false;
   }
 });

@@ -16,4 +16,5 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/fontawesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/assets/css/feedback.css" />
 </head>

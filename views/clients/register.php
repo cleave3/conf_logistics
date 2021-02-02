@@ -78,7 +78,7 @@ include_once "common/header.php"
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success w-100" id="registerbtn">Create Account</button>
-                        <small>By proceeding, I agree that I have read, understand and agree with the <a href="terms">terms &amp; conditions</a>. Also, I have read and understand the relevant <a href="privacy">Client Privacy Statement</a>.</small>
+                        <small>By proceeding, I agree that I have read, understand and agree with the <a href="/terms">terms &amp; conditions</a>. Also, I have read and understand the relevant <a href="/privacy">Client Privacy Statement</a>.</small>
 
                         <h6 class="m-3 text-center">Already Have an Account ? <span><a href="/clients/login">Proceed to Login</a></span></h6>
 
@@ -94,7 +94,7 @@ include_once "common/header.php"
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/register.js"></script>
+    <script src="../assets/js/client/register.js"></script>
 </body>
 
 </html>

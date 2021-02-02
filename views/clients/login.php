@@ -10,7 +10,7 @@ include_once "common/header.php";
         <div class="row bg-white shadow" style="height: 90%; width: 90%; border-radius: 10px;background-color: #f4f3ef;opacity: 0.85;">
             <div class="col-md-5" style="display: grid; place-items: center">
                 <div class="card-body bg-white">
-                    <h3 class="text-center m-2"><i class="fa fa-user-circle-o"></i> Welcome Back <?= var_dump($_GET) ?></h3>
+                    <h3 class="text-center m-2"><i class="fa fa-user-circle-o"></i> Welcome Back</h3>
                     <form id="clientloginform">
                         <div class="row">
                             <div class="col-md-12">
@@ -27,7 +27,8 @@ include_once "common/header.php";
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success w-100" id="loginbtn">Login <i class="fa fa-sign-in"></i></button>
-                        <h6 class="m-3 text-center">Don't Have an Account ? <span><a href="/clients/register">Register Here</a></span></h6>
+                        <h6 class="m-3 text-left">Forgot Password ? <span><a href="/clients/forgotpassword">Click Here</a></span></h6>
+                        <h6 class="m-3 text-left">Don't Have an Account ? <span><a href="/clients/register">Register Here</a></span></h6>
                     </form>
                 </div>
             </div>
@@ -57,7 +58,7 @@ include_once "common/header.php";
     <!--  Notifications Plugin    -->
     <script src="../assets/js/plugins/bootstrap-notify.js"></script>
     <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/login.js"></script>
+    <script src="../assets/js/client/login.js"></script>
 </body>
 
 </html>
