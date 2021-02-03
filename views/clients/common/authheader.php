@@ -1,3 +1,20 @@
+<?php
+
+use App\utils\Session;
+
+Session::start();
+$auth = Session::get("auth");
+$companyname = Session::get("companyname");
+$name = Session::get("username");
+$emailverified = Session::get("emailverified");
+$profileverified = Session::get("profileverified");
+
+if (!isset($auth)) {
+    header("location:login");
+    exit;
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -17,5 +34,4 @@
     <link href="/assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
     <link href="/assets/css/fontawesome-all.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/feedback.css" />
-    <link rel="stylesheet" href="/assets/css/main.css" />
 </head>

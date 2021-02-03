@@ -1,0 +1,21 @@
+@media (max-width: 768px) {
+  #wrap-parent {
+    height: auto !important;
+  }
+
+  #wrap-child {
+    height: auto !important;
+  }
+}
+
+#wrap-child {
+  height: 90%;
+  width: 90%;
+  border-radius: 10px;
+  background-color: #f4f3ef;
+  opacity: 0.85;
+}
+
+#wrap-parent {
+  height: 100vh;
+}

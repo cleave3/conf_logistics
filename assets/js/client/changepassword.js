@@ -1,22 +1,20 @@
-const url = "http://localhost:8080/api/client/register";
-
-document.getElementById("clientregisterform").addEventListener("submit", async e => {
+document.getElementById("changepasswordform").addEventListener("submit", async e => {
   e.preventDefault();
   try {
-    const password = document.getElementById("password").value;
+    const newpassword = document.getElementById("newpassword").value;
     const cpassword = document.getElementById("cpassword").value;
 
-    if (password != cpassword) throw new Error("password does not match");
-    if (password.length < 6) throw new Error("password must be atleast 6 characters long");
+    if (newpassword != cpassword) throw new Error("password does not match");
+    if (newpassword.length < 6) throw new Error("password must be atleast 6 characters long");
 
-    const registerbtn = document.getElementById("registerbtn");
+    const changepasswordbtn = document.getElementById("changepasswordbtn");
 
-    registerbtn.innerHTML = "Submitting...";
-    registerbtn.disabled = true;
+    changepasswordbtn.innerHTML = "Submitting...";
+    changepasswordbtn.disabled = true;
 
     const data = new FormData(e.target);
 
-    const result = await postRequest(url, data);
+    const result = await postRequest("client/changepassword", data);
 
     if (result.status) {
       notify("success", result.message);
@@ -30,7 +28,7 @@ document.getElementById("clientregisterform").addEventListener("submit", async e
   } catch ({ message: error }) {
     notify("danger", error);
   } finally {
-    registerbtn.innerHTML = "Create Account";
-    registerbtn.disabled = false;
+    changepasswordbtn.innerHTML = "Create Account";
+    changepasswordbtn.disabled = false;
   }
 });

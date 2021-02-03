@@ -74,31 +74,35 @@ class File
      */
     public static function upload(array $arguments)
     {
-        try {
-            $file = $arguments["file"];
-            $target_dir = $arguments["path"];
-            $allowedformats = $arguments["allowedformats"] ?? "*";
-            $maxsize = $arguments["maxsize"] ?? 2;
 
-            $target_file = $target_dir . basename($file["name"]);
-            $filetype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            $newfilename = "file" . date("Ymdhis") . '.' . $filetype;
-            $filesize = floatval($file["size"]) / pow(1024, 2);
-            $file_to_upload = $target_dir . $newfilename;
+        if (!is_array($arguments)) throw new \Exception("argument must be an array");
+        if (!isset($arguments["file"])) throw new \Exception("file to upload is required");
+        if (!isset($arguments["path"])) throw new \Exception("upload destination is required");
+        $file = $arguments["file"];
+        $target_dir = $arguments["path"];
+        $allowedformats = $arguments["allowedformats"] ?? "*";
+        $maxsize = $arguments["maxsize"] ?? 2;
 
-            if ($allowedformats != "*") {
-                $filestype = implode(",", $allowedformats);
-                if (!in_array($filetype, $allowedformats)) throw new \Exception("File type not supported only $filestype are allowed");
-            }
+        $target_file = $target_dir . basename($file["name"]);
+        $filetype = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $newfilename = "file" . date("Ymdhis") . '.' . $filetype;
+        $filesize = floatval($file["size"]) / pow(1024, 2);
+        $file_to_upload = $target_dir . $newfilename;
 
-            if ($filesize > $maxsize) throw new \Exception("File size exceeds maximum allowed file size of $maxsize MB");
-
-            $upload = move_uploaded_file($file["tmp_name"], $file_to_upload);
-
-            return $upload ? true : false;
-        } catch (\Exception $error) {
-            return $error->getMessage();
+        if ($allowedformats != "*") {
+            $filestype = implode(",", $allowedformats);
+            if (!in_array($filetype, $allowedformats)) throw new \Exception("File type not supported only $filestype are allowed");
         }
+
+        if ($filesize > $maxsize) throw new \Exception("File size exceeds maximum allowed file size of $maxsize MB");
+
+        if (!is_dir($target_dir)) throw new \Exception("Specified storage location does not exist");
+
+        $upload = move_uploaded_file($file["tmp_name"], $file_to_upload);
+
+        if (!$upload) throw new \Exception("File upload failed");
+
+        return $newfilename;
     }
 
     /**

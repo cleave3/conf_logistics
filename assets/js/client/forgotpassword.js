@@ -1,5 +1,3 @@
-const url = "http://localhost:8080/api/client/forgotpassword";
-
 document.getElementById("forgotpasswordform").addEventListener("submit", async e => {
   e.preventDefault();
   try {
@@ -10,7 +8,7 @@ document.getElementById("forgotpasswordform").addEventListener("submit", async e
 
     const data = new FormData(e.target);
 
-    const result = await postRequest(url, data);
+    const result = await postRequest("client/forgotpassword", data);
 
     if (result.status) {
       notify("success", result.message);

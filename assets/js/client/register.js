@@ -1,36 +1,45 @@
-const url = "http://localhost:8080/api/client/register";
+document.addEventListener("DOMContentLoaded", async () => {
+  const state = document.getElementById("state");
+  const city = document.getElementById("city");
 
-document.getElementById("clientregisterform").addEventListener("submit", async e => {
-  e.preventDefault();
-  try {
-    const password = document.getElementById("password").value;
-    const cpassword = document.getElementById("cpassword").value;
+  city.innerHTML = await loadcities(state.value);
 
-    if (password != cpassword) throw new Error("password does not match");
-    if (password.length < 6) throw new Error("password must be atleast 6 characters long");
+  document.getElementById("clientregisterform").addEventListener("submit", async e => {
+    e.preventDefault();
+    try {
+      const password = document.getElementById("password").value;
+      const cpassword = document.getElementById("cpassword").value;
 
-    const registerbtn = document.getElementById("registerbtn");
+      if (password != cpassword) throw new Error("password does not match");
+      if (password.length < 6) throw new Error("password must be atleast 6 characters long");
 
-    registerbtn.innerHTML = "Submitting...";
-    registerbtn.disabled = true;
+      const registerbtn = document.getElementById("registerbtn");
 
-    const data = new FormData(e.target);
+      registerbtn.innerHTML = "Submitting...";
+      registerbtn.disabled = true;
 
-    const result = await postRequest(url, data);
+      const data = new FormData(e.target);
 
-    if (result.status) {
-      notify("success", result.message);
+      const result = await postRequest(`client/register`, data);
 
-      setTimeout(() => {
-        window.location = "login";
-      }, 3000);
-    } else {
-      notify("danger", result.message);
+      if (result.status) {
+        notify("success", result.message);
+
+        setTimeout(() => {
+          window.location = "login";
+        }, 3000);
+      } else {
+        notify("danger", result.message);
+      }
+    } catch ({ message: error }) {
+      notify("danger", error);
+    } finally {
+      registerbtn.innerHTML = "Create Account";
+      registerbtn.disabled = false;
     }
-  } catch ({ message: error }) {
-    notify("danger", error);
-  } finally {
-    registerbtn.innerHTML = "Create Account";
-    registerbtn.disabled = false;
-  }
+  });
+
+  state.addEventListener("change", async e => {
+    city.innerHTML = await loadcities(e.target.value);
+  });
 });

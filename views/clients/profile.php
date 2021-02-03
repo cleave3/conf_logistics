@@ -1,5 +1,7 @@
 <?php
 
+use App\controllers\ClientController;
+use App\controllers\PublicController;
 use App\utils\Session;
 
 Session::start();
@@ -9,11 +11,21 @@ $name = Session::get("username");
 $emailverified = Session::get("emailverified");
 $profileverified = Session::get("profileverified");
 
+$cc = new ClientController();
+$client = $cc->profile();
+$data = $client["data"];
+
+$pc = new PublicController();
+$states =  $pc->states()["data"];
+$cities = $pc->cityobject($data["state"])["data"];
+
+
 if (!isset($auth)) {
     header("location:login");
     exit;
 }
 $title = "Client Profile";
+
 include_once "common/header.php";
 ?>
 
@@ -26,42 +38,21 @@ include_once "common/header.php";
                 <div class="content">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="card card-user">
-                                <div class="image">
-                                    <img src="../assets/img/damir-bosnjak.jpg" alt="...">
-                                </div>
-                                <div class="card-body">
-                                    <div class="author">
+                            <div class="card">
+                                <div class="d-flex justify-content-center p-2">
+                                    <div>
                                         <a href="#">
-                                            <img class="avatar border-gray" src="../assets/img/mike.jpg" alt="...">
-                                            <h5 class="title">Chet Faker</h5>
+                                            <img id="clientphoto" src="/files/photo/<?= $data["image"] ?? "default.jpg" ?>" alt="..." style="width: 200px; height: 200px;border-radius:50%;">
                                         </a>
-                                        <p class="description">
-                                            @chetfaker
-                                        </p>
-                                    </div>
-                                    <p class="description text-center">
-                                        "I like the way you work it <br>
-                                        No diggity <br>
-                                        I wanna bag it up"
-                                    </p>
-                                </div>
-                                <div class="card-footer">
-                                    <hr>
-                                    <div class="button-container">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-6 col-6 ml-auto">
-                                                <h5>12<br><small>Files</small></h5>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6 col-6 ml-auto mr-auto">
-                                                <h5>2GB<br><small>Used</small></h5>
-                                            </div>
-                                            <div class="col-lg-3 mr-auto">
-                                                <h5>24,6$<br><small>Spent</small></h5>
-                                            </div>
-                                        </div>
+                                        <form id="photoform" class="d-flex justify-content-center flex-column m-2">
+                                            <input class="d-none" type="file" accept="image/*" name="image" id="image" required>
+                                            <button id="changebtn" class="btn btn-sm btn-info m-1">CHANGE PHOTO</button>
+                                            <button id="uploadbtn" type="submit" class="btn btn-sm btn-primary m-1 d-none">UPLOAD PHOTO <i class="fa fa-upload" aria-hidden="true"></i></button>
+                                        </form>
+                                        <h5 class="title m-2"><?= $data["firstname"] ?> <?= $data["lastname"] ?></h5>
                                     </div>
                                 </div>
+                                <p class="text-muted text-center"><?= $data["bio"] ?></p>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -70,38 +61,32 @@ include_once "common/header.php";
                                     <h5 class="card-title">Edit Profile</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form id="editprofileform">
                                         <div class="row">
-                                            <div class="col-md-5 pr-1">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Company (disabled)</label>
-                                                    <input type="text" class="form-control" disabled="" placeholder="Company" value="Creative Code Inc.">
+                                                    <label>Company</label>
+                                                    <input type="text" class="form-control" placeholder="Company" value="<?= $data["companyname"] ?>" disabled>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 px-1">
-                                                <div class="form-group">
-                                                    <label>Username</label>
-                                                    <input type="text" class="form-control" placeholder="Username" value="michael23">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 pl-1">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Email address</label>
-                                                    <input type="email" class="form-control" placeholder="Email">
+                                                    <input type="email" class="form-control" placeholder="Email" value="<?= $data["email"] ?>" disabled>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 pr-1">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" class="form-control" placeholder="Company" value="Chet">
+                                                    <input type="text" class="form-control" placeholder="Firstname" name="firstname" value="<?= $data["firstname"] ?>">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 pl-1">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" class="form-control" placeholder="Last Name" value="Faker">
+                                                    <input type="text" class="form-control" placeholder="Last Name" name="lastname" value="<?= $data["lastname"] ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -109,27 +94,44 @@ include_once "common/header.php";
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Address</label>
-                                                    <input type="text" class="form-control" placeholder="Home Address" value="Melbourne, Australia">
+                                                    <input type="text" class="form-control" placeholder="Company Address" name="address" value="<?= $data["address"] ?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Telephone</label>
+                                                    <input type="text" class="form-control" placeholder="Telepone" name="telephone" value="<?= $data["telephone"] ?>">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4 pr-1">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>City</label>
-                                                    <input type="text" class="form-control" placeholder="City" value="Melbourne">
+                                                    <label>State</label>
+                                                    <select type="text" class="custom-select" name="state" id="state" required>
+                                                        <?php foreach ($states as $state) { ?>
+                                                            <?php if ($data["state"] == $state["state"]) { ?>
+                                                                <option value="<?= $state["state"] ?>" selected><?= $state["state"] ?></option>
+                                                            <?php } else { ?>
+                                                                <option value="<?= $state["state"] ?>"><?= $state["state"] ?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 px-1">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Country</label>
-                                                    <input type="text" class="form-control" placeholder="Country" value="Australia">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 pl-1">
-                                                <div class="form-group">
-                                                    <label>Postal Code</label>
-                                                    <input type="number" class="form-control" placeholder="ZIP Code">
+                                                    <label>LGA</label>
+                                                    <select type="text" class="custom-select" name="city" id="city" required>
+                                                        <?php foreach ($cities as $city) { ?>
+                                                            <?php if ($data["city_town"] == $city["city"]) { ?>
+                                                                <option value="<?= $city["city"] ?>" selected><?= $city["city"] ?></option>
+                                                            <?php } else { ?>
+                                                                <option value="<?= $city["city"] ?>"><?= $city["city"] ?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -137,12 +139,12 @@ include_once "common/header.php";
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>About Me</label>
-                                                    <textarea class="form-control textarea">Oh so, your weak rhyme You doubt I'll bother, reading into it</textarea>
+                                                    <textarea class="form-control textarea" name="bio"><?= $data["bio"] ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <button type="submit" class="btn btn-primary w-50 mx-auto">Update Profile</button>
+                                            <button type="submit" class="btn btn-primary w-50 mx-auto" id="updateprofilebtn">Update Profile <i class="fa fa-upload" aria-hidden="true"></i></button>
                                         </div>
                                     </form>
                                 </div>
@@ -156,6 +158,8 @@ include_once "common/header.php";
     </div>
 
     <?php include_once "common/js.php" ?>
+
+    <script src="/assets/js/client/profile.js"></script>
 </body>
 
 </html>

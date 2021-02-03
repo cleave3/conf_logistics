@@ -1,12 +1,17 @@
 <?php
+
+use App\controllers\PublicController;
+
+$pc = new PublicController();
+$states =  $pc->states()["data"];
 $title = "Client Registration";
-include_once "common/header.php"
+include_once "common/header.php";
 ?>
 
 <body style="background: linear-gradient(#000000b3, #000000b3), url(/assets/img/truck.jpg) no-repeat; background-size:cover;background-position: center;">
-    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div id="wrap-parent" class="d-flex justify-content-center align-items-center">
 
-        <div class="row bg-white shadow" style="height: 90%; width: 90%; border-radius: 10px;background-color: #f4f3ef;opacity: 0.85;">
+        <div id="wrap-child" class="row bg-white shadow">
 
             <div class="d-none d-md-block col-md-7 h-100 bg-dark" style="background: linear-gradient(#3a5a58b3, #375f5cb3);">
 
@@ -31,49 +36,72 @@ include_once "common/header.php"
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">First Name</label>
+                                    <label class="d-md-block">First Name</label>
                                     <input type="text" class="form-control" name="firstname" placeholder="first name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">Last Name</label>
+                                    <label class="d-md-block">Last Name</label>
                                     <input type="text" class="form-control" name="lastname" placeholder="Last Name" required>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">Company</label>
-                                    <input type="text" class="form-control" placeholder="Enter Company Name" name="companyname" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="d-none d-md-block">Email address</label>
+                                    <label class="d-md-block">Email address</label>
                                     <input type="email" class="form-control" name="email" placeholder="example@mail.com" required>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">Telephone</label>
+                                    <label class="d-md-block">Telephone</label>
                                     <input type="tel" class="form-control" name="telephone" placeholder="080000000" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="d-md-block">Company</label>
+                                    <input type="text" class="form-control" placeholder="Enter Company Name" name="companyname" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="d-md-block">Address</label>
+                                    <input type="text" class="form-control" placeholder="Enter Company Address" name="address" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="d-md-block">State</label>
+                                    <select type="text" class="custom-select" name="state" id="state" required>
+                                        <?php foreach ($states as $state) { ?>
+                                            <option value="<?= $state["state"] ?>"><?= $state["state"] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="d-md-block">LGA</label>
+                                    <select type="text" class="custom-select" name="city" id="city" required>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">Password</label>
+                                    <label class="d-md-block">Password</label>
                                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="d-none d-md-block">Password</label>
-                                    <input type="password" class="form-control" name="password" id="cpassword" placeholder="Enter Password" required>
+                                    <label class="d-md-block">Confirm Password</label>
+                                    <input type="password" class="form-control" name="cpassword" id="cpassword" placeholder="Enter Password" required>
                                 </div>
                             </div>
                         </div>

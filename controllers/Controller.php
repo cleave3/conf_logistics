@@ -14,10 +14,12 @@ abstract class Controller
     protected $conn;
     public $body;
     public $query;
+    public $file;
     public function __construct()
     {
         $this->body = $_POST;
         $this->query = $_GET;
+        $this->file = $_FILES;
         $this->conn = (new PDOConnection())->__construct();
     }
 
@@ -115,30 +117,25 @@ abstract class Controller
      */
     public function create(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            if (!isset($argument["fields"])) throw new Exception("key fields not found");
-            if (!isset($argument["values"])) throw new Exception("key values not found");
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        if (!isset($argument["fields"])) throw new Exception("key fields not found");
+        if (!isset($argument["values"])) throw new Exception("key values not found");
 
-            $table = $argument["tablename"];
-            $fields = $argument["fields"];
-            $values = $argument["values"];
-            $bindparam = $argument["bindparam"] ?? null;
+        $table = $argument["tablename"];
+        $fields = $argument["fields"];
+        $values = $argument["values"];
+        $bindparam = $argument["bindparam"] ?? null;
 
-            $query = "INSERT INTO $table ($fields) VALUES ($values)";
-            $result = $this->conn->prepare($query);
+        $query = "INSERT INTO $table ($fields) VALUES ($values)";
+        $result = $this->conn->prepare($query);
 
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-            return $result->execute();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+        return $result->execute();
     }
 
     /**
@@ -163,29 +160,24 @@ abstract class Controller
      */
     public function findOne(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $condition = $argument["condition"] ?? 1;
-            $fields = $argument["fields"] ?? "*";
-            $bindparam = $argument["bindparam"] ?? null;
-            $joins = $argument["joins"] ?? "";
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $condition = $argument["condition"] ?? 1;
+        $fields = $argument["fields"] ?? "*";
+        $bindparam = $argument["bindparam"] ?? null;
+        $joins = $argument["joins"] ?? "";
 
-            $query = "SELECT $fields FROM $tablename $joins WHERE $condition";
-            $result = $this->conn->prepare($query);
+        $query = "SELECT $fields FROM $tablename $joins WHERE $condition";
+        $result = $this->conn->prepare($query);
 
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-            $result->execute();
-            return $result->fetch();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+        $result->execute();
+        return $result->fetch();
     }
 
 
@@ -210,29 +202,24 @@ abstract class Controller
      */
     public function findAll(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $condition = $argument["condition"] ?? 1;
-            $fields = $argument["fields"] ?? "*";
-            $bindparam = $argument["bindparam"] ?? null;
-            $joins = $argument["joins"] ?? "";
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $condition = $argument["condition"] ?? 1;
+        $fields = $argument["fields"] ?? "*";
+        $bindparam = $argument["bindparam"] ?? null;
+        $joins = $argument["joins"] ?? "";
 
-            $query = "SELECT $fields FROM $tablename $joins WHERE $condition";
-            $result = $this->conn->prepare($query);
+        $query = "SELECT $fields FROM $tablename $joins WHERE $condition";
+        $result = $this->conn->prepare($query);
 
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-            $result->execute();
-            return $result->fetchAll();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+        $result->execute();
+        return $result->fetchAll();
     }
 
     /**
@@ -257,27 +244,22 @@ abstract class Controller
      */
     public function update(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $fields = $argument["fields"];
-            $condition = $argument["condition"] ?? 1;
-            $bindparam = $argument["bindparam"] ?? null;
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $fields = $argument["fields"];
+        $condition = $argument["condition"] ?? 1;
+        $bindparam = $argument["bindparam"] ?? null;
 
-            $query = "UPDATE $tablename SET $fields WHERE $condition";
-            $result = $this->conn->prepare($query);
+        $query = "UPDATE $tablename SET $fields WHERE $condition";
+        $result = $this->conn->prepare($query);
 
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-            return $result->execute();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+        return $result->execute();
     }
 
 
@@ -301,26 +283,21 @@ abstract class Controller
      */
     public function destroy(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $condition = $argument["condition"] ?? 1;
-            $bindparam = $argument["bindparam"] ?? null;
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $condition = $argument["condition"] ?? 1;
+        $bindparam = $argument["bindparam"] ?? null;
 
-            $query = "DELETE FROM $tablename WHERE $condition";
-            $result = $this->conn->prepare($query);
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        $query = "DELETE FROM $tablename WHERE $condition";
+        $result = $this->conn->prepare($query);
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-
-            return $result->execute();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+
+        return $result->execute();
     }
 
     /**
@@ -349,50 +326,45 @@ abstract class Controller
      */
     public function paginate(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $condition = $argument["condition"] ?? 1;
-            $fields = $argument["fields"] ?? "*";
-            $bindparam = $argument["bindparam"] ?? null;
-            $pageno = $argument["pageno"] ?? 1;
-            $pageno = floatval($pageno) < 1 ? 1 : floatval($pageno);
-            $limit = $argument["limit"] ?? 20;
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $condition = $argument["condition"] ?? 1;
+        $fields = $argument["fields"] ?? "*";
+        $bindparam = $argument["bindparam"] ?? null;
+        $pageno = $argument["pageno"] ?? 1;
+        $pageno = floatval($pageno) < 1 ? 1 : floatval($pageno);
+        $limit = $argument["limit"] ?? 20;
 
-            $count = $this->getCount([
-                "tablename" => $tablename,
-                "condition" => $condition,
-                "fields" => $fields,
-                "bindparam" => $bindparam
-            ]);
+        $count = $this->getCount([
+            "tablename" => $tablename,
+            "condition" => $condition,
+            "fields" => $fields,
+            "bindparam" => $bindparam
+        ]);
 
-            $total = $count["status"] ? $count["data"] : 0;
-            $totalpages = ceil($total / $limit);
-            $offset = ($pageno - 1) * $limit;
+        $total = $count["status"] ? $count["data"] : 0;
+        $totalpages = ceil($total / $limit);
+        $offset = ($pageno - 1) * $limit;
 
-            $query = "SELECT $fields FROM $tablename WHERE $condition LIMIT $limit OFFSET $offset";
-            $result = $this->conn->prepare($query);
+        $query = "SELECT $fields FROM $tablename WHERE $condition LIMIT $limit OFFSET $offset";
+        $result = $this->conn->prepare($query);
 
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-
-            $result->execute();
-            return [
-                "status" => true,
-                "message" => "Records found",
-                "totalrecords" => $total,
-                "totalpages" => $totalpages,
-                "currentpage" => $pageno,
-                "data" => $result->fetchAll()
-            ];
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+
+        $result->execute();
+        return [
+            "status" => true,
+            "message" => "Records found",
+            "totalrecords" => $total,
+            "totalpages" => $totalpages,
+            "currentpage" => $pageno,
+            "data" => $result->fetchAll()
+        ];
     }
 
     /**
@@ -416,27 +388,22 @@ abstract class Controller
      */
     public function getCount(array $argument)
     {
-        try {
-            if (!is_array($argument)) throw new Exception("argument must be an array");
-            if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
-            $tablename = $argument["tablename"];
-            $condition = $argument["condition"] ?? 1;
-            $fields = $argument["fields"] ?? "*";
-            $bindparam = $argument["bindparam"] ?? null;
+        if (!is_array($argument)) throw new Exception("argument must be an array");
+        if (!isset($argument["tablename"])) throw new Exception("key tablename not found");
+        $tablename = $argument["tablename"];
+        $condition = $argument["condition"] ?? 1;
+        $fields = $argument["fields"] ?? "*";
+        $bindparam = $argument["bindparam"] ?? null;
 
-            $query = "SELECT $fields FROM $tablename WHERE $condition";
-            $result = $this->conn->prepare($query);
-            if ($bindparam != null) {
-                foreach ($bindparam as $key => $value) {
-                    $result->bindValue($key, $value, $this->bind($value));
-                }
+        $query = "SELECT $fields FROM $tablename WHERE $condition";
+        $result = $this->conn->prepare($query);
+        if ($bindparam != null) {
+            foreach ($bindparam as $key => $value) {
+                $result->bindValue($key, $value, $this->bind($value));
             }
-            $result->execute();
-            return $result->rowCount();
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
         }
+        $result->execute();
+        return $result->rowCount();
     }
 
 
@@ -458,21 +425,16 @@ abstract class Controller
      */
     public function exec_query(string $query)
     {
-        try {
-            if (empty($query)) throw new Exception("invalid query");
-            $result = $this->conn->prepare($query);
-            $data = $result->execute();
-            $queryarray =  explode(" ", $query);
-            $type = $queryarray[0];
+        if (empty($query)) throw new Exception("invalid query");
+        $result = $this->conn->prepare($query);
+        $data = $result->execute();
+        $queryarray =  explode(" ", $query);
+        $type = $queryarray[0];
 
-            if (preg_match('/select/i', $type)) {
-                $data = $result->fetchAll();
-            }
-
-            return $data;
-        } catch (Exception $error) {
-            $this->errorhandler($error->getMessage());
-            return $error->getMessage();
+        if (preg_match('/select/i', $type)) {
+            $data = $result->fetchAll();
         }
+
+        return $data;
     }
 }
