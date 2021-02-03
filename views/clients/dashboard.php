@@ -2,13 +2,6 @@
 
 use App\utils\Session;
 
-// var_dump($_SESSION);
-// exit;
-
-// // Session::destroy();
-
-// require __DIR__ . '/../../../vendor/autoload.php';
-
 Session::start();
 $auth = Session::get("auth");
 $companyname = Session::get("companyname");
@@ -20,91 +13,15 @@ if (!isset($auth)) {
   header("location:login");
   exit;
 }
-// exit;
 $title = "Client Dashboard";
 include_once "common/header.php";
 ?>
 
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="danger" data-active-color="danger">
-      <div class="logo">
-        <a href="dashboard" class="brand simple-text logo-normal">
-          <i class="nc-icon nc-spaceship" style="font-size: 1.5rem;"></i> CONFIDEBAT
-        </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="active">
-            <a href="">
-              <i class="nc-icon nc-layout-11"></i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li>
-          <li class="">
-            <a href="">
-              <i class="nc-icon nc-bank"></i>
-              <p>Register Package</p>
-            </a>
-          </li>
-          <li class="">
-            <a href="">
-              <i class="nc-icon nc-send"></i>
-              <p>WayBill</p>
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i class="nc-icon nc-box"></i>
-              <p>Inventory</p>
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i class="nc-icon nc-pin-3"></i>
-              <p>Transaction History</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <?php include "common/sidebar.php" ?>
     <div class="main-panel" style="height: 100vh;">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <div class="navbar-toggle">
-              <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </button>
-            </div>
-            <a class="navbar-brand" href=""><?= $companyname ?></a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <ul class="navbar-nav">
-              <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link dropdown-toggle pull-right" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <?= $name ?><i class="nc-icon nc-circle-10"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Change Password</a>
-                  <a class="dropdown-item" href="logout">Logout</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <!-- End Navbar -->
+      <?php include "common/nav.php" ?>
       <div class="content">
         <div class="row">
           <div class="col-lg-3 col-md-6 col-sm-6">
@@ -255,18 +172,11 @@ include_once "common/header.php";
           </div>
         </div>
       </div>
-      <footer class="footer" style="position: absolute; bottom: 0; width: -webkit-fill-available;">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="credits ml-auto">
-              <span class="copyright">
-                © <?= date("Y") ?> confidebat <i class="fa fa-heart heart"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <?php include_once "common/footer.php" ?>
     </div>
   </div>
 
-  <?php include_once "common/footer.php" ?>
+  <?php include_once "common/js.php" ?>
+</body>
+
+</html>

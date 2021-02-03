@@ -1,9 +1,0 @@
-:root {
-  --primary-color: #b1193f;
-  --secondary-color: #962a41;
-  --hover-color: #248ab9;
-}
-
-.c {
-  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
-}

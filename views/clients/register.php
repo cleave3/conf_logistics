@@ -46,7 +46,7 @@ include_once "common/header.php"
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="d-none d-md-block">Company</label>
-                                    <input type="text" class="form-control" placeholder="Enter Company Name" name="companyname">
+                                    <input type="text" class="form-control" placeholder="Enter Company Name" name="companyname" required>
                                 </div>
                             </div>
                             <div class="col-md-12">

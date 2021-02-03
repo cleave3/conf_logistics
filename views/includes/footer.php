@@ -38,40 +38,6 @@
     <script src="/assets/public/js/minimal-slider.js"></script>
     <!-- carousel -->
     <script src="/assets/public/js/owl.carousel.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.owl-carousel').owlCarousel({
-                loop: true,
-                margin: 10,
-                responsiveClass: true,
-                responsive: {
-                    0: {
-                        items: 1,
-                        nav: true
-                    },
-                    600: {
-                        items: 1,
-                        nav: false
-                    },
-                    900: {
-                        items: 1,
-                        nav: false
-                    },
-                    1000: {
-                        items: 3,
-                        nav: true,
-                        loop: false,
-                        margin: 20
-                    }
-                }
-            })
-        })
-    </script>
-    </script>
-    <!--// end-smoth-scrolling -->
-    <!-- /js -->
-    <script src="/assets/public/js/bootstrap.js"></script>
-
     </body>
 
     </html>

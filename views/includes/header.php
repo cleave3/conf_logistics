@@ -6,11 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <meta name="keywords" content="" />
-    <link href="/assets/public/css/bootstrap.css" rel='stylesheet' type='text/css' />
+    <link href="/assets/public/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
     <link href="/assets/public/css/style.css" rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" href="/assets/public/css/owl.theme.css" type="text/css" media="all">
-    <link rel="stylesheet" href="/assets/public/css/owl.carousel.css" type="text/css" media="screen" property="" />
-    <link href="/assets/public/css/prettyPhoto.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/assets/public/css/minimal-slider.css" type="text/css" media="all" />
     <link href="/assets/public/css/fontawesome-all.css" rel="stylesheet">
     <link href="/assets/public/css/contact.css" rel="stylesheet">
