@@ -34,10 +34,8 @@
         </div>
     </footer>
     <!--//newsletter-->
-    <script src="/assets/public/js/jquery-2.2.3.min.js"></script>
-    <script src="/assets/public/js/minimal-slider.js"></script>
-    <!-- carousel -->
-    <script src="/assets/public/js/owl.carousel.js"></script>
+    <script src="/assets/js/core/jquery.min.js"></script>
+    <script src="/assets/js/core/minimal-slider.js"></script>
     </body>
 
     </html>

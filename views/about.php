@@ -28,7 +28,7 @@ require("includes/header.php");
                     <p class="my-4">Lorem ipsum dolor sit amet Neque porro quisquam est qui dolorem Lorem int ipsum dolor sit amet when an unknown printer took a galley of type.Vivamus id tempor felis. Cras sagittis mi sit amet malesuada mollis. Mauris porroinit consectetur cursus tortor vel interdum.</p>
 
                     <ul class="author d-flex">
-                        <li><img class="img-fluid" src="images/author.jpg" alt=""></li>
+                        <li><img class="img-fluid" src="/assets/img/author.jpg" alt=""></li>
                         <li><span>Admin Name</span>Comany Name</li>
                     </ul>
 

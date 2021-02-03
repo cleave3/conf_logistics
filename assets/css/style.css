@@ -196,7 +196,7 @@ li.nav-item {
 /*--/banner-info--*/
 
 .slide {
-  background: url(../images/1.jpg) no-repeat center;
+  background: url(../img/1.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -206,7 +206,7 @@ li.nav-item {
 }
 
 .slide2 {
-  background: url(../images/2.jpg) no-repeat center;
+  background: url(../img/2.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -216,7 +216,7 @@ li.nav-item {
 }
 
 .slide3 {
-  background: url(../images/3.jpg) no-repeat center;
+  background: url(../img/3.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -333,7 +333,7 @@ h3.main mark {
 
 .about-img {
   padding: 0;
-  background: url(../images/ab.jpg) no-repeat center;
+  background: url(../img/ab.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -423,7 +423,7 @@ h3.tittle {
 }
 
 .price-main-info .card-header {
-  background: url(../images/price.jpg) no-repeat 0px 0px;
+  background: url(../img/price.jpg) no-repeat 0px 0px;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -568,7 +568,7 @@ span.entry-date {
 /*--bottom-last--*/
 
 .bottom-last {
-  background: url(../images/1.jpg) no-repeat center;
+  background: url(../img/1.jpg) no-repeat center;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -726,7 +726,7 @@ section.bottom-last h3 {
 /*--//model-forms--*/
 /*--/inner-page--*/
 .inner-page {
-  background: url(../images/3.jpg) no-repeat center;
+  background: url(../img/3.jpg) no-repeat center;
   background-size: cover;
   -o-background-size: cover;
   -moz-background-size: cover;
@@ -831,7 +831,7 @@ p.copy-right a {
   height: 40px;
   border: none;
   text-indent: 100%;
-  background: url(../images/move_up.png) no-repeat 0px 0px;
+  background: url(../img/move_up.png) no-repeat 0px 0px;
 }
 
 #toTopHover {
