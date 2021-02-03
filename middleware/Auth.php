@@ -13,7 +13,6 @@ class Auth
     public static function checkAuth($key)
     {
         $auth = Session::get($key);
-        if (!$auth) throw new \Exception("session timeout, Kindly reload, login and try again");
     }
 
     public static function checkRole(array $roles)
@@ -24,9 +23,7 @@ class Auth
 
     public static function checkPermissions(array $permissions)
     {
-        Session::start();
         $auth = Session::get("auth");
-        if (!$auth) throw new \Exception("session timeout, Kindly reload, login and try again");
         $permission = self::decodeToken($auth)["permissions"];
         if (!in_array($permission, $permissions)) throw new \Exception("Unathorized Access");
     }

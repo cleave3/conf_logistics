@@ -1,5 +1,6 @@
 <?php
 $title = "Change Password";
+$currentnav = "cp";
 include_once "common/authheader.php";
 ?>
 

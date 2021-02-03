@@ -25,6 +25,7 @@ if (!isset($auth)) {
     exit;
 }
 $title = "Client Profile";
+$currentnav = "profile";
 
 include_once "common/header.php";
 ?>

@@ -12,17 +12,14 @@ class Session
 
     public static function set(array $var)
     {
-        $vlaue = "";
         foreach ($var as $key => $value) {
             $_SESSION[$key] = $value;
-            $vlaue .= $key . " " . $value;
         }
-
-        return $vlaue;
     }
 
     public static function get($key)
     {
+        if (!isset($_SESSION[$key])) throw new \Exception("Authenticated access or session timeout (Reload and Try again)");
         return $_SESSION[$key];
     }
 

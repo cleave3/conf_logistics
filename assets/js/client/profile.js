@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (result.status) {
         notify("success", result.message);
+        uploadbtn.classList.add("d-none");
       } else {
         notify("danger", result.message);
       }

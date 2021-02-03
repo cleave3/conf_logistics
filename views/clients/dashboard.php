@@ -14,6 +14,7 @@ if (!isset($auth)) {
   exit;
 }
 $title = "Client Dashboard";
+$currentnav = "dashboard";
 include_once "common/header.php";
 ?>
 
