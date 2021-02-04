@@ -824,6 +824,7 @@ p.copy-right a {
   text-decoration: none;
   position: fixed;
   bottom: 20px;
+  display: grid;
   right: 2%;
   overflow: hidden;
   z-index: 999;

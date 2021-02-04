@@ -1,6 +1,13 @@
 <?php
+session_start();
 $activenav = "nav-item active";
 $nav = "nav-item";
+
+$dashboardlink = "#";
+if (isset($_SESSION["clientid"])) $dashboardlink = "/clients/dashboard";
+if (isset($_SESSION["userid"])) $dashboardlink = "/admin/dashboard";
+
+$auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]);
 ?>
 <div class="header-top-w3layouts">
     <div class="container">
@@ -53,15 +60,21 @@ $nav = "nav-item";
                         <li class="<?= $title == "Contact Us" ? $activenav : $nav ?>">
                             <a class="nav-link" href="/contact">Contact</a>
                         </li>
-                        <li class="">
-                            <a class="nav-link" href="/clients/login">Sign In</a>
-                        </li>
+                        <?php if (!$auth) { ?>
+                            <li class="">
+                                <a class="nav-link" href="/clients/login">Sign In</a>
+                            </li>
+                        <?php } ?>
 
                     </ul>
-
                     <div class="log-in">
-                        <a class="btn text-uppercase" href="/clients/register">
-                            Create Account</a>
+                        <?php if (!$auth) { ?>
+                            <a class="btn text-uppercase" href="/clients/register">
+                                Create Account</a>
+                        <?php } else { ?>
+                            <a class="btn text-uppercase" href="<?= $dashboardlink ?>">
+                                Dashboard</a>
+                        <?php } ?>
                     </div>
                 </div>
 

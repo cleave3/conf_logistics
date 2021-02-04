@@ -2,14 +2,8 @@
 
 use App\controllers\ClientController;
 use App\controllers\PublicController;
-use App\utils\Session;
 
-Session::start();
-$auth = Session::get("auth");
-$companyname = Session::get("companyname");
-$name = Session::get("username");
-$emailverified = Session::get("emailverified");
-$profileverified = Session::get("profileverified");
+include_once "common/authheader.php";
 
 $cc = new ClientController();
 $client = $cc->profile();
@@ -19,11 +13,6 @@ $pc = new PublicController();
 $states =  $pc->states()["data"];
 $cities = $pc->cityobject($data["state"])["data"];
 
-
-if (!isset($auth)) {
-    header("location:login");
-    exit;
-}
 $title = "Client Profile";
 $currentnav = "profile";
 

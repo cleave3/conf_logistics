@@ -150,11 +150,13 @@ class ClientController extends Controller
 				"tablename" => "clients A",
 				"condition" => "email = :email",
 				"bindparam" => [":email" => $email],
-				"fields" => "A.*, B.firstname,B.companyname",
+				"fields" => "A.*, B.firstname,B.lastname,B.companyname",
 				"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
 			]);
 
 			if (!$client) throw new Exception("Invalid email or password");
+
+			if ($client["email_verified"] != "YES") throw new Exception("Your account is unverified, check your email for your verification link");
 
 			if (!Auth::verifyHash($password, $client["password"])) throw new Exception("Invalid email or password");
 
@@ -165,7 +167,7 @@ class ClientController extends Controller
 			Session::set([
 				"clientid" => $client["id"],
 				"auth" => $token,
-				"username" => $client["firstname"],
+				"username" => $client["firstname"] . " " . $client["lastname"],
 				"companyname" => $client["companyname"],
 				"emailverified" => $client["email_verified"],
 				"profileverified" => $client["profile_complete"]

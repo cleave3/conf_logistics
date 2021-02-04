@@ -1,4 +1,11 @@
 <?php
+session_start();
+$auth = false;
+
+if (isset($_SESSION["clientid"])) {
+    $auth = true;
+    $user = $_SESSION["username"];
+}
 
 use App\controllers\PublicController;
 
@@ -31,6 +38,12 @@ include_once "common/header.php";
             </div>
             <div class="col-md-5" style="display: grid; place-items: center">
                 <div class="card-body">
+                    <?php if ($auth) { ?>
+                        <div class="d-flex flex-wrap">
+                            <a href="/clients/dashboard" class="btn btn-info text-uppercase">CONTINUE AS <?= $user ?> <i class="fa fa-user"></i></a>
+                            <a href="/clients/logout" class="btn btn-danger">LOGOUT ME OUT</a>
+                        </div>
+                    <?php } ?>
                     <h3 class="text-center m-2"><i class="fa fa-user-circle-o"></i> Create Account</h3>
                     <form id="clientregisterform">
                         <div class="row">

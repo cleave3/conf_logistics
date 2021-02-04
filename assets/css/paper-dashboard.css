@@ -4100,7 +4100,7 @@ License - nucleoapp.com/license/
 }
 
 .table-responsive {
-  overflow: scroll;
+  overflow: auto;
   padding-bottom: 10px;
 }
 
@@ -4879,7 +4879,7 @@ License - nucleoapp.com/license/
 }
 
 .card {
-  border-radius: 12px;
+  border-radius: 5px;
   box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
   background-color: #ffffff;
   color: #252422;

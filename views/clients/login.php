@@ -1,5 +1,12 @@
 <?php
+session_start();
 $title = "Client Login";
+$auth = false;
+
+if (isset($_SESSION["clientid"])) {
+    $auth = true;
+    $user = $_SESSION["username"];
+}
 
 include_once "common/header.php";
 ?>
@@ -8,8 +15,14 @@ include_once "common/header.php";
     <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
 
         <div class="row bg-white shadow" style="height: 90%; width: 90%; border-radius: 10px;background-color: #f4f3ef;opacity: 0.85;">
-            <div class="col-md-5" style="display: grid; place-items: center">
+            <div class="col-md-5 w-100" style="display: grid; place-items: center">
                 <div class="card-body bg-white">
+                    <?php if ($auth) { ?>
+                        <div class="d-flex flex-wrap">
+                            <a href="/clients/dashboard" class="btn btn-info text-uppercase">CONTINUE AS <?= $user ?> <i class="fa fa-user"></i></a>
+                            <a href="/clients/logout" class="btn btn-danger">LOGOUT</a>
+                        </div>
+                    <?php } ?>
                     <h3 class="text-center m-2"><i class="fa fa-user-circle-o"></i> Welcome Back</h3>
                     <form id="clientloginform">
                         <div class="row">
@@ -27,8 +40,8 @@ include_once "common/header.php";
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success w-100" id="loginbtn">Login <i class="fa fa-sign-in"></i></button>
-                        <h6 class="m-3 text-left">Forgot Password ? <span><a href="/clients/forgotpassword">Click Here</a></span></h6>
-                        <h6 class="m-3 text-left">Don't Have an Account ? <span><a href="/clients/register">Register Here</a></span></h6>
+                        <p class="m-3 text-left">Forgot Password ? <span><a href="/clients/forgotpassword">Click Here</a></span></p>
+                        <p class="m-3 text-left">Don't Have an Account ? <span><a href="/clients/register">Register</a></span></p>
                     </form>
                 </div>
             </div>

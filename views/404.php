@@ -11,7 +11,7 @@ require("includes/header.php");
                     <div class="error-wrapper text-center ptb-50 pt-xs-20">
                         <div class="error-text">
                             <h1>404</h1>
-                            <h2>Opps! PAGE NOT BE FOUND</h2>
+                            <h2>Oops! PAGE NOT FOUND</h2>
                             <p>Sorry but the page you are looking for does not exist, have been removed, <br> name changed or is temporarity unavailable.</p>
                         </div>
                         <div class="error-button">
