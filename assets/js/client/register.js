@@ -23,16 +23,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const result = await postRequest(`client/register`, data);
 
       if (result.status) {
-        notify("success", result.message);
-
+        toastr.success(result.message);
         setTimeout(() => {
           window.location = "login";
         }, 3000);
       } else {
-        notify("danger", result.message);
+        toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      notify("danger", error);
+      toastr.success(result.message);
     } finally {
       registerbtn.innerHTML = "Create Account";
       registerbtn.disabled = false;

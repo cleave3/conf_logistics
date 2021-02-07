@@ -91,6 +91,9 @@ include $base . "common/header.php";
     </div>
 
     <?php include $base . "common/js.php" ?>
+    <script>
+        formatCurrencyInput(["#cost"]);
+    </script>
     <script src="/assets/js/client/inventory.js"></script>
 </body>
 

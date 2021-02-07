@@ -41,13 +41,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const result = await postRequest(`client/updatephoto`, data);
 
       if (result.status) {
-        notify("success", result.message);
+        toastr.success(result.message);
         uploadbtn.classList.add("d-none");
       } else {
-        notify("danger", result.message);
+        toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      notify("danger", error);
+      toastr.success(result.message);
     } finally {
       uploadbtn.innerHTML = `UPLOAD PHOTO <i class="fa fa-upload" aria-hidden="true"></i>`;
       uploadbtn.disabled = false;
@@ -67,15 +67,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const result = await postRequest(`client/updateprofile`, data);
 
       if (result.status) {
-        notify("success", result.message);
+        toastr.success(result.message);
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       } else {
-        notify("danger", result.message);
+        toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      notify("danger", error);
+      toastr.success(result.message);
     } finally {
       updateprofilebtn.innerHTML = "UPDATE PROFILE";
       updateprofilebtn.disabled = false;

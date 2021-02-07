@@ -8,7 +8,7 @@ if (!isset($_GET["itemid"])) {
 }
 $ic = new InventoryController();
 
-$item = $ic->getInventoryItem()["data"];
+$item = $ic->getInventoryItem($_GET["itemid"]);
 
 $base = __DIR__ . "/../";
 include $base . "common/authheader.php";
@@ -120,6 +120,9 @@ include $base . "common/header.php";
     </div>
 
     <?php include $base . "common/js.php" ?>
+    <script>
+        formatCurrencyInput(["#cost"]);
+    </script>
     <script src="/assets/js/client/inventory.js"></script>
 </body>
 

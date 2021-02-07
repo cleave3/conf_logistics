@@ -11,16 +11,16 @@ document.getElementById("clientloginform").addEventListener("submit", async e =>
     const result = await postRequest("client/login", data);
 
     if (result.status) {
-      notify("success", result.message);
+      toastr.success(result.message);
 
       setTimeout(() => {
         window.location = "dashboard";
       }, 1000);
     } else {
-      notify("danger", result.message);
+      toastr.error(result.message);
     }
   } catch ({ message: error }) {
-    notify("danger", error);
+    toastr.success(result.message);
   } finally {
     loginbtn.innerHTML = "Login";
     loginbtn.disabled = false;

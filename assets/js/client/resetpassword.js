@@ -17,16 +17,15 @@ document.getElementById("resetpasswordform").addEventListener("submit", async e 
     const result = await postRequest("client/resetpassword", data);
 
     if (result.status) {
-      notify("success", result.message);
-
+      toastr.success(result.message);
       setTimeout(() => {
         window.location = `login`;
       }, 1000);
     } else {
-      notify("danger", result.message);
+      toastr.error(result.message);
     }
   } catch ({ message: error }) {
-    notify("danger", error);
+    toastr.success(result.message);
   } finally {
     resetpasswordbtn.innerHTML = "Submit";
     resetpasswordbtn.disabled = false;

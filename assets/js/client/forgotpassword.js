@@ -11,16 +11,16 @@ document.getElementById("forgotpasswordform").addEventListener("submit", async e
     const result = await postRequest("client/forgotpassword", data);
 
     if (result.status) {
-      notify("success", result.message);
+      toastr.success(result.message);
 
       setTimeout(() => {
         window.location = "resetpassword";
       }, 1000);
     } else {
-      notify("danger", result.message);
+      toastr.error(result.message);
     }
   } catch ({ message: error }) {
-    notify("danger", error);
+    toastr.success(result.message);
   } finally {
     forgotpasswordbtn.innerHTML = "Submit";
     forgotpasswordbtn.disabled = false;

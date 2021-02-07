@@ -1,3 +1,4 @@
+<div id="loader" class="d-none"></div>
 <footer class="footer" style="width: -webkit-fill-available;">
     <div class="container-fluid">
         <div class="row">

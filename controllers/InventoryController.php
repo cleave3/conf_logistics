@@ -5,6 +5,8 @@ namespace App\controllers;
 use App\utils\Response;
 use App\utils\Validator;
 use App\utils\Sanitize;
+use App\middleware\Auth;
+use App\utils\Session;
 
 class InventoryController extends Controller
 {
@@ -61,41 +63,37 @@ class InventoryController extends Controller
 		]);
 	}
 
-	public function index()
-	{
-	}
-
 	public function getClientInventory()
 	{
+		$client = new ClientController();
+		$clientid = $client->getClientId();
+		$data = $this->findAll([
+			"tablename" => "inventory",
+			"condition" => "client_id = :clientid",
+			"bindparam" => [":clientid" => $clientid],
+			"fields" => "*,(SELECT SUM(qty_in) - SUM(qty_out) FROM inventory_item WHERE inventory.id = inventory_item.inventory_id) as quantity",
+		]);
+		return $data;
+	}
+
+	public function index()
+	{
 		try {
-			$client = new ClientController();
-			$clientid = $client->getClientId();
-			$data = $this->findAll([
-				"tablename" => "inventory",
-				"condition" => "client_id = :clientid",
-				"bindparam" => [":clientid" => $clientid],
-				"fields" => "*,(SELECT SUM(qty_in) - SUM(qty_out) FROM inventory_item WHERE inventory.id = inventory_item.inventory_id) as quantity",
-			]);
-			return Response::send(["status" => true, "data" => $data]);
+			$data = $this->getClientInventory();
+			return Response::json(["status" => true, "data" => $data]);
 		} catch (\Exception $error) {
-			return Response::send(["status" => false, "message" => $error->getMessage()]);
+			return Response::json(["status" => false, "message" => $error->getMessage()]);
 		}
 	}
 
-	public function getInventoryItem()
+	public function getInventoryItem($id)
 	{
-		try {
-			$id = $this->query["itemid"];
-			$data = $this->findOne([
-				"tablename" => "inventory",
-				"condition" => "id = :id",
-				"bindparam" => [":id" => $id],
-				"fields" => "*,(SELECT SUM(qty_in) - SUM(qty_out) FROM inventory_item WHERE inventory.id = inventory_item.inventory_id) as quantity",
-			]);
-			return Response::send(["status" => true, "data" => $data]);
-		} catch (\Exception $error) {
-			return Response::send(["status" => false, "message" => $error->getMessage()]);
-		}
+		return $this->findOne([
+			"tablename" => "inventory",
+			"condition" => "id = :id",
+			"bindparam" => [":id" => $id],
+			"fields" => "*,(SELECT SUM(qty_in) - SUM(qty_out) FROM inventory_item WHERE inventory.id = inventory_item.inventory_id) as quantity",
+		]);
 	}
 
 	public function add()
@@ -144,5 +142,27 @@ class InventoryController extends Controller
 
 	public function delete()
 	{
+		try {
+			Session::start();
+			Auth::checkAuth("clientid");
+
+			$clientid = Session::get("clientid");
+			$ids = explode(",", $this->body["items"]);
+
+			for ($i = 0; $i < count($ids); $i++) {
+				$data = $this->getInventoryItem($ids[$i]);
+				if ($data["client_id"] !== $clientid) throw new \Exception("You are to allowed to perform this operation");
+
+				$this->destroy([
+					"tablename" => "inventory",
+					"condition" => "id = :id",
+					"bindparam" => [":id" => $ids[$i]]
+				]);
+			}
+
+			return Response::json(["status" => true, "message" => "Item deleted successfully"]);
+		} catch (\Exception $error) {
+			return Response::json(["status" => false, "message" => $error->getMessage()]);
+		}
 	}
 }

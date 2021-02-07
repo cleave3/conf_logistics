@@ -17,16 +17,16 @@ document.getElementById("changepasswordform").addEventListener("submit", async e
     const result = await postRequest("client/changepassword", data);
 
     if (result.status) {
-      notify("success", result.message);
+      toastr.success(result.message);
 
       setTimeout(() => {
         window.location = "login";
       }, 3000);
     } else {
-      notify("danger", result.message);
+      toastr.error(result.message);
     }
   } catch ({ message: error }) {
-    notify("danger", error);
+    toastr.error(error);
   } finally {
     changepasswordbtn.innerHTML = "Create Account";
     changepasswordbtn.disabled = false;

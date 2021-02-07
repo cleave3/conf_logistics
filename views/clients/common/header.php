@@ -19,4 +19,5 @@
     <link rel="stylesheet" href="/assets/css/feedback.css" />
     <link rel="stylesheet" href="/assets/css/main.css" />
     <link rel="stylesheet" href="/assets/css/datatables.min.css" />
+    <link rel="stylesheet" href="/assets/css/toast.css" />
 </head>
