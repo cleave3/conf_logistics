@@ -19,7 +19,7 @@ class Session
 
     public static function get($key)
     {
-        if (!isset($_SESSION[$key])) throw new \Exception("Authenticated access or session timeout (Reload and Try again)");
+        if (!isset($_SESSION[$key])) return false;
         return $_SESSION[$key];
     }
 
