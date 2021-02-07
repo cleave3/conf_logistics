@@ -3,7 +3,7 @@
 namespace App\controllers;
 
 use App\config\DotEnv;
-use App\controllers\Controller;
+
 use App\middleware\Auth;
 use App\services\MailService;
 use App\utils\EmailTemplate;
@@ -18,7 +18,7 @@ use Exception;
 class ClientController extends Controller
 {
 
-	protected function getClientId()
+	public function getClientId()
 	{
 		Session::start();
 		Auth::checkAuth("clientid");

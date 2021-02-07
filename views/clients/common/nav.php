@@ -23,9 +23,9 @@
                               <?= $name ?><i class="nc-icon nc-circle-10"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                              <a class="dropdown-item" href="profile">Profile</a>
-                              <a class="dropdown-item" href="changepassword">Change Password</a>
-                              <a class="dropdown-item" href="logout">Logout</a>
+                              <a class="dropdown-item" href="/clients/profile">Profile</a>
+                              <a class="dropdown-item" href="/clients/changepassword">Change Password</a>
+                              <a class="dropdown-item" href="/clients/logout">Logout</a>
                           </div>
                       </li>
                   </ul>

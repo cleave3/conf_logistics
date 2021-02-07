@@ -2,7 +2,7 @@
 
 namespace App\controllers;
 
-use App\controllers\Controller;
+
 use App\utils\Session;
 use App\middleware\Auth;
 use App\utils\Response;

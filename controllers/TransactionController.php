@@ -2,7 +2,7 @@
 
 namespace App\controllers;
 
-use App\controllers\Controller;
+
 
 
 class TransactionController extends Controller

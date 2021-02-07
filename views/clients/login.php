@@ -29,13 +29,23 @@ include_once "common/header.php";
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="d-none d-md-block">Email</label>
-                                    <input type="email" class="form-control" name="email" placeholder="Enter Email" required>
+                                    <div class="input-group mb-3">
+                                        <input type="email" class="form-control" name="email" placeholder="Enter Email" required>
+                                        <div class="input-group-append">
+                                            <span style="cursor: pointer;" class="input-group-text" id="basic-addon2"><i class="fa fa-envelope text-dark" aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="d-none d-md-block">Password</label>
-                                    <input type="password" name="password" class="form-control" placeholder="*****" required>
+                                    <div class="input-group mb-3">
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="*****" required>
+                                        <div class="input-group-append">
+                                            <span style="cursor: pointer;" class="input-group-text" id="basic-addon2"><i id="eye" class="fa fa-eye text-dark" aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

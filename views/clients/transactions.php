@@ -1,8 +1,8 @@
 <?php
 
 include_once "common/authheader.php";
-$title = "Orders";
-$currentnav = "orders";
+$title = "Transaction History";
+$currentnav = "transactions";
 include_once "common/header.php";
 ?>
 

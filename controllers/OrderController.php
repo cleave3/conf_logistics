@@ -2,9 +2,6 @@
 
 namespace App\controllers;
 
-use App\controllers\Controller;
-
-
 class OrderController extends Controller
 {
 

@@ -19,8 +19,8 @@
                     <p>WayBill Package</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "order" ? "active" : "" ?>">
-                <a href="/clients/order">
+            <li class="<?= $currentnav == "orders" ? "active" : "" ?>">
+                <a href="/clients/orders">
                     <i class="nc-icon nc-cart-simple"></i>
                     <p>Send Order</p>
                 </a>

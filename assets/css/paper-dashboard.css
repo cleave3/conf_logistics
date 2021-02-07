@@ -4101,6 +4101,7 @@ License - nucleoapp.com/license/
 
 .table-responsive {
   overflow: auto;
+  overflow-y: hidden;
   padding-bottom: 10px;
 }
 

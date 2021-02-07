@@ -73,7 +73,7 @@ $auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]);
                                 Create Account</a>
                         <?php } else { ?>
                             <a class="btn text-uppercase" href="<?= $dashboardlink ?>">
-                                Dashboard</a>
+                                Dashboard <i class="fa fa-user" aria-hidden="true"></i></a>
                         <?php } ?>
                     </div>
                 </div>

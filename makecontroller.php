@@ -16,7 +16,7 @@ foreach ($contollers as $name) {
 
         $file = fopen("./controllers/{$name}.php", "w");
 
-        $code = "<?php\n\nnamespace App\controllers;\n\nuse App\controllers\Controller;\n\n\nclass {$name} extends Controller\n{\n\n\tpublic function index()\n\t{\n\t}\n\n\tpublic function add()\n\t{\n\t}\n\n\tpublic function edit()\n\t{\n\t}\n\n\tpublic function delete()\n\t{\n\t}\n}\n";
+        $code = "<?php\n\nnamespace App\controllers;\n\nclass {$name} extends Controller\n{\n\n\tpublic function index()\n\t{\n\t}\n\n\tpublic function add()\n\t{\n\t}\n\n\tpublic function edit()\n\t{\n\t}\n\n\tpublic function delete()\n\t{\n\t}\n}\n";
         fwrite($file, $code);
         fclose($file);
 

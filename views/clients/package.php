@@ -16,7 +16,7 @@ include_once "common/header.php";
         <div class="main-panel" style="height: 100vh;">
             <?php include "common/nav.php" ?>
             <div class="content">
-                <a href="/clients/package/add" class="btn btn-sm btn-success">New Package <i class="fa fa-book"></i></a>
+                <a href="/clients/package/add" class="btn btn-sm btn-success">Send New <i class="fa fa-book"></i></a>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">PACKAGES</h4>

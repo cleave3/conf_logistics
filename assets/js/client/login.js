@@ -26,3 +26,9 @@ document.getElementById("clientloginform").addEventListener("submit", async e =>
     loginbtn.disabled = false;
   }
 });
+
+document.getElementById("eye").addEventListener("click", e => {
+  const password = document.getElementById("password");
+  password.type = password.type == "password" ? "text" : "password";
+  e.target.classList.toggle("fa-eye-slash");
+});

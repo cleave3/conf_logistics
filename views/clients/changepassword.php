@@ -1,8 +1,10 @@
 <?php
-$title = "Change Password";
-$currentnav = "cp";
 include_once "common/authheader.php";
+$title = "Chabge Password";
+$currentnav = "profile";
+include_once "common/header.php";
 ?>
+
 
 <body class="">
     <div class="wrapper ">

@@ -62,51 +62,10 @@ require("includes/header.php");
     <!-- end of main image slider container -->
     <!-- banner-text -->
     <!-- ab -->
-    <section class="banner-bottom-w3ls py-lg-5 py-md-5 py-3">
-        <div class="container">
-            <div class="inner-sec-w3layouts py-lg-5 py-3">
-                <div class="intro text-left">
-                    <h3 class="main mb-md-5 mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit sedc dnmo eiusmod tempor incididunt ut labore et dolore.</h3>
-                    <p>Adipisicing elit sedc eiusmod tempor incididunt ut labore et dolore.</p>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 about-in text-left">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <i class="fas fa-truck mb-2"></i>
-                                <h6 class="my-3">Consectetur elit</h6>
-                                <h5 class="card-title">Land Transport</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur elit,Adipisicing elit tempor.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 about-in text-left">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <i class="fab fa-docker mb-2"></i>
-                                <h6 class="my-3">Consectetur elit</h6>
-                                <h5 class="card-title">Supply</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur elit,Adipisicing elit tempor.</p>
-                            </div>
-                        </div>
+    <section class="container p-2">
+        <h3 class="title text-center mb-md-5 mb-4">How It Works</h3>
+        <div class="flex flex-wrap justify-content-center">
 
-                    </div>
-                    <div class="col-lg-4 about-in text-left">
-                        <div class="card shadow">
-                            <div class="card-body">
-                                <i class="far fa-clock mb-2"></i>
-
-                                <h6 class="my-3">Consectetur elit</h6>
-                                <h5 class="card-title">Fast & On Time</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur elit,Adipisicing elit tempor.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
         </div>
     </section>
     <!-- //ab -->
@@ -135,7 +94,7 @@ require("includes/header.php");
     <section class="banner-bottom-w3ls py-lg-5 py-md-5 py-3">
         <div class="container">
             <div class="inner-sec-w3layouts py-lg-5 py-3">
-                <h3 class="tittle text-center mb-md-5 mb-4">We Offered Services</h3>
+                <h3 class="title text-center mb-md-5 mb-4">We Offered Services</h3>
                 <div class="row middle-grids">
                     <div class="col-lg-4 about-in middle-grid-info text-center">
                         <div class="card">

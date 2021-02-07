@@ -11,7 +11,7 @@ class Sanitize
      * @param string $currency
      * @return float
      */
-    public static function currency($currency)
+    public static function integer($currency)
     {
         return floatval(preg_replace('/(,)/', "", $currency));
     }
