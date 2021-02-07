@@ -22,44 +22,43 @@ include_once "common/header.php";
                         <h4 class="card-title">ITEMS IN STOCK</h4>
                     </div>
                     <div class="card-body table-responsive">
-                        <table id="resulttable" class="table table-sm table-striped table-hover table-inverse" style="font-size: 13px;">
-                            <thead>
-                                <tr>
-                                    <th>S/N</th>
-                                    <th>ITEM NAME</th>
-                                    <th>UNIT COST</th>
-                                    <th>MEASURE</th>
-                                    <th>QUANTITY</th>
-                                    <th>DESCRIPTION</th>
-                                    <th>CREATED AT</th>
-                                    <th>UPDATED AT</th>
-                                    <th>ACTIONS</th>
+                        <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
+                            <thead role="rowgroup">
+                                <tr role="row">
+                                    <th role="columnheader"></th>
+                                    <th role="columnheader">S/N</th>
+                                    <th role="columnheader">ITEM&nbsp;NAME</th>
+                                    <th role="columnheader">UNIT&nbsp;COST</th>
+                                    <th role="columnheader">MEASURE</th>
+                                    <th role="columnheader">QUANTITY</th>
+                                    <th role="columnheader">DESCRIPTION</th>
+                                    <th role="columnheader">CREATED&nbsp;AT</th>
+                                    <th role="columnheader">UPDATED&nbsp;AT</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody role="rowgroup">
                                 <?php
                                 $sn = 1;
                                 foreach ($inventories as $inventory) {
                                 ?>
-                                    <tr>
-                                        <td><?= $sn ?></td>
-                                        <td><?= $inventory["name"] ?></td>
-                                        <td><?= number_format($inventory["unit_cost"], 2) ?></td>
-                                        <td><?= $inventory["unit_measure"] ?></td>
-                                        <td><?= number_format($inventory["quantity"]) ?></td>
-                                        <td><?= $inventory["description"] ?></td>
-                                        <td><?= date("Y-m-d H:m:s a", strtotime($inventory["created_at"])) ?></td>
-                                        <td><?= empty($inventory["updated_at"]) ? "" : date("Y-m-d H:m:s a", strtotime($inventory["updated_at"])) ?></td>
-                                        <td align="center" class="dropdown dropleft">
+                                    <tr role="row">
+                                        <td role="cell" data-label="" class="dropdown dropright">
                                             <div class="dropdown">
-                                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ACTIONS</a>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                    <a class="dropdown-item" href="#">Detail</a>
                                                     <a class="dropdown-item" href="/clients/inventory/edit?itemid=<?= $inventory["id"] ?>" title="Edit Item">Edit</a>
                                                     <a class="dropdown-item" href="#">Delete</a>
                                                 </div>
                                             </div>
                                         </td>
+                                        <td role="cell" data-label="S/N : "><?= $sn ?></td>
+                                        <td role="cell" data-label="NAME : "><?= $inventory["name"] ?></td>
+                                        <td role="cell" data-label="UNIT COST : "><?= number_format($inventory["unit_cost"], 2) ?></td>
+                                        <td role="cell" data-label="MEASURE : "><?= $inventory["unit_measure"] ?></td>
+                                        <td role="cell" data-label="QTY : "><?= number_format($inventory["quantity"]) ?></td>
+                                        <td role="cell" data-label="DESCRIPTION : "><?= $inventory["description"] ?></td>
+                                        <td role="cell" data-label="CREATED AT : "><?= date("Y-m-d H:m:s a", strtotime($inventory["created_at"])) ?></td>
+                                        <td role="cell" data-label="UPDATED AT : "><?= empty($inventory["updated_at"]) ? "" : date("Y-m-d H:m:s a", strtotime($inventory["updated_at"])) ?></td>
                                     </tr>
                                 <?php
                                     $sn++;

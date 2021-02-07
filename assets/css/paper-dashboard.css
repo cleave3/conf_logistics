@@ -3067,7 +3067,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .card.card-just-text .dropdown .dropdown-menu:before,
 .card-just-text .dropdown .dropdown-menu:before,
 .dropdown-btn .dropdown-menu:before {
-  border-bottom: 11px solid #f1eae0;
+  /* border-bottom: 11px solid #f1eae0; */
   border-left: 11px solid rgba(0, 0, 0, 0);
   border-right: 11px solid rgba(0, 0, 0, 0);
   content: "";
@@ -3083,7 +3083,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 .card.card-just-text .dropdown .dropdown-menu:after,
 .card-just-text .dropdown .dropdown-menu:after,
 .dropdown-btn .dropdown-menu:after {
-  border-bottom: 11px solid #ffffff;
+  /* border-bottom: 11px solid #ffffff; */
   border-left: 11px solid rgba(0, 0, 0, 0);
   border-right: 11px solid rgba(0, 0, 0, 0);
   content: "";
