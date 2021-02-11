@@ -1443,7 +1443,7 @@ fieldset[disabled] .btn-neutral.active {
 .btn.disabled {
   opacity: 0.5;
   filter: alpha(opacity=50);
-  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .btn-simple {

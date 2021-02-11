@@ -1,3 +1,7 @@
+body {
+  counter-reset: section;
+}
+
 @media (max-width: 768px) {
   #wrap-parent {
     height: auto !important;
@@ -78,4 +82,27 @@
 button:disabled,
 input:disabled {
   cursor: not-allowed !important;
+}
+
+.collapse a li {
+  transition: all 0.3s ease-in-out;
+}
+
+.collapse a li:hover {
+  border-right: 10px solid white;
+  transform: scale(0.99);
+}
+
+#package-items .row::before {
+  counter-increment: section;
+  content: counter(section);
+  padding: 5px;
+  position: absolute;
+  top: -30px;
+  left: 15px;
+  margin-bottom: 2px;
+  background: #0b7699;
+  width: 30px;
+  text-align: center;
+  color: white;
 }

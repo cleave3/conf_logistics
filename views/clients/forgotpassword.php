@@ -38,7 +38,7 @@ include_once "common/header.php";
     <script src="/assets/js/core/popper.min.js"></script>
     <script src="/assets/js/core/bootstrap.min.js"></script>
     <!--  Notifications Plugin    -->
-    <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+    <script src="/assets/js/toast.js" type="text/javascript"></script>
     <script src="/assets/js/main.js"></script>
     <script src="/assets/js/client/forgotpassword.js"></script>
 </body>

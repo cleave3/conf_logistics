@@ -10,7 +10,6 @@ use App\utils\Session;
 
 class InventoryController extends Controller
 {
-
 	protected function addinventory($name, $unit_cost, $unit_measure, $low_stock, $reorder, $description)
 	{
 		$client = new ClientController();

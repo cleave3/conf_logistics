@@ -25,11 +25,11 @@ include_once "common/header.php";
                         <div class="table-responsive">
                             <table id="resulttable" class="table table-sm table-striped table-hover table-inverse" style="font-size: 13px;">
                                 <thead>
-                                    <tr>
+                                    <tr>id client_id package_title weight description image status destination instructions created_at updated_at
                                         <th>S/N</th>
                                         <th>TITLE</th>
                                         <th>WEIGHT</th>
-                                        <th>LOCATION</th>
+                                        <th>DESTINATION</th>
                                         <th>STATUS</th>
                                         <th>ACTIONS</th>
                                     </tr>

@@ -33,7 +33,6 @@ class Router
         if ($request == "/") {
             echo json_encode(["status" => true, "message" => "App is live"]);
         } else {
-
             if (method_exists($class, $method)) {
                 $instance = new $class();
                 echo $instance->$method($param);
@@ -42,7 +41,6 @@ class Router
             }
         }
     }
-
 
     public function runweb($path)
     {
