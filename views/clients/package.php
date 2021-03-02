@@ -15,8 +15,10 @@ include_once "common/header.php";
         <?php include "common/sidebar.php" ?>
         <div class="main-panel" style="height: 100vh;">
             <?php include "common/nav.php" ?>
+
             <div class="content">
                 <a href="/clients/package/add" class="btn btn-sm btn-success">Send New <i class="fa fa-book"></i></a>
+                <marquee class="text-warning">Please donot send package on transit. We advice that all package are sent with a registered company</marquee>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">PACKAGES</h4>

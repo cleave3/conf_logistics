@@ -81,4 +81,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       updateprofilebtn.disabled = false;
     }
   });
+
+  document.getElementById("accountdetailform").addEventListener("submit", async e => {
+    e.preventDefault();
+    try {
+      const submitbankdetails = document.getElementById("submitbankdetails");
+
+      submitbankdetails.innerHTML = "SUBMITTING...";
+      submitbankdetails.disabled = true;
+
+      const data = new FormData(e.target);
+
+      const result = await postRequest(`client/submitbankdetails`, data);
+
+      if (result.status) {
+        toastr.success(result.message);
+      } else {
+        toastr.error(result.message);
+      }
+    } catch ({ message: error }) {
+      toastr.success(result.message);
+    } finally {
+      submitbankdetails.innerHTML = `Submit <i class="fa fa-paper-plane"></i>`;
+      submitbankdetails.disabled = false;
+    }
+  });
 });

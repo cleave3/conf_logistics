@@ -95,6 +95,21 @@ class InventoryController extends Controller
 		]);
 	}
 
+	public function item()
+	{
+
+		try {
+			$itemid = $this->query["itemid"];
+
+			$item = $this->getInventoryItem($itemid);
+
+			exit(Response::json(["status" => true, "message" => "item retrieved", "data" => $item]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+
 	public function add()
 	{
 		try {

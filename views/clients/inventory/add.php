@@ -14,7 +14,7 @@ include $base . "common/header.php";
             <div class="content">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/clients/inventory">Inventory</a>
+                        <a href="/clients/stockinventory">Inventory</a>
                     </li>
                     <li class="breadcrumb-item active">add</li>
                 </ol>

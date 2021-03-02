@@ -284,12 +284,11 @@ class ClientController extends Controller
 
 			$client = $this->findOne([
 				"tablename" => "clients A",
-				"condition" => "id = :id",
+				"condition" => "A.id = :id",
 				"bindparam" => [":id" => $id],
-				"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.created_at,A.updated_at, B.*",
-				"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
+				"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.created_at,A.updated_at, B.*,C.bankcode,C.accountnumber,C.accountname ",
+				"joins" => "INNER JOIN client_profile B ON A.id = B.client_id LEFT JOIN client_account C ON A.id = C.client_id"
 			]);
-
 			return Response::send(["status" => true, "data" => $client]);
 		} catch (\Exception $error) {
 			return Response::send(["status" => false, "message" => $error->getMessage()]);
@@ -353,6 +352,46 @@ class ClientController extends Controller
 			]);
 
 			exit(Response::json(["status" => true, "message" => "photo updated successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function submitbankdetails()
+	{
+		try {
+			$id = $this->getClientId();
+
+
+			$accountdetails = $this->findOne([
+				"tablename" => "client_account",
+				"condition" => "client_id = :id",
+				"bindparam" => [":id" => $id]
+			]);
+
+			$bankcode = $this->body["bankcode"] ?? $accountdetails["bankcode"];
+			$accountnumber = $this->body["accountnumber"] ?? $accountdetails["accountnumber"];
+			$accountname = $this->body["accountname"] ?? $accountdetails["accountname"];
+
+			if (!$accountdetails) {
+				$this->create([
+					"tablename" => "client_account",
+					"fields" => "`client_id`,`bankcode`, `accountnumber`, `accountname`",
+					"values" => ":id,:bankcode,:accountnumber,:accountname",
+					"bindparam" => [":id" => $id, ":bankcode" => $bankcode, ":accountnumber" => $accountnumber, "accountname" => $accountname]
+				]);
+
+				exit(Response::json(["status" => true, "message" => "Account details submitted successfully"]));
+			}
+
+			$this->update([
+				"tablename" => "client_account",
+				"fields" => "bankcode = :bankcode,accountnumber = :accountnumber,accountname = :accountname",
+				"condition" => "client_id = :id",
+				"bindparam" => [":bankcode" => $bankcode, ":accountnumber" => $accountnumber, "accountname" => $accountname, ":id" => $id]
+			]);
+
+			exit(Response::json(["status" => true, "message" => "Account details updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

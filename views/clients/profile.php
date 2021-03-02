@@ -11,6 +11,7 @@ $data = $client["data"];
 
 $pc = new PublicController();
 $states =  $pc->states()["data"];
+$banks =  $pc->getBankList()["data"];
 $cities = $pc->cityobject($data["state"])["data"];
 
 $title = "Client Profile";
@@ -43,6 +44,48 @@ include_once "common/header.php";
                                     </div>
                                 </div>
                                 <p class="text-muted text-center"><?= $data["bio"] ?></p>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title">Bank Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="accountdetailform">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Selecy Bank</label>
+                                                    <select name="bankcode" class="custom-select" required>
+                                                        <option value="">--SELECT BANK--</option>
+                                                        <?php foreach ($banks as $bank => $value) { ?>
+                                                            <?php if ($data["bankcode"] === $value["bankcode"]) { ?>
+                                                                <option value="<?= $value["bankcode"] ?>" selected><?= $value["bankname"] ?></option>
+                                                            <?php } else { ?>
+                                                                <option value="<?= $value["bankcode"] ?>"><?= $value["bankname"] ?></option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="accountnumber">Account Number</label>
+                                                    <input type="text" class="form-control" pattern="\d{10}" placeholder="accountnumber" name="accountnumber" value="<?= $data["accountnumber"] ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="accountname">Account Name</label>
+                                                    <input type="text" class="form-control" placeholder="account name" name="accountname" value="<?= $data["accountname"] ?>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <button type="submit" class="btn btn-primary w-50 mx-auto" id="submitbankdetails">Submit <i class="fa fa-paper-plane"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-8">

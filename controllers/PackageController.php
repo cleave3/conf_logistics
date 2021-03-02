@@ -38,6 +38,29 @@ class PackageController extends Controller
 
 	public function add()
 	{
+		// {
+		// 	"title": "Package one",
+		// 	"weight": "3",
+		// 	"destination": "Benin",
+		// 	"description": "PAckage one",
+		// 	"instructions": "test",
+		//drivernumber
+		//transportcompany
+		//image
+		// 	"item": [
+		// 		"21",
+		// 		"32"
+		// 	],
+		// 	"cost": [
+		// 		"2000",
+		// 		"2000"
+		// 	],
+		// 	"quantity": [
+		// 		"5",
+		// 		"4"
+		// 	]
+		// }
+		exit(Response::json($this->body));
 	}
 
 	public function edit()

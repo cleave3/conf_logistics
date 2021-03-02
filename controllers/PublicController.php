@@ -19,6 +19,17 @@ class PublicController extends Controller
 		}
 	}
 
+	public function getBankList()
+	{
+		try {
+			$banks = $this->findAll(["tablename" => "banklist"]);
+
+			return Response::send(["status" => true, "data" => $banks]);
+		} catch (\Exception $error) {
+			return Response::send(["status" => false, "message" => $error->getMessage()]);
+		}
+	}
+
 	public function cities()
 	{
 		try {
