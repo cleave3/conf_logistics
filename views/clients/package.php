@@ -57,11 +57,11 @@ include_once "common/header.php";
                                             <td class="font-weight-bold <?= determineClass($package["status"]) ?>"><?= strtoupper($package["status"]) ?></td>
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">
                                                 <?php if (in_array($package["status"], ["onhand", "pending"])) { ?>
-                                                    <a class="btn btn-sm mx-1 btn-success" href="#" title="Send Item Now">
+                                                    <a class="btn btn-sm mx-1 btn-success" href="#" title="Send Item Now" onclick='sendPackageNow(<?= $package["id"] ?>)'>
                                                         <img src="/assets/icons/send.svg" width="20px" height="20px" />
                                                     </a>
                                                 <?php } ?>
-                                                <a class="btn btn-sm mx-1 btn-secondary" href="#" title="Package Details">
+                                                <a class="btn btn-sm mx-1 btn-secondary" href="/clients/package/details?packageid=<?= $package["id"] ?>" title="Package Details">
                                                     <img src="/assets/icons/details.svg" width="20px" height="20px" />
                                                 </a>
                                                 <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
@@ -86,6 +86,7 @@ include_once "common/header.php";
     </div>
 
     <?php include_once "common/js.php" ?>
+    <script src="/assets/js/client/package.js"></script>
     <script>
         $('#resulttable').DataTable({
             fixedHeader: true

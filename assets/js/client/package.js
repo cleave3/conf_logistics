@@ -101,7 +101,7 @@ if (registerpackageform)
     }
   });
 
-async function sendPackage(packageid) {
+async function sendPackage(packageid, reload = false) {
   try {
     showLoader();
 
@@ -113,6 +113,7 @@ async function sendPackage(packageid) {
 
     if (result.status) {
       toastr.success(result.message);
+      reload && window.location.reload();
     } else {
       toastr.error(result.message);
     }
@@ -121,4 +122,8 @@ async function sendPackage(packageid) {
   } finally {
     hideLoader();
   }
+}
+
+async function sendPackageNow(packageid) {
+  toastr.confirm("Are you sure you want to send this package now ?", { yes: () => sendPackage(packageid, true) });
 }

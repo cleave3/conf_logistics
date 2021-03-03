@@ -79,6 +79,35 @@ class PackageController extends Controller
 		}
 	}
 
+	public function getPackage()
+	{
+		try {
+			$package = ["package" => "", "packageitems" => []];
+			$id = $this->query["packageid"];
+			$package["package"] = $this->getPackageById($id);
+			$package["packageitems"] = $this->getPackageDetailByPackageId($id);
+			return $package;
+		} catch (\Exception $error) {
+			return $error->getMessage();
+		}
+	}
+
+	public function getPackageById($id)
+	{
+		return $this->findOne(["tablename" => "package", "condition" => "id = :id", "bindparam" => [":id" => $id]]);
+	}
+
+	public function getPackageDetailByPackageId($id)
+	{
+		return $this->findAll([
+			"tablename" => "package_item A",
+			"condition" => "package_id = :id",
+			"fields" => "A.*, B.name",
+			"joins" => "INNER JOIN inventory B ON A.item_id = B.id",
+			"bindparam" => [":id" => $id]
+		]);
+	}
+
 	public function updatepackage($packageid)
 	{
 		$package = $this->findOne(["tablename" => "package", "condition" => "id = :id", "bindparam" => [":id" => $packageid]]);
