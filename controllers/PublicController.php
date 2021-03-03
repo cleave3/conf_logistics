@@ -65,4 +65,22 @@ class PublicController extends Controller
 			return Response::send(["status" => false, "message" => $error->getMessage()]);
 		}
 	}
+
+	public function getActiveLocations()
+	{
+		try {
+			return $this->findAll(["tablename" => "locations", "condition" => "status = 'active'"]);
+		} catch (\Exception $error) {
+			return $error->getMessage();
+		}
+	}
+
+	public function getAllLocations()
+	{
+		try {
+			return $this->findAll(["tablename" => "locations"]);
+		} catch (\Exception $error) {
+			return $error->getMessage();
+		}
+	}
 }

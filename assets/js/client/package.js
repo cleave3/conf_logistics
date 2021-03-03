@@ -82,21 +82,43 @@ if (registerpackageform)
       const data = new FormData(e.target);
 
       const result = await postRequest("package/add", data);
-      console.log(result);
 
       if (result.status) {
         toastr.success(result.message);
         toastr.confirm("Have you sent this package ?", {
           yes: () => sendPackage(result.data.packageid),
         });
+        registerpackageform.reset();
       } else {
         toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      toastr.success(result.message);
+      toastr.error(result.message);
     } finally {
       hideLoader();
       registerpackagebtn.innerHTML = "Submit";
       registerpackagebtn.disabled = false;
     }
   });
+
+async function sendPackage(packageid) {
+  try {
+    showLoader();
+
+    const data = new FormData();
+    data.append("status", "sent");
+    data.append("packageid", packageid);
+
+    const result = await postRequest("package/edit", data);
+
+    if (result.status) {
+      toastr.success(result.message);
+    } else {
+      toastr.error(result.message);
+    }
+  } catch ({ message: error }) {
+    toastr.error(result.message);
+  } finally {
+    hideLoader();
+  }
+}

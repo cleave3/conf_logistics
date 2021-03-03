@@ -21,3 +21,20 @@
     <link rel="stylesheet" href="/assets/css/datatables.min.css" />
     <link rel="stylesheet" href="/assets/css/toast.css" />
 </head>
+
+<?php
+function determineClass($status)
+{
+    switch ($status) {
+        case 'onhand':
+        case 'pending':
+            return "text-warning";
+        case 'sent':
+            return "text-primary";
+        case "recieved":
+            return "text-success";
+        default:
+            return "text-dark";
+    }
+}
+?>

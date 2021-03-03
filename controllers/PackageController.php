@@ -5,6 +5,7 @@ namespace App\controllers;
 
 use App\utils\Session;
 use App\middleware\Auth;
+use App\utils\File;
 use App\utils\Response;
 
 class PackageController extends Controller
@@ -12,7 +13,7 @@ class PackageController extends Controller
 
 	protected function getClientId()
 	{
-		// Session::start();
+		Session::start();
 		Auth::checkAuth("clientid");
 		return Session::get("clientid");
 	}
@@ -23,7 +24,7 @@ class PackageController extends Controller
 			$id = $this->getClientId();
 			$package = $this->findAll([
 				"tablename" => "package",
-				"condition" => "client_id = :id",
+				"condition" => "client_id = :id ORDER BY created_at DESC",
 				"bindparam" => ["id" => $id]
 			]);
 			return Response::send(["status" => true, "data" => $package]);
@@ -38,33 +39,82 @@ class PackageController extends Controller
 
 	public function add()
 	{
-		// {
-		// 	"title": "Package one",
-		// 	"weight": "3",
-		// 	"destination": "Benin",
-		// 	"description": "PAckage one",
-		// 	"instructions": "test",
-		//drivernumber
-		//transportcompany
-		//image
-		// 	"item": [
-		// 		"21",
-		// 		"32"
-		// 	],
-		// 	"cost": [
-		// 		"2000",
-		// 		"2000"
-		// 	],
-		// 	"quantity": [
-		// 		"5",
-		// 		"4"
-		// 	]
-		// }
-		exit(Response::json($this->body));
+		try {
+			$id = $this->getClientId();
+			$title = $this->body["title"];
+			$weight = $this->body["weight"];
+			$description = $this->body["description"];
+			$destination = $this->body["destination"];
+			$instructions = $this->body["instructions"];
+			$drivernumber = $this->body["drivernumber"];
+			$transportcompany = $this->body["transportcompany"];
+			$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : null;
+
+			// register package	
+			$this->create([
+				"tablename" => "package",
+				"fields" => "`client_id`, `package_title`, `weight`, `description`, `image`,`destination`, `instructions`, `driver_number`, `transport_company`",
+				"values" => ":id,:title,:weight,:description,:image,:destination,:instructions,:drivernumber,:transportcompany",
+				"bindparam" => [":id" => $id, ":title" => $title, ":weight" => $weight, ":description" => $description, ":image" => $image, ":destination" => $destination, ":instructions" => $instructions, ":drivernumber" => $drivernumber, ":transportcompany" => $transportcompany]
+			]);
+
+			$packageid = $this->lastId();
+			$items = $this->body["item"];
+			$costs = $this->body["cost"];
+			$quantities = $this->body["quantity"];
+
+			for ($i = 0; $i < count($items); $i++) {
+				//register package_item
+				$this->create([
+					"tablename" => "package_item",
+					"fields" => "`item_id`, `package_id`, `unitcost`, `quantity`, `location`",
+					"values" => ":id,:packageid,:cost,:quantity,:location",
+					"bindparam" => [":id" => $items[$i], ":packageid" => $packageid, ":cost" => $costs[$i], ":quantity" => $quantities[$i], ":location" => $destination]
+				]);
+			}
+
+			exit(Response::json(["status" => true, "message" => "package registered successfully", "data" => ["packageid" => $packageid]]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function updatepackage($packageid)
+	{
+		$package = $this->findOne(["tablename" => "package", "condition" => "id = :id", "bindparam" => [":id" => $packageid]]);
+
+		if (!$package) throw new \Exception("Package not found");
+
+		$title = $this->body["title"] ?? $package["package_title"];
+		$weight = $this->body["weight"] ?? $package["weight"];
+		$description = $this->body["description"] ?? $package["description"];
+		$destination = $this->body["destination"] ?? $package["destination"];
+		$instructions = $this->body["instructions"] ?? $package["instructions"];
+		$drivernumber = $this->body["drivernumber"] ?? $package["driver_number"];
+		$transportcompany = $this->body["transportcompany"] ?? $package["transport_company"];
+		$status = $this->body["status"] ?? $package["status"];
+		$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : $package["image"];
+
+		// register package	
+		$this->update([
+			"tablename" => "package",
+			"fields" => "package_title = :title,weight = :weight,description = :description,image = :image,destination = :destination,instructions = :instructions,driver_number = :drivernumber,transport_company = :transportcompany,status = :status",
+			"condition" => "id = :id",
+			"bindparam" => [":title" => $title, ":weight" => $weight, ":description" => $description, ":image" => $image, ":destination" => $destination, ":instructions" => $instructions, ":drivernumber" => $drivernumber, ":transportcompany" => $transportcompany, ":status" => $status, ":id" => $packageid]
+		]);
+
+		return "package updated successfully";
 	}
 
 	public function edit()
 	{
+		try {
+			$packageid = $this->body["packageid"];
+			$package = $this->updatepackage($packageid);
+			exit(Response::json(["status" => true, "message" => $package]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
 	}
 
 	public function delete()

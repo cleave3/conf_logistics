@@ -1,6 +1,7 @@
 <?php
 
 use App\controllers\InventoryController;
+use App\controllers\PublicController;
 
 $base = __DIR__ . "/../";
 include $base . "common/authheader.php";
@@ -8,7 +9,9 @@ $title = "Client Package";
 $currentnav = "package";
 include $base . "common/header.php";
 $ic = new InventoryController();
+$pc = new PublicController();
 $inventories = $ic->getClientInventory();
+$locations = $pc->getActiveLocations();
 ?>
 
 <body class="">
@@ -67,8 +70,9 @@ $inventories = $ic->getClientInventory();
                                             <label>Destination</label>
                                             <select class="custom-select" name="destination" required>
                                                 <option value="">--SELECT DESTINATION--</option>
-                                                <option value="Benin">Benin</option>
-                                                <option value="Lagos">Lagos</option>
+                                                <?php foreach ($locations as $location) { ?>
+                                                    <option value="<?= $location["location"] ?>"><?= $location["location"] ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                     </div>

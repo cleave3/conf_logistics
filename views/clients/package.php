@@ -18,8 +18,8 @@ include_once "common/header.php";
 
             <div class="content">
                 <a href="/clients/package/add" class="btn btn-sm btn-success">Send New <i class="fa fa-book"></i></a>
-                <marquee class="text-warning">Please donot send package on transit. We advice that all package are sent with a registered company</marquee>
                 <div class="card">
+                    <marquee class="text-warning">Please donot send package on transit. We advice that all package are sent with a registered company</marquee>
                     <div class="card-header">
                         <h4 class="card-title">PACKAGES</h4>
                     </div>
@@ -27,10 +27,13 @@ include_once "common/header.php";
                         <div class="table-responsive">
                             <table id="resulttable" class="table table-sm table-striped table-hover table-inverse" style="font-size: 13px;">
                                 <thead>
-                                    <tr>id client_id package_title weight description image status destination instructions created_at updated_at
+                                    <tr>
                                         <th>S/N</th>
+                                        <th></th>
                                         <th>TITLE</th>
                                         <th>WEIGHT</th>
+                                        <th>TRANSPORT&nbsp;COMPANY</th>
+                                        <th>DRIVER&nbsp;NUMBER</th>
                                         <th>DESTINATION</th>
                                         <th>STATUS</th>
                                         <th>ACTIONS</th>
@@ -42,14 +45,31 @@ include_once "common/header.php";
                                     foreach ($packages as $package) {
                                     ?>
                                         <tr>
-                                            <td><?= $sn ?></td>
-                                            <td><?= $packages["package_title"] ?></td>
-                                            <td><?= $packages["weight"] ?></td>
-                                            <td><?= $packages["destination"] ?></td>
-                                            <td><?= $packages["status"] ?></td>
-                                            <td class="d-flex">
-                                                <a class="btn btn-sm btn-primary" href="/clients/package/edit?<?= $package["id"] ?>" title="Edit package"><i class="fa fa-pencil text-white" aria-hidden="true"></i></a>
-                                                <a class="btn btn-sm btn-outline-danger" href=""><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
+                                            <td data-label="SN : "><?= $sn ?></td>
+                                            <td data-label="">
+                                                <img class="img-fluid" src="/files/document/<?= $package["image"] ?? "camera.svg" ?>" alt="..." style="width: 40px; height: 40px; cursor:pointer;">
+                                            </td>
+                                            <td data-label="TITLE"><?= $package["package_title"] ?></td>
+                                            <td data-label="WEIGHT : "><?= $package["weight"] ?>KG</td>
+                                            <td data-label="TRANSPORT COMPANY : "><?= $package["transport_company"] ?></td>
+                                            <td data-label="DRIVER NUMBER : "><?= $package["driver_number"] ?></td>
+                                            <td data-label="DESTINATION : "><?= $package["destination"] ?></td>
+                                            <td class="font-weight-bold <?= determineClass($package["status"]) ?>"><?= strtoupper($package["status"]) ?></td>
+                                            <td data-label="ACTIONS " class="d-md-flex justify-content-center">
+                                                <?php if (in_array($package["status"], ["onhand", "pending"])) { ?>
+                                                    <a class="btn btn-sm mx-1 btn-success" href="#" title="Send Item Now">
+                                                        <img src="/assets/icons/send.svg" width="20px" height="20px" />
+                                                    </a>
+                                                <?php } ?>
+                                                <a class="btn btn-sm mx-1 btn-secondary" href="#" title="Package Details">
+                                                    <img src="/assets/icons/details.svg" width="20px" height="20px" />
+                                                </a>
+                                                <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
+                                                    <img src="/assets/icons/edit.svg" width="20px" height="20px" />
+                                                </a>
+                                                <a class="btn btn-sm mx-1 btn-danger" href="" title="Delete Package">
+                                                    <img src="/assets/icons/trash.svg" width="20px" height="20px" />
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php
