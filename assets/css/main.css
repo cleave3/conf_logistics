@@ -25,24 +25,24 @@ body {
 }
 
 @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr,
-  .table-sm,
-  .table {
+  .responsivetable table,
+  .responsivetable thead,
+  .responsivetable tbody,
+  .responsivetable th,
+  .responsivetable td,
+  .responsivetable tr,
+  .responsivetable .table-sm,
+  .responsivetable .table {
     display: block;
   }
 
-  thead tr {
+  .responsivetable thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  tr {
+  .responsivetable tr {
     margin: 0 0 1rem 0;
   }
 
@@ -50,7 +50,7 @@ body {
     overflow: hidden;
   }
 
-  td:before {
+  .responsivetable td:before {
     content: attr(data-label);
     width: 45%;
     padding-right: 10px;
@@ -105,4 +105,39 @@ input:disabled {
   width: 30px;
   text-align: center;
   color: white;
+}
+
+@media print {
+  body {
+    visibility: hidden;
+  }
+
+  .print-container,
+  .print-container * {
+    visibility: visible !important;
+  }
+
+  input,
+  button {
+    display: none !important;
+  }
+
+  #repaymentmodal {
+    visibility: hidden !important;
+  }
+
+  #sysmainpanel {
+    min-width: 100vw;
+  }
+
+  .sidebar-content-wrapper {
+    display: none;
+  }
+
+  .print-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+  }
 }

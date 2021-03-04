@@ -9,4 +9,5 @@
 <script src="/assets/js/datatables.min.js" type="text/javascript"></script>
 <script src="/assets/js/toast.js" type="text/javascript"></script>
 <script src="/assets/js/inputformatter.js" type="text/javascript"></script>
+<!-- <script src="/assets/js/pdf.js"></script> -->
 <script src="/assets/js/main.js" type="text/javascript"></script>

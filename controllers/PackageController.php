@@ -82,14 +82,26 @@ class PackageController extends Controller
 	public function getPackage()
 	{
 		try {
-			$package = ["package" => "", "packageitems" => []];
+			$package = ["package" => "", "packageitems" => [], "owner" => ""];
 			$id = $this->query["packageid"];
 			$package["package"] = $this->getPackageById($id);
 			$package["packageitems"] = $this->getPackageDetailByPackageId($id);
+			$package["owner"] = $this->getPackageOwner($package["package"]["client_id"]);
 			return $package;
 		} catch (\Exception $error) {
 			return $error->getMessage();
 		}
+	}
+
+	public function getPackageOwner($clientid)
+	{
+		return $this->findOne([
+			"tablename" => "clients A",
+			"condition" => "A.id = :id",
+			"bindparam" => [":id" => $clientid],
+			"fields" => "A.id,A.email,A.telephone,B.*",
+			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
+		]);
 	}
 
 	public function getPackageById($id)

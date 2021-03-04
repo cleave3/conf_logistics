@@ -23,7 +23,7 @@ include_once "common/header.php";
                     <div class="card-header">
                         <h4 class="card-title">ITEMS IN STOCK</h4>
                     </div>
-                    <div class="card-body table-responsive">
+                    <div class="card-body responsivetable table-responsive">
                         <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
                             <thead role="rowgroup">
                                 <tr role="row">

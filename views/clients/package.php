@@ -24,7 +24,7 @@ include_once "common/header.php";
                         <h4 class="card-title">PACKAGES</h4>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="responsivetable table-responsive">
                             <table id="resulttable" class="table table-sm table-striped table-hover table-inverse" style="font-size: 13px;">
                                 <thead>
                                     <tr>

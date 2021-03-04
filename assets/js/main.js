@@ -43,5 +43,16 @@ function formatCurrencyInput(inputs) {
   });
 }
 
+// function makePDF(element, filename = "document") {
+//   const doc = new jsPDF();
+//   doc.html(document.querySelector(element), {
+//     callback: function (doc) {
+//       doc.save();
+//     },
+//     margin: 5,
+//     filename: `${filename}.pdf`,
+//   });
+// }
+
 const showLoader = () => document.getElementById("loader").classList.remove("d-none");
 const hideLoader = () => document.getElementById("loader").classList.add("d-none");

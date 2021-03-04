@@ -1,5 +1,6 @@
 const addpackageitem = document.getElementById("addpackageitem");
 const registerpackageform = document.getElementById("registerpackageform");
+// const downloaddetails = document.getElementById("downloaddetails");
 
 if (addpackageitem) addpackageitem.addEventListener("click", addPackage);
 
@@ -127,3 +128,5 @@ async function sendPackage(packageid, reload = false) {
 async function sendPackageNow(packageid) {
   toastr.confirm("Are you sure you want to send this package now ?", { yes: () => sendPackage(packageid, true) });
 }
+
+// if (downloaddetails) downloaddetails.addEventListener("click", () => makePDF(".waybill", "waybillinfo"));
