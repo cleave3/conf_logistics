@@ -49,7 +49,7 @@ include_once "common/header.php";
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success w-100" id="loginbtn">Login <i class="fa fa-sign-in"></i></button>
+                        <button type="submit" class="btn btn-success w-100" id="loginbtn">Login <img class="ml-1" src="/assets/icons/enter.svg" width="20px" height="20px" /></button>
                         <p class="m-3 text-left">Forgot Password ? <span><a href="/clients/forgotpassword">Click Here</a></span></p>
                         <p class="m-3 text-left">Don't Have an Account ? <span><a href="/clients/register">Register</a></span></p>
                     </form>

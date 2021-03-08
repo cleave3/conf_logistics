@@ -141,3 +141,15 @@ input:disabled {
     width: 100%;
   }
 }
+
+.admin-login {
+  padding: 20px 10px;
+  border-radius: 5px;
+  width: 600px;
+}
+
+@media (max-width: 768px) {
+  .admin-login {
+    width: 95%;
+  }
+}

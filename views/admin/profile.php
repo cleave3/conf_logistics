@@ -1,18 +1,15 @@
 <?php
 
-use App\controllers\ClientController;
+use App\controllers\AuthController;
 use App\controllers\PublicController;
 
 include_once "common/authheader.php";
 
-$cc = new ClientController();
-$client = $cc->profile();
-$data = $client["data"];
-
+$ac = new AuthController();
+$user = $ac->profile();
 $pc = new PublicController();
 $states =  $pc->states()["data"];
-$banks =  $pc->getBankList()["data"];
-$cities = $pc->cityobject($data["state"])["data"];
+$cities = $pc->cityobject($user["state"])["data"];
 
 $title = "Client Profile";
 $currentnav = "profile";
@@ -33,59 +30,18 @@ include_once "common/header.php";
                                 <div class="d-flex justify-content-center p-2">
                                     <div>
                                         <a href="#">
-                                            <img id="clientphoto" src="/files/photo/<?= $data["image"] ?? "default.jpg" ?>" alt="..." style="width: 200px; height: 200px;border-radius:50%;">
+                                            <img id="userphoto" src="/files/photo/<?= $user["image"] ?? "default.jpg" ?>" alt="..." style="width: 200px; height: 200px;border-radius:50%;">
                                         </a>
                                         <form id="photoform" class="d-flex justify-content-center flex-column m-2">
                                             <input class="d-none" type="file" accept="image/*" name="image" id="image" required>
                                             <button id="changebtn" class="btn btn-sm btn-info m-1">CHANGE PHOTO</button>
                                             <button id="uploadbtn" type="submit" class="btn btn-sm btn-primary m-1 d-none">UPLOAD PHOTO <i class="fa fa-upload" aria-hidden="true"></i></button>
                                         </form>
-                                        <h6 class="title m-2"><?= $data["firstname"] ?> <?= $data["lastname"] ?></h6>
+                                        <h6 class="title m-2"><?= $user["firstname"] ?> <?= $user["lastname"] ?></h6>
+                                        <h6 class="title m-2">Designation : <?= $user["userrole"] ?></h6>
                                     </div>
                                 </div>
-                                <p class="text-muted text-center"><?= $data["bio"] ?></p>
-                            </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title">Bank Details</h5>
-                                </div>
-                                <div class="card-body">
-                                    <form id="accountdetailform">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Selecy Bank</label>
-                                                    <select name="bankcode" class="custom-select" required>
-                                                        <option value="">--SELECT BANK--</option>
-                                                        <?php foreach ($banks as $bank => $value) { ?>
-                                                            <?php if ($data["bankcode"] === $value["bankcode"]) { ?>
-                                                                <option value="<?= $value["bankcode"] ?>" selected><?= $value["bankname"] ?></option>
-                                                            <?php } else { ?>
-                                                                <option value="<?= $value["bankcode"] ?>"><?= $value["bankname"] ?></option>
-                                                            <?php } ?>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="accountnumber">Account Number</label>
-                                                    <input type="text" class="form-control" pattern="\d{10}" placeholder="accountnumber" name="accountnumber" value="<?= $data["accountnumber"] ?>" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="accountname">Account Name</label>
-                                                    <input type="text" class="form-control" placeholder="account name" name="accountname" value="<?= $data["accountname"] ?>" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <button type="submit" class="btn btn-primary w-50 mx-auto" id="submitbankdetails">Submit <i class="fa fa-paper-plane"></i></button>
-                                        </div>
-                                    </form>
-                                </div>
+                                <p class="text-muted text-center"><?= $user["bio"] ?></p>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -98,14 +54,8 @@ include_once "common/header.php";
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Company</label>
-                                                    <input type="text" class="form-control" placeholder="Company" value="<?= $data["companyname"] ?>" disabled>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
                                                     <label for="exampleInputEmail1">Email address</label>
-                                                    <input type="email" class="form-control" placeholder="Email" value="<?= $data["email"] ?>" disabled>
+                                                    <input type="email" class="form-control" placeholder="Email" value="<?= $user["email"] ?>" disabled>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,13 +63,13 @@ include_once "common/header.php";
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" class="form-control" placeholder="Firstname" name="firstname" value="<?= $data["firstname"] ?>">
+                                                    <input type="text" class="form-control" placeholder="Firstname" name="firstname" value="<?= $user["firstname"] ?>">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" class="form-control" placeholder="Last Name" name="lastname" value="<?= $data["lastname"] ?>">
+                                                    <input type="text" class="form-control" placeholder="Last Name" name="lastname" value="<?= $user["lastname"] ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -127,14 +77,14 @@ include_once "common/header.php";
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Address</label>
-                                                    <input type="text" class="form-control" placeholder="Address" name="address" value="<?= $data["address"] ?>">
+                                                    <input type="text" class="form-control" placeholder="Address" name="address" value="<?= $user["address"] ?>">
                                                 </div>
                                             </div>
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Telephone</label>
-                                                    <input type="text" class="form-control" placeholder="Telepone" name="telephone" value="<?= $data["telephone"] ?>">
+                                                    <input type="text" class="form-control" placeholder="Telepone" name="telephone" value="<?= $user["telephone"] ?>">
                                                 </div>
                                             </div>
                                         </div>
@@ -144,7 +94,7 @@ include_once "common/header.php";
                                                     <label>State</label>
                                                     <select type="text" class="custom-select" name="state" id="state" required>
                                                         <?php foreach ($states as $state) { ?>
-                                                            <?php if ($data["state"] == $state["state"]) { ?>
+                                                            <?php if ($user["state"] == $state["state"]) { ?>
                                                                 <option value="<?= $state["state"] ?>" selected><?= $state["state"] ?></option>
                                                             <?php } else { ?>
                                                                 <option value="<?= $state["state"] ?>"><?= $state["state"] ?></option>
@@ -158,7 +108,7 @@ include_once "common/header.php";
                                                     <label>LGA</label>
                                                     <select type="text" class="custom-select" name="city" id="city" required>
                                                         <?php foreach ($cities as $city) { ?>
-                                                            <?php if ($data["city_town"] == $city["city"]) { ?>
+                                                            <?php if ($user["city_town"] == $city["city"]) { ?>
                                                                 <option value="<?= $city["city"] ?>" selected><?= $city["city"] ?></option>
                                                             <?php } else { ?>
                                                                 <option value="<?= $city["city"] ?>"><?= $city["city"] ?></option>
@@ -172,7 +122,7 @@ include_once "common/header.php";
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>About Me</label>
-                                                    <textarea class="form-control textarea" name="bio"><?= $data["bio"] ?></textarea>
+                                                    <textarea class="form-control textarea" name="bio"><?= $user["bio"] ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,7 +142,7 @@ include_once "common/header.php";
 
     <?php include_once "common/js.php" ?>
 
-    <script src="/assets/js/client/profile.js"></script>
+    <script src="/assets/js/admin/profile.js"></script>
 </body>
 
 </html>

@@ -13,7 +13,7 @@ class Auth
     public static function checkAuth($key)
     {
         $auth = Session::get($key);
-        if ($auth == false) throw new \Exception("Authenticated access or session timeout (Reload and Try again)");
+        if ($auth == false) throw new \Exception("Authenticated access or session timeout (Reload and Try again) " . $key);
     }
 
     public static function checkRole(array $roles)

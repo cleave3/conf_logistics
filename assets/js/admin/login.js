@@ -1,4 +1,4 @@
-document.getElementById("clientloginform").addEventListener("submit", async e => {
+document.getElementById("adminloginform").addEventListener("submit", async e => {
   e.preventDefault();
   try {
     const loginbtn = document.getElementById("loginbtn");
@@ -8,7 +8,7 @@ document.getElementById("clientloginform").addEventListener("submit", async e =>
 
     const data = new FormData(e.target);
 
-    const result = await postRequest("client/login", data);
+    const result = await postRequest("auth/login", data);
 
     if (result.status) {
       toastr.success(result.message);
@@ -22,7 +22,7 @@ document.getElementById("clientloginform").addEventListener("submit", async e =>
   } catch ({ message: error }) {
     toastr.success(result.message);
   } finally {
-    loginbtn.innerHTML = `LOGIN<img class="ml-1" src="/assets/icons/enter.svg" width="20px" height="20px" />`;
+    loginbtn.innerHTML = `LOGIN <img class="ml-1" src="/assets/icons/enter.svg" width="20px" height="20px" />`;
     loginbtn.disabled = false;
   }
 });

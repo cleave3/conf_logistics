@@ -14,7 +14,7 @@ document.getElementById("changepasswordform").addEventListener("submit", async e
 
     const data = new FormData(e.target);
 
-    const result = await postRequest("client/changepassword", data);
+    const result = await postRequest("auth/changepassword", data);
 
     if (result.status) {
       toastr.success(result.message);

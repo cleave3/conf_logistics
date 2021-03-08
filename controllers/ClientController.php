@@ -45,19 +45,23 @@ class ClientController extends Controller
 		]);
 	}
 
+	public function getallclients()
+	{
+		Session::start();
+		Auth::checkAuth("userid");
+
+		return $this->findAll([
+			"tablename" => "clients A",
+			"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.created_at,A.updated_at, A.status, B.*",
+			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
+		]);
+	}
+
 	public function index()
 	{
 		try {
-			Session::start();
-			Auth::checkAuth("userid");
-
-			$client = $this->findAll([
-				"tablename" => "clients A",
-				"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.created_at,A.updated_at, B.*",
-				"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
-			]);
-
-			return Response::json(["status" => true, "data" => $client]);
+			$clients = $this->getallclients();
+			return Response::json(["status" => true, "data" => $clients]);
 		} catch (\Exception $error) {
 			return Response::json(["status" => false, "message" => $error->getMessage()]);
 		}
