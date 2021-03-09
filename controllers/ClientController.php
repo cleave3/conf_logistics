@@ -154,7 +154,7 @@ class ClientController extends Controller
 				"tablename" => "clients A",
 				"condition" => "email = :email",
 				"bindparam" => [":email" => $email],
-				"fields" => "A.*, B.firstname,B.lastname,B.companyname",
+				"fields" => "A.*, B.firstname,B.lastname,B.companyname,B.image",
 				"joins" => "INNER JOIN client_profile B ON A.id = B.client_id"
 			]);
 
@@ -173,6 +173,7 @@ class ClientController extends Controller
 				"auth" => $token,
 				"username" => $client["firstname"] . " " . $client["lastname"],
 				"companyname" => $client["companyname"],
+				"image" => $client["image"],
 				"emailverified" => $client["email_verified"],
 				"profileverified" => $client["profile_complete"]
 			]);

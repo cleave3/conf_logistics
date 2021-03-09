@@ -43,6 +43,48 @@ class AuthController extends Controller
 		return Session::get("userid");
 	}
 
+	public function getAllRoles()
+	{
+		return $this->findAll(["tablename" => "roles", "fields" => "id,role"]);
+	}
+
+	public function register()
+	{
+		try {
+			$telephone = Sanitize::string($this->body["telephone"]);
+			$email = Sanitize::string($this->body["email"]);
+			$role = Sanitize::string($this->body["role"]);
+			$firstname = Sanitize::string($this->body["firstname"]);
+			$lastname = Sanitize::string($this->body["lastname"]);
+			$address = Sanitize::string($this->body["address"]);
+			$bio = Sanitize::string($this->body["bio"]);
+			$state = Sanitize::string($this->body["state"]);
+			$lga = Sanitize::string($this->body["city"]);
+			$id = uniqid("user" . "-" . uniqid());
+
+			$user = $this->getuserbyemail($email, "email");
+
+			if ($user) throw new Exception("This email is already in use");
+
+			$password = chr(rand(97, 122)) . rand(100, 999) . chr(rand(65, 90)) . rand(100, 999);
+			$hash = Auth::genHash($password);
+
+			$this->create([
+				"tablename" => "users",
+				"fields" => "`id`,`email`, `telephone`, `password`, `role`, `firstname`, `lastname`, `address`, `bio`, `state`, `city`",
+				"values" => ":id,:email,:telephone,:password,:role,:firstname,:lastname,:address,:bio,:state,:lga",
+				"bindparam" => [":id" => $id, ":email" => $email, ":telephone" => $telephone, ":password" => $hash, ":role" => $role, ":firstname" => $firstname, ":lastname" => $lastname, ":address" => $address, ":bio" => $bio, ":state" => $state, ":lga" => $lga]
+			]);
+
+			$template = EmailTemplate::welcomeuser($firstname, $email, $password);
+			MailService::sendMail($email, "Welcome", $template);
+
+			exit(Response::json(["status" => true, "message" => "Registration successfull, An email containing the login credentials has been sent to the user"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
 	public function login()
 	{
 		try {
@@ -71,6 +113,7 @@ class AuthController extends Controller
 				"userid" => $user["id"],
 				"adminid" => $user["id"],
 				"role" => $user["userrole"],
+				"image" => $user["image"],
 				"permissions" => $user["permissions"],
 				"username" => $user["firstname"] . " " . $user["lastname"],
 			]);

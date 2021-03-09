@@ -32,7 +32,11 @@ function determineClass($status)
         case 'sent':
             return "text-primary";
         case "recieved":
+        case "active";
             return "text-success";
+        case "deactivated":
+        case "suspended":
+            return "text-danger";
         default:
             return "text-dark";
     }

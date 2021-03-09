@@ -17,6 +17,7 @@ include_once "common/header.php";
             <?php include "common/nav.php" ?>
 
             <div class="content">
+                <a href="/admin/users/add" class="btn btn-sm btn-success">New User <i class="fa fa-book"></i></a>
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">USERS</h4>
@@ -32,7 +33,7 @@ include_once "common/header.php";
                                         <th>EMAIL</th>
                                         <th>ROLE</th>
                                         <th>STATE</th>
-                                        <th>CITY</th>
+                                        <th>LGA</th>
                                         <th>STATUS</th>
                                         <th>REGISTRATION&nbsp;DATE</th>
                                         <th>ACTIONS</th>
@@ -45,14 +46,14 @@ include_once "common/header.php";
                                     ?>
                                         <tr>
                                             <td data-label="">
-                                                <img class="img-fluid" src="/files/photo/<?= $user["image"] ?? "camera.svg" ?>" alt="..." style="width: 40px; height: 40px; cursor:pointer;">
+                                                <img class="img-fluid" src="/files/photo/<?= $user["image"] ? $user["image"] : "default.jpg" ?>" alt="..." style="width: 40px; height: 40px; cursor:pointer;">
                                             </td>
                                             <td data-label="NAME"><?= $user["firstname"] ?> <?= $user["lastname"] ?></td>
                                             <td data-label="TELEPHONE : "><?= $user["telephone"] ?></td>
                                             <td data-label="EMAIL : "><?= $user["email"] ?></td>
                                             <td data-label="ROLE : "><?= $user["userrole"] ?></td>
                                             <td data-label="STATE : "><?= $user["state"] ?></td>
-                                            <td data-label="CITY : "><?= $user["city"] ?></td>
+                                            <td data-label="LGA : "><?= $user["city"] ?></td>
                                             <td class="font-weight-bold <?= determineClass($user["status"]) ?>"><?= strtoupper($user["status"]) ?></td>
                                             <td data-label="REG. DATE : "><?= date("Y-m-d H:m:s a", strtotime($user["created_at"])) ?></td>
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">

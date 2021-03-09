@@ -14,7 +14,6 @@ class Helpers
      */
     public static function removefield($array, $keys)
     {
-
         if (!is_array($keys)) throw new \Exception("keys must be an array");
         foreach ($keys as $key) {
             unset($array[$key]);

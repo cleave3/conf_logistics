@@ -2,6 +2,10 @@
 
 namespace App\utils;
 
+use App\config\DotEnv;
+
+(new DotEnv(__DIR__ . '/../.env'))->load();
+
 class EmailTemplate
 {
 
@@ -9,7 +13,7 @@ class EmailTemplate
   {
     return '<p>Dear ' . $recipient . ',</p>
           <div>Thank you for registering with us. To complete your registration,<br/><br/>
-              <a style="padding: 10px; border:none;background-color:#4caf50;color:white;margin: 10px auto;" href="' . $confirmationlink . '">Click here</a>
+              <a style="padding: 10px; border:none;text-decoration:none;background-color:#4caf50;color:white;margin: 10px auto;" href="' . $confirmationlink . '">Click here</a>
               </div>
               <br/>
               <p>to confirm your account and complete your profile for approval and verification</p>
@@ -21,6 +25,23 @@ class EmailTemplate
           <p>Thanks,<br/>Confidebat Team</p>';
   }
 
+  public static function welcomeuser($recipient, $email, $password)
+  {
+    return '<p>Dear ' . $recipient . ',</p>
+          <div>Your Account has been created,<br/><br/>
+              <div>Use the credentials below to login to your Account</div>
+              <div>Email: ' . $email . '</div>
+              <div>Password: ' . $password . '</div>
+              <div style="margin-top: 50px;">
+              <a style="padding: 10px;text-decoration:none;border:none;background-color:#4caf50;color:white;margin: 10px auto;" href="' . getenv("BASE_URL") . '/admin/login">Click here</a>
+            </div>
+              </div>
+              <br/>
+              <p>to login to your account</p>
+              <p>Once you are logged in, you can update your profile and change your password</p>
+    
+          <p>Thanks,<br/>Confidebat Team</p>';
+  }
 
   public static function forgotpassword($recipient, $token, $confirmationlink)
   {

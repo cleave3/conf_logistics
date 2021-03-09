@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      toastr.success(result.message);
+      toastr.error(result.message);
     } finally {
       uploadbtn.innerHTML = `UPLOAD PHOTO <i class="fa fa-upload" aria-hidden="true"></i>`;
       uploadbtn.disabled = false;
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         toastr.error(result.message);
       }
     } catch ({ message: error }) {
-      toastr.success(result.message);
+      toastr.error(result.message);
     } finally {
       updateprofilebtn.innerHTML = "UPDATE PROFILE";
       updateprofilebtn.disabled = false;
