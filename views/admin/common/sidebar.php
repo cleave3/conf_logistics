@@ -31,7 +31,7 @@
                     <p>Orders</p>
                 </a>
             </li>
-            <div role="tablist" aria-multiselectable="true">
+            <!-- <div role="tablist" aria-multiselectable="true">
                 <div class="card-header <?= $currentnav == "inventory" ? "active" : "" ?>" role="tab" id="inventorytab">
                     <a style="text-decoration: none;" class="text-white" data-toggle="collapse" data-parent="#inventorytab" href="#inventorytabcontent" aria-expanded="true" aria-controls="inventorytabcontent">
                         <i class="nc-icon nc-box"></i>
@@ -50,17 +50,23 @@
                         </li>
                     </a>
                 </div>
-            </div>
-            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+            </div> -->
+            <!-- <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
                 <a href="/admin/transactions">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Transaction History</p>
                 </a>
-            </li>
+            </li> -->
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">
                 <a href="/admin/profile">
                     <i class="nc-icon nc-circle-10"></i>
                     <p>Profile</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "settings" ? "active" : "" ?>">
+                <a href="/admin/settings">
+                    <i class="nc-icon nc-settings-gear-65"></i>
+                    <p>Settings</p>
                 </a>
             </li>
         </ul>

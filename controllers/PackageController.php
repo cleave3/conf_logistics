@@ -134,7 +134,7 @@ class PackageController extends Controller
 		$drivernumber = $this->body["drivernumber"] ?? $package["driver_number"];
 		$transportcompany = $this->body["transportcompany"] ?? $package["transport_company"];
 		$status = $this->body["status"] ?? $package["status"];
-		$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : $package["image"];
+		$image = isset($this->file["image"]) && !empty($this->file["image"]["name"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : $package["image"];
 
 		// register package	
 		$this->update([

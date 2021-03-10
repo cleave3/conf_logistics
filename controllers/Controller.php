@@ -211,6 +211,7 @@ abstract class Controller
         $joins = $argument["joins"] ?? "";
 
         $query = "SELECT $fields FROM $tablename $joins WHERE $condition";
+
         $result = $this->conn->prepare($query);
 
         if ($bindparam != null) {

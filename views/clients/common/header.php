@@ -36,6 +36,7 @@ function determineClass($status)
             return "text-success";
         case "deactivated":
         case "suspended":
+        case "inactive":
             return "text-danger";
         default:
             return "text-dark";

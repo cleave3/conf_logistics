@@ -30,17 +30,37 @@ async function loadcities(state) {
 }
 
 function numberFormat(value) {
-  const result = new Intl.NumberFormat().format(value);
+  const result = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2 }).format(value);
   return result;
 }
 
 function formatCurrencyInput(inputs) {
+  if (inputs.length < 1) return;
   inputs.forEach(input => {
     let format = new Cleave(input, {
       numeral: true,
       numeralThousandsGroupStyle: "thousand",
     });
   });
+}
+
+function determineClass(status) {
+  switch (status) {
+    case "onhand":
+    case "pending":
+      return "text-warning";
+    case "sent":
+      return "text-primary";
+    case "recieved":
+    case "active":
+      return "text-success";
+    case "deactivated":
+    case "suspended":
+    case "inactive":
+      return "text-danger";
+    default:
+      return "text-dark";
+  }
 }
 
 // function makePDF(element, filename = "document") {

@@ -12,6 +12,7 @@ class Auth
 {
     public static function checkAuth($key)
     {
+        Session::start();
         $auth = Session::get($key);
         if ($auth == false) throw new \Exception("Authenticated access or session timeout (Reload and Try again) " . $key);
     }

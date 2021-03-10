@@ -153,3 +153,7 @@ input:disabled {
     width: 95%;
   }
 }
+
+.nav-link.active {
+  background-color: #343a40 !important;
+}

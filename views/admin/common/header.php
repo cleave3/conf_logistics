@@ -36,9 +36,35 @@ function determineClass($status)
             return "text-success";
         case "deactivated":
         case "suspended":
+        case "inactive":
             return "text-danger";
         default:
             return "text-dark";
     }
 }
+
+function evaluteFieldType($fieldtype, $value)
+{
+    switch ($fieldtype) {
+        case 'INPUT':
+            return <<<HTML
+                <input type="text" class="form-control" name="value" value="$value" required/>
+            HTML;
+        case 'TEXTAREA':
+            return <<<HTML
+                <textarea type="text" class="form-control" name="value" value="$value" required>$value</textarea>
+            HTML;
+        case 'SELECT':
+            $options = $value === "YES" ? "<option value='YES'>YES</option><option value='NO'>NO</option>" : "<option value='NO'>NO</option><option value='YES'>YES</option>";
+            return <<<HTML
+                <select type="text" class="custom-select" name="value" required>$options</select>
+            HTML;
+        default:
+            return <<<HTML
+                <input type="text" class="form-control" name="value" value="$value" required/>
+            HTML;
+    }
+}
+
+$nairasymbol = "&#8358;";
 ?>
