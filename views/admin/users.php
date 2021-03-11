@@ -57,9 +57,6 @@ include_once "common/header.php";
                                             <td class="font-weight-bold <?= determineClass($user["status"]) ?>"><?= strtoupper($user["status"]) ?></td>
                                             <td data-label="REG. DATE : "><?= date("Y-m-d H:m:s a", strtotime($user["created_at"])) ?></td>
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">
-                                                <a class="btn btn-sm mx-1 btn-secondary" href="/admin/users/details?userid=<?= $user["id"] ?>" title="Package Details">
-                                                    <img src="/assets/icons/history.svg" width="20px" height="20px" />
-                                                </a>
                                                 <a class="btn btn-sm mx-1 btn-primary" href="/admin/users/edit?userid=<?= $user["id"] ?>" title="Edit package">
                                                     <img src="/assets/icons/edit.svg" width="20px" height="20px" />
                                                 </a>

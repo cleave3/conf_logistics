@@ -22,7 +22,7 @@ $states =  $pc->states()["data"];
             <div class="content">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/clients/stockinventory">Users</a>
+                        <a href="/admin/users">Users</a>
                     </li>
                     <li class="breadcrumb-item active">add</li>
                 </ol>
@@ -87,6 +87,7 @@ $states =  $pc->states()["data"];
                                         <div class="form-group">
                                             <label>State</label>
                                             <select type="text" class="custom-select" name="state" id="state" required>
+                                                <option value="">--SELECT STATE--</option>
                                                 <?php foreach ($states as $state) { ?>
                                                     <option value="<?= $state["state"] ?>"><?= $state["state"] ?></option>
                                                 <?php } ?>
@@ -122,7 +123,7 @@ $states =  $pc->states()["data"];
     </div>
 
     <?php include $base . "common/js.php" ?>
-    <script src="/assets/js/admin/register.js"></script>
+    <script src="/assets/js/admin/user.js"></script>
 </body>
 
 </html>

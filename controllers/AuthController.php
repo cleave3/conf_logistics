@@ -301,19 +301,35 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function index()
-	{
-	}
-
-	public function add()
-	{
-	}
-
 	public function edit()
 	{
-	}
+		try {
+			$userid = Sanitize::string($this->body["userid"]);
 
-	public function delete()
-	{
+			$user = $this->getuserbyId($userid);
+
+			$telephone = Sanitize::string($this->body["telephone"]) ?? $user["telephone"];
+			$email = Sanitize::string($this->body["email"]) ?? $user["email"];
+			$role = Sanitize::string($this->body["role"]) ?? $user["role"];
+			$status = Sanitize::string($this->body["status"]) ?? $user["status"];
+			$firstname = Sanitize::string($this->body["firstname"]) ?? $user["firstname"];
+			$lastname = Sanitize::string($this->body["lastname"]) ?? $user["lastname"];
+			$address = Sanitize::string($this->body["address"]) ?? $user["address"];
+			$state = Sanitize::string($this->body["state"]) ?? $user["state"];
+			$lga = Sanitize::string($this->body["city"]) ?? $user["city"];
+
+			if (!$user) throw new Exception("user not found");
+
+			$this->update([
+				"tablename" => "users",
+				"condition" => "id = :id",
+				"fields" => "email = :email,telephone = :telephone,role = :role,firstname = :firstname,lastname = :lastname,address = :address,state = :state,city = :lga,status = :status",
+				"bindparam" => [":id" => $userid, ":email" => $email, ":telephone" => $telephone, ":role" => $role, ":firstname" => $firstname, ":lastname" => $lastname, ":address" => $address, ":state" => $state, ":lga" => $lga, ":status" => $status]
+			]);
+
+			exit(Response::json(["status" => true, "message" => "Changes saved successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
 	}
 }
