@@ -54,7 +54,9 @@ include_once "common/header.php";
                                             <td data-label="TRANSPORT COMPANY : "><?= $package["transport_company"] ?></td>
                                             <td data-label="DRIVER NUMBER : "><?= $package["driver_number"] ?></td>
                                             <td data-label="DESTINATION : "><?= $package["destination"] ?></td>
-                                            <td class="font-weight-bold <?= determineClass($package["status"]) ?>"><?= strtoupper($package["status"]) ?></td>
+                                            <td class="font-weight-bold text-uppercase">
+                                                <span class="badge badge-<?= determineClass($package["status"]) ?> p-2"><?= $package["status"] ?></span>
+                                            </td>
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">
                                                 <?php if (in_array($package["status"], ["onhand", "pending"])) { ?>
                                                     <a class="btn btn-sm mx-1 btn-success" href="#" title="Send Item Now" onclick='sendPackageNow(<?= $package["id"] ?>)'>
@@ -67,9 +69,9 @@ include_once "common/header.php";
                                                 <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
                                                     <img src="/assets/icons/edit.svg" width="20px" height="20px" />
                                                 </a>
-                                                <a class="btn btn-sm mx-1 btn-danger" href="" title="Delete Package">
+                                                <!-- <a class="btn btn-sm mx-1 btn-danger" href="" title="Delete Package">
                                                     <img src="/assets/icons/trash.svg" width="20px" height="20px" />
-                                                </a>
+                                                </a> -->
                                             </td>
                                         </tr>
                                     <?php

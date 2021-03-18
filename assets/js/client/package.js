@@ -53,19 +53,6 @@ document.addEventListener("change", async e => {
     hideLoader();
     if (itemdetail.status) {
       e.target.parentElement.offsetParent.nextElementSibling.firstElementChild.children[1].value = itemdetail.data.unit_cost;
-      e.target.parentElement.offsetParent.nextElementSibling.nextElementSibling.children[0].children[1].setAttribute(
-        "data-qty",
-        Number(itemdetail.data.quantity)
-      );
-    }
-  }
-});
-
-document.addEventListener("input", e => {
-  if (e.target.classList.contains("qty")) {
-    if (Number(e.target.getAttribute("data-qty")) < Number(e.target.value)) {
-      toastr.warning(`Only ${Number(e.target.getAttribute("data-qty"))} of this item is left. You can't send more item than you have in stock`);
-      e.target.value = "";
     }
   }
 });

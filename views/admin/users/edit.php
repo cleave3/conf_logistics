@@ -12,7 +12,7 @@ $pc = new PublicController();
 $ac = new AuthController();
 $roles = $ac->getAllRoles();
 $states =  $pc->states()["data"];
-$user = $ac->getuserbyId($_SESSION["userid"]);
+$user = $ac->getuserbyId($_GET["userid"]);
 $cities = $pc->cityobject($user["state"])["data"];
 $statuses = [["value" => "active", "label" => "User Activated"], ["value" => "deactivated", "label" => "User Deactivated"]];
 ?>

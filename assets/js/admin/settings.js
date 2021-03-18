@@ -104,10 +104,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     result.data.map((data, i) => {
       if (type === "pricing") {
+        // <td data-label="">${i + 1}</td>
+        // <td data-label="STATE : ">${data.state}</td>
         newrow += `<tr>
-              <td data-label="">${i + 1}</td>
-              <td data-label="STATE : ">${data.state}</td>
-              <td data-label="CITY : ">${data.city}</td>
+              <td data-label="CITY : ">${data.state} - ${data.city}</td>
               <td data-label="AMOUNT : ">&#8358;${numberFormat(data.amount)}</td>
               <td data-label=" " class="d-md-flex justify-content-center">
                   <a class="btn btn-sm mx-1 btn-primary" href="#" data-toggle="modal" data-target="#editpricingmodal" title="Edit Pricing" onclick="setEditDetails('pricing' , '${
@@ -118,10 +118,10 @@ document.addEventListener("DOMContentLoaded", async () => {
               </td>
           </tr>`;
       } else {
+        // <td data-label="">${i + 1}</td>
+        // <td data-label="STATE : ">${data.state}</td>
         newrow += `<tr>
-          <td data-label="">${i + 1}</td>
-          <td data-label="STATE : ">${data.state}</td>
-          <td data-label="LOCATION : ">${data.location}</td>
+          <td data-label="LOCATION : ">${data.state} - ${data.location}</td>
           <td data-label="AMOUNT : ">&#8358;${numberFormat(data.amount)}</td>
           <td data-label="STATUS : " class="${determineClass(data.status)}">${data.status}</td>
           <td data-label=" " class="d-md-flex justify-content-center">

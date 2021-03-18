@@ -1,8 +1,8 @@
 <?php
 $base = __DIR__ . "/../";
 include $base . "common/authheader.php";
-$title = "Add Inventory Item";
-$currentnav = "inventory";
+$title = "Add Catalog Item";
+$currentnav = "catalog";
 include $base . "common/header.php";
 ?>
 
@@ -14,7 +14,7 @@ include $base . "common/header.php";
             <div class="content">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/clients/stockinventory">Inventory</a>
+                        <a href="/clients/catalog">Catalog</a>
                     </li>
                     <li class="breadcrumb-item active">add</li>
                 </ol>
@@ -35,18 +35,12 @@ include $base . "common/header.php";
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Quantity</label>
-                                            <input type="number" pattern="\d" min="1" id="quantity" name="quantity" class="form-control" placeholder="Enter quantity" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
                                             <label>Unit Cost</label>
                                             <input type="text" class="form-control" name="cost" id="cost" placeholder="Enter Unit Cost">
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Unit Measure</label>
                                             <select name="measure" class="custom-select" required>
@@ -57,18 +51,6 @@ include $base . "common/header.php";
                                                 <option value="CARTONS">GALLONS</option>
                                                 <option value="CARTONS">CRATES</option>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Low Stock</label>
-                                            <input type="number" pattern="\d" min="0" id="lowstock" name="lowstock" class="form-control" placeholder="Enter quantity where to get notified of low stock" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Reorder level</label>
-                                            <input type="number" pattern="\d" min="0" id="reorder" name="reorder" class="form-control" placeholder="Enter quantity to get notified to reorder" required>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -94,7 +76,7 @@ include $base . "common/header.php";
     <script>
         formatCurrencyInput(["#cost"]);
     </script>
-    <script src="/assets/js/client/inventory.js"></script>
+    <script src="/assets/js/client/catalog.js"></script>
 </body>
 
 </html>

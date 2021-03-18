@@ -83,4 +83,33 @@ class PublicController extends Controller
 			return $error->getMessage();
 		}
 	}
+
+	public function getDeliveryPriceListByState($state)
+	{
+		return $this->findAll([
+			"tablename" => "delivery_pricing",
+			"condition" => "state_id = :state",
+			"bindparam" => [":state" => $state]
+		]);
+	}
+
+	public function deliverypricing()
+	{
+		try {
+			$pricelist = $this->getDeliveryPriceListByState($this->query["stateid"]);
+			return Response::json(["status" => true, "data" => $pricelist]);
+		} catch (\Exception $error) {
+			return Response::json(["status" => false, "message" => $error->getMessage()]);
+		}
+	}
+
+	public function getStatesForDelivery()
+	{
+		return $this->findAll([
+			"tablename" => "delivery_pricing A",
+			"conditions" => "1 GROUP BY A.state_id ORDER BY B.state ASC",
+			"fields" => "DISTINCT A.state_id, B.id, B.state",
+			"joins" => "INNER JOIN states B ON A.state_id = B.id"
+		]);
+	}
 }

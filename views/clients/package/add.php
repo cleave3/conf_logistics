@@ -71,7 +71,7 @@ $locations = $pc->getActiveLocations();
                                             <select class="custom-select" name="destination" required>
                                                 <option value="">--SELECT DESTINATION--</option>
                                                 <?php foreach ($locations as $location) { ?>
-                                                    <option value="<?= $location["location"] ?>"><?= $location["location"] ?></option>
+                                                    <option value="<?= $location["id"] ?>"><?= $location["location"] ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>

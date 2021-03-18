@@ -115,7 +115,7 @@ class PackageController extends Controller
 			"tablename" => "package_item A",
 			"condition" => "package_id = :id",
 			"fields" => "A.*, B.name",
-			"joins" => "INNER JOIN inventory B ON A.item_id = B.id",
+			"joins" => "INNER JOIN catalog B ON A.item_id = B.id",
 			"bindparam" => [":id" => $id]
 		]);
 	}
@@ -158,7 +158,39 @@ class PackageController extends Controller
 		}
 	}
 
+	public function getitems()
+	{
+		try {
+			$this->getClientId();
+			$package = $this->getPackageItemsWithDetails();
+			exit(Response::json(["status" => true, "message" => "record retrieved", "data" => $package]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
 	public function delete()
 	{
+	}
+
+	public function getPackageItemsWithDetails()
+	{
+		return $this->findAll([
+			"tablename" => "package_item A",
+			"condition" => "1 GROUP BY A.item_id",
+			"joins" => "INNER JOIN package B ON A.package_id = B.id INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id INNER JOIN locations E ON A.location = E.id",
+			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity, B.package_title,B.weight,B.description,B.image,B.status,B.destination,B.driver_number,B.transport_company,B.instructions,C.name,C.unit_cost,C.unit_measure,C.description,D.*, E.state_id as itemstate_id, E.location,E.status, E.amount as waybillfee"
+		]);
+	}
+
+	public function getPackageItemDetails($itemid)
+	{
+		return $this->findOne([
+			"tablename" => "package_item A",
+			"condition" => "A.item_id =:itemid GROUP BY A.item_id",
+			"bindparam" => [":itemid" => $itemid],
+			"joins" => "INNER JOIN package B ON A.package_id = B.id INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id INNER JOIN locations E ON A.location = E.id",
+			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity, B.package_title,B.weight,B.description,B.image,B.status,B.destination,B.driver_number,B.transport_company,B.instructions,C.name,C.unit_cost,C.unit_measure,C.description,D.*, E.state_id as itemstate_id, E.location,E.status, E.amount as waybillfee"
+		]);
 	}
 }

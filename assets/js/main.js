@@ -29,7 +29,22 @@ async function loadcities(state) {
   return cities;
 }
 
+async function getdeliveryfee() {
+  const result = await getRequest(`config/getDeliveryFee`);
+  return result.data;
+}
+
+async function getitems() {
+  const result = await getRequest(`package/getitems`);
+  return result.data;
+}
+
 function numberFormat(value) {
+  const result = new Intl.NumberFormat("en-US", { style: "currency", currency: "NGN", minimumFractionDigits: 2 }).format(value);
+  return result;
+}
+
+function number_format(value) {
   const result = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2 }).format(value);
   return result;
 }

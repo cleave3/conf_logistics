@@ -34,7 +34,7 @@ include_once "common/header.php";
                             <a class="nav-link" id="location-tab" data-toggle="pill" href="#location" role="tab" aria-controls="location" aria-selected="false">Waybill locations</a>
                         </div>
                     </div>
-                    <div class="col-md-9 col-12" style="overflow-y: auto; height: calc(100vh - 100px)">
+                    <div class="col-md-9 col-12" style="/*overflow-y: auto; height: calc(100vh - 100px)*/">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
                                 <form id="basicsettingsform">
@@ -109,10 +109,11 @@ include_once "common/header.php";
                                     <table id="pricingtable" class="table table-sm table-hover table-inverse" style="font-size: 13px;">
                                         <thead>
                                             <tr>
-                                                <th></th>
-                                                <th>STATE</th>
+                                                <!-- <th></th> -->
+                                                <!-- <th>STATE</th> -->
                                                 <th>CITY</th>
-                                                <th>AMOUNT</th>
+                                                <th>EXTRA&nbsp;CHARGE</th>
+                                                <th>WAYBILL&nbsp;AMOUNT</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -122,10 +123,11 @@ include_once "common/header.php";
                                             foreach ($prices as $price) {
                                             ?>
                                                 <tr>
-                                                    <td data-label=""><?= $sn ?></td>
-                                                    <td data-label="STATE : "><?= $price["state"] ?></td>
-                                                    <td data-label="CITY : "><?= $price["city"] ?></td>
-                                                    <td data-label="AMOUNT : "><?= $nairasymbol ?> <?= number_format($price["amount"], 2) ?></td>
+                                                    <!-- <td data-label=""><?= $sn ?></td> -->
+                                                    <!-- <td data-label="STATE : "><?= $price["state"] ?></td> -->
+                                                    <td data-label="CITY : "><?= $price["state"] ?> - <?= $price["city"] ?></td>
+                                                    <td data-label="EXCHARGE CHARGE : "><?= $nairasymbol ?> <?= number_format($price["extra_charge"], 2) ?></td>
+                                                    <td data-label="WAYBILL AMOUNT : "><?= $nairasymbol ?> <?= number_format($price["waybill_charge"], 2) ?></td>
                                                     <td data-label=" " class="d-md-flex justify-content-center">
                                                         <a class="btn btn-sm mx-1 btn-primary" href="#" data-toggle="modal" data-target="#editpricingmodal" title="Edit Pricing" onclick="setEditDetails('pricing' , '<?= $price['id'] ?>')">
                                                             <img src="/assets/icons/edit.svg" width="20px" height="20px" />
@@ -147,8 +149,8 @@ include_once "common/header.php";
                                     <table id="locationtable" class="table table-sm table-hover table-inverse" style="font-size: 13px;">
                                         <thead>
                                             <tr>
-                                                <th></th>
-                                                <th>STATE</th>
+                                                <!-- <th></th> -->
+                                                <!-- <th>STATE</th> -->
                                                 <th>LOCATION</th>
                                                 <th>AMOUNT</th>
                                                 <th>STATUS</th>
@@ -161,9 +163,9 @@ include_once "common/header.php";
                                             foreach ($locations as $location) {
                                             ?>
                                                 <tr>
-                                                    <td data-label=""><?= $sn ?></td>
-                                                    <td data-label="STATE : "><?= $location["state"] ?></td>
-                                                    <td data-label="LOCATION : "><?= $location["location"] ?></td>
+                                                    <!-- <td data-label=""><?= $sn ?></td> -->
+                                                    <!-- <td data-label="STATE : "><?= $location["state"] ?></td> -->
+                                                    <td data-label="LOCATION : "><?= $location["state"] ?> - <?= $location["location"] ?></td>
                                                     <td data-label="AMOUNT : "><?= $nairasymbol ?> <?= number_format($location["amount"], 2) ?></td>
                                                     <td data-label="STATUS : " class="<?= determineClass($location["status"]) ?>"><?= $location["status"] ?></td>
                                                     <td data-label=" " class="d-md-flex justify-content-center">

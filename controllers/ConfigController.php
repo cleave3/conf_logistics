@@ -55,6 +55,16 @@ class ConfigController extends Controller
 		]);
 	}
 
+	public function getDeliveryFee()
+	{
+		try {
+			$config = $this->getConfig("BASE DELIVERY FEE");
+			exit(Response::json(["status" => true, "message" => "record retrieved", "data" => $config["value"]]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
 	public function getDeliveryPricing()
 	{
 		return $this->findAll([

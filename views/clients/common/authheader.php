@@ -12,6 +12,6 @@ $emailverified = Session::get("emailverified");
 $profileverified = Session::get("profileverified");
 
 if (!$auth) {
-    header("location:login");
+    header("location:/clients/login");
     exit;
 }

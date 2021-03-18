@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (result.status) {
           toastr.success(result.message);
           setTimeout(() => {
-            window.location = "/clients/stockinventory";
+            window.location = "/clients/catalog";
           }, 1000);
         } else {
           toastr.error(result.message);

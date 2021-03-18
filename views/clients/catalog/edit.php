@@ -13,7 +13,7 @@ $item = $ic->getInventoryItem($_GET["itemid"]);
 $base = __DIR__ . "/../";
 include $base . "common/authheader.php";
 $title = "Edit Item";
-$currentnav = "inventory";
+$currentnav = "catalog";
 include $base . "common/header.php";
 ?>
 
@@ -25,7 +25,7 @@ include $base . "common/header.php";
             <div class="content">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/clients/stockinventory">Inventory</a>
+                        <a href="/clients/catalog">Catalog</a>
                     </li>
                     <li class="breadcrumb-item active">Edit</li>
                 </ol>
@@ -47,28 +47,8 @@ include $base . "common/header.php";
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Quantity on Hand</label>
-                                            <input type="number" pattern="\d" min="1" id="quantity" name="quantity" class="form-control" placeholder="Enter quantity" value="<?= $item["quantity"] ?>" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
                                             <label>Unit Cost</label>
                                             <input type="text" class="form-control" name="cost" id="cost" placeholder="Enter Unit Cost" value="<?= $item["unit_cost"] ?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Quantity to Add</label>
-                                            <input type="number" pattern="\d" min="0" id="in" name="in" class="form-control" placeholder="Enter quantity" value="0">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Quantity to Remove</label>
-                                            <input type="number" pattern="\d" min="0" id="out" name="out" class="form-control" placeholder="Enter quantity" value="0">
                                         </div>
                                     </div>
 
@@ -86,18 +66,6 @@ include $base . "common/header.php";
                                                     <option value="<?= $measure ?>"><?= $measure ?></option>
                                                 <?php } ?>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Low Stock</label>
-                                            <input type="number" pattern="\d" min="0" id="lowstock" name="lowstock" class="form-control" placeholder="Enter quantity where to get notified of low stock" value="<?= $item["low_stock"] ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Reorder level</label>
-                                            <input type="number" pattern="\d" min="0" id="reorder" name="reorder" class="form-control" placeholder="Enter quantity to get notified to reorder" value="<?= $item["reorder"] ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -123,7 +91,7 @@ include $base . "common/header.php";
     <script>
         formatCurrencyInput(["#cost"]);
     </script>
-    <script src="/assets/js/client/inventory.js"></script>
+    <script src="/assets/js/client/catalog.js"></script>
 </body>
 
 </html>

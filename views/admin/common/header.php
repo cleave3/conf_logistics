@@ -28,15 +28,21 @@ function determineClass($status)
     switch ($status) {
         case 'onhand':
         case 'pending':
+        case 'processing':
             return "text-warning";
         case 'sent':
             return "text-primary";
         case "recieved":
         case "active";
+        case "paid";
+        case "delivered";
+        case "verified";
             return "text-success";
         case "deactivated":
         case "suspended":
         case "inactive":
+        case "unpaid":
+        case "cancelled":
             return "text-danger";
         default:
             return "text-dark";
@@ -55,7 +61,9 @@ function evaluteFieldType($fieldtype, $value)
                 <textarea type="text" class="form-control" name="value" value="$value" required>$value</textarea>
             HTML;
         case 'SELECT':
-            $options = $value === "YES" ? "<option value='YES'>YES</option><option value='NO'>NO</option>" : "<option value='NO'>NO</option><option value='YES'>YES</option>";
+            $options = $value === "YES" ?
+                "<option value='YES'>YES</option><option value='NO'>NO</option>"
+                : "<option value='NO'>NO</option><option value='YES'>YES</option>";
             return <<<HTML
                 <select type="text" class="custom-select" name="value" required>$options</select>
             HTML;
