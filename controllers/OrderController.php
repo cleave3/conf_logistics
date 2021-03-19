@@ -28,6 +28,46 @@ class OrderController extends Controller
 		]);
 	}
 
+	public function getOrder($orderid)
+	{
+		return $this->findOne([
+			"tablename" => "orders A",
+			"condition" => "A.id = :id ORDER BY A.created_at DESC",
+			"bindparam" => [":id" => $orderid],
+			"fields" => "A.*, B.state, C.city, D.companyname, E.email as companyemail, E.telephone as companytelephone",
+			"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN client_profile D ON A.client_id = D.client_id INNER JOIN clients E ON A.client_id = E.id"
+		]);
+	}
+
+	public function getOrderItems($orderid)
+	{
+		return $this->findAll([
+			"tablename" => "order_items A",
+			"condition" => "A.order_id = :id",
+			"bindparam" => [":id" => $orderid],
+			"fields" => "A.*, B.name",
+			"joins" => "INNER JOIN catalog B ON A.item_id = B.id"
+		]);
+	}
+
+	public function getOrderHistory($orderid)
+	{
+		return $this->findAll([
+			"tablename" => "order_history",
+			"condition" => "order_id = :id",
+			"bindparam" => [":id" => $orderid],
+		]);
+	}
+
+	public function getOrderDetails($orderid)
+	{
+		return [
+			"order" => $this->getOrder($orderid),
+			"orderitems" => $this->getOrderItems($orderid),
+			"orderhistory" => $this->getOrderHistory($orderid)
+		];
+	}
+
 	public function addOrderItems($orderid, $itemid, $cost, $quantity)
 	{
 		return $this->create([
@@ -90,6 +130,62 @@ class OrderController extends Controller
 			$this->addOrderHistory($orderid, "sent", "Order sent");
 			//send email here
 			exit(Response::json(["status" => true, "message" => "Order sent successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function cancelorder()
+	{
+		try {
+			$clientid = $this->client->getClientId();
+			$orderid = $this->query["orderid"];
+			$order = $this->getOrder($orderid);
+			if (!$order) throw new \Exception("Order not found");
+
+			if ($clientid !== $order["client_id"]) throw new \Exception("you are not allowed to perform this operation");
+			if (in_array($order["status"], ["delivered", "intransit", "cancelled"])) throw new \Exception("You can no longer cancel this order");
+			if (in_array($order["payment_status"], ["paid", "verified"])) throw new \Exception("You can cancel an order that has been paid for, Contact Admin");
+
+			$this->update([
+				"tablename" => "orders",
+				"fields" => "status =:status",
+				"condition" => "id =:orderid",
+				"bindparam" => [":status" => "cancelled", ":orderid" => $orderid]
+			]);
+
+			$this->addOrderHistory($orderid, "cancelled", "Order was cancelled by " . $order["companyname"]);
+
+			//send email here
+			exit(Response::json(["status" => true, "message" => "Order cancelled successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function verifypayment()
+	{
+		try {
+			$clientid = $this->client->getClientId();
+			$orderid = $this->query["orderid"];
+			$order = $this->getOrder($orderid);
+			if (!$order) throw new \Exception("Order not found");
+
+			if ($clientid !== $order["client_id"]) throw new \Exception("you are not allowed to perform this operation");
+			if (in_array($order["payment_status"], ["verified"])) throw new \Exception("You have alread verified this payment");
+			if ($order["payment_status"] !== "paid") throw new \Exception("You can not verify an unpaid payment");
+
+			$this->update([
+				"tablename" => "orders",
+				"fields" => "payment_status =:status",
+				"condition" => "id =:orderid",
+				"bindparam" => [":status" => "verified", ":orderid" => $orderid]
+			]);
+
+			$this->addOrderHistory($orderid, "verified", "Payment for this order was verified" . $order["companyname"]);
+
+			//send email here
+			exit(Response::json(["status" => true, "message" => "Payment verified successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

@@ -60,17 +60,17 @@ include_once "common/header.php";
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">
                                                 <?php if (in_array($package["status"], ["onhand", "pending"])) { ?>
                                                     <a class="btn btn-sm mx-1 btn-success" href="#" title="Send Item Now" onclick='sendPackageNow(<?= $package["id"] ?>)'>
-                                                        <img src="/assets/icons/send.svg" width="20px" height="20px" />
+                                                        <img src="/assets/icons/send.svg" width="15px" height="15px" />
                                                     </a>
                                                 <?php } ?>
                                                 <a class="btn btn-sm mx-1 btn-secondary" href="/clients/package/details?packageid=<?= $package["id"] ?>" title="Package Details">
-                                                    <img src="/assets/icons/details.svg" width="20px" height="20px" />
+                                                    <img src="/assets/icons/details.svg" width="15px" height="15px" />
                                                 </a>
                                                 <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
-                                                    <img src="/assets/icons/edit.svg" width="20px" height="20px" />
+                                                    <img src="/assets/icons/edit.svg" width="15px" height="15px" />
                                                 </a>
                                                 <!-- <a class="btn btn-sm mx-1 btn-danger" href="" title="Delete Package">
-                                                    <img src="/assets/icons/trash.svg" width="20px" height="20px" />
+                                                    <img src="/assets/icons/trash.svg" width="15px" height="15px" />
                                                 </a> -->
                                             </td>
                                         </tr>

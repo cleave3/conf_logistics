@@ -26,6 +26,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (e.target.classList.contains("removeitem")) {
       removeItem(e.target.getAttribute("data-id"));
     }
+
+    if (e.target.id === "cancelbtn") {
+      toastr.confirm("Are you sure you want to cancel this order ?", {
+        yes: () => cancelOrder(e.target.getAttribute("data-orderid")),
+      });
+    }
+
+    if (e.target.id === "verifybtn") {
+      toastr.confirm("Have you recieved this payment ?", {
+        yes: () => verifyPayment(e.target.getAttribute("data-orderid")),
+      });
+    }
   });
 
   function confirmOrder() {
@@ -83,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (e.target.value.trim() === "") return;
       const price = prices.find(p => p.id === e.target.value);
       extracharge = price.extra_charge;
-      waybillfee = Number(price.waybill_charge);
+      // waybillfee = Number(price.waybill_charge);
       bckwaybill = waybillfee;
       calculateOrderDetails();
     });
@@ -224,6 +236,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       data.append("items", JSON.stringify(orderitems));
       data.append("conf_ec", extracharge);
       data.append("conf_wbf", waybillfee);
+
       const result = await postRequest(`order/submit`, data);
 
       if (result.status) {
@@ -242,6 +255,42 @@ document.addEventListener("DOMContentLoaded", async () => {
       hideLoader();
       submitorder.innerHTML = `Submit Order <i class="fa fa-paper-plane" aria-hidden="true"></i>`;
       submitorder.disabled = false;
+    }
+  };
+
+  const cancelOrder = async id => {
+    try {
+      showLoader();
+      const result = await getRequest(`order/cancelorder?orderid=${id}`);
+
+      if (result.status) {
+        toastr.success(result.message);
+        window.location = "/clients/orders";
+      } else {
+        toastr.error(result.message);
+      }
+    } catch ({ message: error }) {
+      toastr.error(error);
+    } finally {
+      hideLoader();
+    }
+  };
+
+  const verifyPayment = async id => {
+    try {
+      showLoader();
+      const result = await getRequest(`order/verifypayment?orderid=${id}`);
+
+      if (result.status) {
+        toastr.success(result.message);
+        window.location = "/clients/orders";
+      } else {
+        toastr.error(result.message);
+      }
+    } catch ({ message: error }) {
+      toastr.error(error);
+    } finally {
+      hideLoader();
     }
   };
 });

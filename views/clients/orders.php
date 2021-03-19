@@ -33,12 +33,11 @@ include_once "common/header.php";
                                     <th role="columnheader">ADDRESS</th>
                                     <th role="columnheader">AMOUNT</th>
                                     <th role="columnheader">DELIVERY&nbsp;FEE</th>
-                                    <th role="columnheader">ORDER&nbsp;STATUS</th>
                                     <th role="columnheader">EARNING</th>
-                                    <th role="columnheader">PAYMENT</th>
+                                    <th role="columnheader">ORDER&nbsp;STATUS</th>
+                                    <!-- <th role="columnheader">PAYMENT</th> -->
                                     <th role="columnheader">CREATED&nbsp;AT</th>
                                     <th role="columnheader">UPDATED&nbsp;AT</th>
-                                    <th role="columnheader"></th>
                                 </tr>
                             </thead>
                             <tbody role="rowgroup" id="inventorylist">
@@ -47,7 +46,12 @@ include_once "common/header.php";
                                 foreach ($orders as $order) {
                                 ?>
                                     <tr role="row">
-                                        <td role="cell" data-label=""><?= $sn ?></td>
+                                        <td role="cell" data-label="">
+                                            <?= $sn ?>
+                                            <a class="btn btn-sm mx-1 btn-secondary" href="/clients/orders/details?orderid=<?= $order["id"] ?>" title="Order Details">
+                                                <img src="/assets/icons/details.svg" width="15px" height="15px" />
+                                            </a>
+                                        </td>
                                         <td role="cell" data-label="CUSTOMER : "><?= $order["customer"] ?></td>
                                         <td role="cell" data-label="TELEPHONE : "><?= $order["telephone"] ?></td>
                                         <td role="cell" data-label="STATE : "><?= $order["state"] ?></td>
@@ -55,26 +59,20 @@ include_once "common/header.php";
                                         <td role="cell" data-label="ADDRESS : "><?= $order["address"] ?></td>
                                         <td role="cell" data-label="AMOUNT : "><?= number_format($order["totalamount"], 2) ?></td>
                                         <td role="cell" data-label="DELIVERY FEE : "><?= number_format($order["delivery_fee"], 2) ?></td>
-                                        <td class="text-uppercase" role="cell" data-label="ORDER STATUS : ">
-                                            <span class="badge badge-<?= determineClass($order["status"]) ?> p-2"><?= $order["status"] ?></span>
-                                        </td>
                                         <td role="cell" data-label="EXPECTED PAYMENT : ">
                                             <?= number_format(($order["totalamount"] - $order["delivery_fee"]), 2) ?>
                                         </td>
-                                        <td class="text-uppercase" role="cell" data-label="PAYMENT STATUS : ">
-                                            <span class="badge badge-<?= determineClass($order["payment_status"]) ?> p-2"><?= $order["payment_status"] ?></span>
+                                        <td class="text-uppercase" role="cell" data-label="ORDER STATUS : ">
+                                            <span class="badge badge-<?= determineClass($order["status"]) ?> p-2"><?= $order["status"] ?></span>
                                         </td>
+                                        <!-- <td class="text-uppercase" role="cell" data-label="PAYMENT STATUS : ">
+                                            <span class="badge badge-<?= determineClass($order["payment_status"]) ?> p-2"><?= $order["payment_status"] ?></span>
+                                        </td> -->
                                         <td role="cell" data-label="CREATED AT : ">
                                             <?= date("Y-m-d, H:m:s a", strtotime($order["created_at"])) ?>
                                         </td>
                                         <td role="cell" data-label="UPDATED AT : ">
                                             <?= empty($order["updated_at"]) ? "never" : date("Y-m-d, H:m:s a", strtotime($order["updated_at"])) ?>
-                                        </td>
-                                        <td role="cell" data-label="" class="d-flex">
-                                            <a class="btn btn-sm mx-1 btn-secondary" href="/clients/orders/details?orderid=<?= $order["id"] ?>" title="Order Details">
-                                                <img src="/assets/icons/details.svg" width="15px" height="15px" />
-                                            </a>
-                                            <a class="btn btn-sm btn-primary" href="/clients/orders/edit?orderid=<?= $order["id"] ?>" title="Edit Order">&#9998;&nbsp;Edit</a>
                                         </td>
                                     </tr>
                                 <?php

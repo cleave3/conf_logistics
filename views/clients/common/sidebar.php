@@ -37,12 +37,12 @@
                     <p>Package Inventory</p>
                 </a>
             </li>
-            <!-- <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+            <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
                 <a href="/clients/transactions">
                     <i class="nc-icon nc-credit-card"></i>
-                    <p>Transaction History</p>
+                    <p>Payments</p>
                 </a>
-            </li> -->
+            </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">
                 <a href="/clients/profile">
                     <i class="nc-icon nc-circle-10"></i>

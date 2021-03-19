@@ -37,7 +37,7 @@ include $base . "common/header.php";
                             <table style="border-collapse: collapse; width: 100%; border-top: 1.5px solid #DDDDDD; border-left: 1.5px solid #DDDDDD; margin-bottom: 20px;">
                                 <thead>
                                     <tr>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;" colspan="2">WAYBILL DETAIL</td>
+                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;" colspan="3">WAYBILL DETAIL</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -45,12 +45,15 @@ include $base . "common/header.php";
                                         <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
                                             <b>Date : </b> <?= date("Y-m-d H:m:s a", strtotime($package["owner"]["created_at"])) ?><br />
                                         </td>
+                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" class="text-uppercase">
+                                            <b>PAckage Status : </b><span class="badge badge-<?= determineClass($package["package"]["status"]) ?> p-2"><?= $package["package"]["status"] ?></span>
+                                        </td>
                                         <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
                                             <b>Package Title : </b> <?= $package["package"]["package_title"] ?><br />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" colspan="2">
+                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" colspan="3">
                                             <b>Description : </b> <?= $package["package"]["description"] ?><br />
                                         </td>
                                     </tr>
