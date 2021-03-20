@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (result.status) {
         toastr.success(result.message);
-        window.location = "/clients/orders";
+        window.location.reload();
       } else {
         toastr.error(result.message);
       }

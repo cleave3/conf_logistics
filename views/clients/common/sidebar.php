@@ -38,7 +38,7 @@
                 </a>
             </li>
             <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
-                <a href="/clients/transactions">
+                <a href="/clients/payments">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Payments</p>
                 </a>

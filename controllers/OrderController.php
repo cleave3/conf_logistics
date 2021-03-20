@@ -190,4 +190,15 @@ class OrderController extends Controller
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
 	}
+
+	public function getClientPayments()
+	{
+		$clientid = $this->client->getClientId();
+
+		return $this->findAll([
+			"tablename" => "orders",
+			"condition" => "client_id =:clientid AND status =:status ORDER BY updated_at DESC",
+			"bindparam" => [":clientid" => $clientid, ":status" => "delivered"]
+		]);
+	}
 }

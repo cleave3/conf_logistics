@@ -25,7 +25,7 @@ include_once "common/header.php";
                         <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
                             <thead role="rowgroup">
                                 <tr role="row">
-                                    <th role="columnheader">S/N</th>
+                                    <th role="columnheader">ORDER ID</th>
                                     <th role="columnheader">CUSTOMER</th>
                                     <th role="columnheader">TELEPHONE</th>
                                     <th role="columnheader">STATE</th>
@@ -33,7 +33,7 @@ include_once "common/header.php";
                                     <th role="columnheader">ADDRESS</th>
                                     <th role="columnheader">AMOUNT</th>
                                     <th role="columnheader">DELIVERY&nbsp;FEE</th>
-                                    <th role="columnheader">EARNING</th>
+                                    <th role="columnheader">BALANCE</th>
                                     <th role="columnheader">ORDER&nbsp;STATUS</th>
                                     <!-- <th role="columnheader">PAYMENT</th> -->
                                     <th role="columnheader">CREATED&nbsp;AT</th>
@@ -46,8 +46,8 @@ include_once "common/header.php";
                                 foreach ($orders as $order) {
                                 ?>
                                     <tr role="row">
-                                        <td role="cell" data-label="">
-                                            <?= $sn ?>
+                                        <td role="cell" data-label="ORDER ID">
+                                            #<?= $order["id"] ?>
                                             <a class="btn btn-sm mx-1 btn-secondary" href="/clients/orders/details?orderid=<?= $order["id"] ?>" title="Order Details">
                                                 <img src="/assets/icons/details.svg" width="15px" height="15px" />
                                             </a>

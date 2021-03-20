@@ -33,11 +33,11 @@ include $base . "common/header.php";
                     </button>
                 <?php } ?>
 
-                <!-- <?php if (in_array($order["order"]["payment_status"], ["paid"])) { ?>
+                <?php if (in_array($order["order"]["payment_status"], ["paid"])) { ?>
                     <button type="button" class="btn btn-transparent btn-sm mx-1" id="verifybtn" data-orderid="<?= $order["order"]["id"] ?>">
                         <img src="/assets/icons/money.svg" width="15px" height="15px" /> Verify Payment
                     </button>
-                <?php } ?> -->
+                <?php } ?>
                 <div class="order print-container">
                     <div class="card">
                         <div class="card-header">
