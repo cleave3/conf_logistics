@@ -39,6 +39,17 @@ async function getitems() {
   return result.data;
 }
 
+async function clientitems() {
+  const result = await getRequest(`inventory`);
+  let items = `<option value="">--SELECT ITEM--</option>`;
+  if (result.status) {
+    for (let i = 0; i < result.data.length; i++) {
+      items += `<option value="${result.data[i].id}">${result.data[i].name}</option>`;
+    }
+  }
+  return items;
+}
+
 function numberFormat(value) {
   const result = new Intl.NumberFormat("en-US", { style: "currency", currency: "NGN", minimumFractionDigits: 2 }).format(value);
   return result;

@@ -53,7 +53,7 @@ include_once "common/header.php";
                                             <td data-label="WEIGHT : "><?= $package["weight"] ?>KG</td>
                                             <td data-label="TRANSPORT COMPANY : "><?= $package["transport_company"] ?></td>
                                             <td data-label="DRIVER NUMBER : "><?= $package["driver_number"] ?></td>
-                                            <td data-label="DESTINATION : "><?= $package["destination"] ?></td>
+                                            <td data-label="DESTINATION : "><?= $package["location"] ?></td>
                                             <td class="font-weight-bold text-uppercase">
                                                 <span class="badge badge-<?= determineClass($package["status"]) ?> p-2"><?= $package["status"] ?></span>
                                             </td>
@@ -66,12 +66,16 @@ include_once "common/header.php";
                                                 <a class="btn btn-sm mx-1 btn-secondary" href="/clients/package/details?packageid=<?= $package["id"] ?>" title="Package Details">
                                                     <img src="/assets/icons/details.svg" width="15px" height="15px" />
                                                 </a>
-                                                <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
-                                                    <img src="/assets/icons/edit.svg" width="15px" height="15px" />
-                                                </a>
-                                                <!-- <a class="btn btn-sm mx-1 btn-danger" href="" title="Delete Package">
-                                                    <img src="/assets/icons/trash.svg" width="15px" height="15px" />
-                                                </a> -->
+                                                <?php if (in_array($package["status"], ["onhand", "pending", "sent"])) { ?>
+                                                    <a class="btn btn-sm mx-1 btn-primary" href="/clients/package/edit?packageid=<?= $package["id"] ?>" title="Edit package">
+                                                        <img src="/assets/icons/edit.svg" width="15px" height="15px" />
+                                                    </a>
+                                                <?php } ?>
+                                                <?php if (in_array($package["status"], ["onhand", "pending"])) { ?>
+                                                    <a class="btn btn-sm mx-1 btn-danger" href="#" title="Delete Package" onclick='removePackageNow(<?= $package["id"] ?>)'>
+                                                        <img src="/assets/icons/trash.svg" width="15px" height="15px" />
+                                                    </a>
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                     <?php

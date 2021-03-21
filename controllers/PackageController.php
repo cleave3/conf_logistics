@@ -23,8 +23,10 @@ class PackageController extends Controller
 		try {
 			$id = $this->getClientId();
 			$package = $this->findAll([
-				"tablename" => "package",
-				"condition" => "client_id = :id ORDER BY created_at DESC",
+				"tablename" => "package A",
+				"condition" => "A.client_id = :id ORDER BY created_at DESC",
+				"fields" => "A.*, B.location",
+				"joins" => "LEFT JOIN locations B ON A.destination = B.id",
 				"bindparam" => ["id" => $id]
 			]);
 			return Response::send(["status" => true, "data" => $package]);
@@ -48,7 +50,7 @@ class PackageController extends Controller
 			$instructions = $this->body["instructions"];
 			$drivernumber = $this->body["drivernumber"];
 			$transportcompany = $this->body["transportcompany"];
-			$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : null;
+			$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/document/"]) : null;
 
 			// register package	
 			$this->create([
@@ -134,15 +136,47 @@ class PackageController extends Controller
 		$drivernumber = $this->body["drivernumber"] ?? $package["driver_number"];
 		$transportcompany = $this->body["transportcompany"] ?? $package["transport_company"];
 		$status = $this->body["status"] ?? $package["status"];
-		$image = isset($this->file["image"]) && !empty($this->file["image"]["name"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/photo/"]) : $package["image"];
+		$image = isset($this->file["image"]) && !empty($this->file["image"]["name"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/document/"]) : $package["image"];
 
-		// register package	
+		// update package	
 		$this->update([
 			"tablename" => "package",
 			"fields" => "package_title = :title,weight = :weight,description = :description,image = :image,destination = :destination,instructions = :instructions,driver_number = :drivernumber,transport_company = :transportcompany,status = :status",
 			"condition" => "id = :id",
 			"bindparam" => [":title" => $title, ":weight" => $weight, ":description" => $description, ":image" => $image, ":destination" => $destination, ":instructions" => $instructions, ":drivernumber" => $drivernumber, ":transportcompany" => $transportcompany, ":status" => $status, ":id" => $packageid]
 		]);
+
+		if (isset($this->body["ids"])) {
+			$items = $this->body["item"];
+			$ids = $this->body["ids"];
+			$costs = $this->body["cost"];
+			$quantities = $this->body["quantity"];
+
+			for ($i = 0; $i < count($items); $i++) {
+				$packageitem = $this->getCount([
+					"tablename" => "package_item",
+					"condition" => "item_id =:itemid AND package_id =:packageid",
+					"bindparam" => [":itemid" => $items[$i], ":packageid" => $packageid]
+				]);
+
+				if ($packageitem > 0) {
+					//update package_item
+					$this->update([
+						"tablename" => "package_item",
+						"fields" => "item_id=:id, unitcost=:cost, quantity =:quantity",
+						"condition" => ":id = :id",
+						"bindparam" => [":id" => $ids[$i], ":itemid" => $items[$i], ":cost" => $costs[$i], ":quantity" => $quantities[$i]]
+					]);
+				} else {
+					$this->create([
+						"tablename" => "package_item",
+						"fields" => "`item_id`, `package_id`, `unitcost`, `quantity`, `location`",
+						"values" => ":id,:packageid,:cost,:quantity,:location",
+						"bindparam" => [":id" => $items[$i], ":packageid" => $packageid, ":cost" => $costs[$i], ":quantity" => $quantities[$i], ":location" => $destination]
+					]);
+				}
+			}
+		}
 
 		return "package updated successfully";
 	}
@@ -171,6 +205,22 @@ class PackageController extends Controller
 
 	public function delete()
 	{
+		try {
+			$packageid = $this->body["packageid"];
+			$clientid = $this->getClientId();
+
+			$package = $this->findOne(["tablename" => "package", "condition" => "id = :id", "bindparam" => [":id" => $packageid]]);
+			if ($package["client_id"] !== $clientid) throw new \Exception("You are not alllowed to perform this operation");
+
+			$this->destroy([
+				"tablename" => "package",
+				"condition" => "id = :id AND client_id =:clientid",
+				"bindparam" => [":id" => $packageid, ":clientid" => $clientid]
+			]);
+			exit(Response::json(["status" => true, "message" => "Package deleted successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
 	}
 
 	public function getPackageItemsWithDetails()

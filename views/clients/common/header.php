@@ -37,6 +37,7 @@ function determineClass($status)
         case "active":
         case "delivered":
         case "verified":
+        case "received":
             return "success";
         case "deactivated":
         case "suspended":

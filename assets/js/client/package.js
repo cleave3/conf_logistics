@@ -1,12 +1,15 @@
 const addpackageitem = document.getElementById("addpackageitem");
 const registerpackageform = document.getElementById("registerpackageform");
+const editpackageform = document.getElementById("editpackageform");
 // const downloaddetails = document.getElementById("downloaddetails");
 
 if (addpackageitem) addpackageitem.addEventListener("click", addPackage);
-
+let items;
+(async () => {
+  items = await clientitems();
+})();
 function addPackage(e) {
   e.preventDefault();
-  const items = document.getElementById("items");
   const unique_id = "id" + Math.random() * 999999 + Math.random() * 999999;
   const itemtemplate = `
     <div style="position: relative;" class="row border border-light mt-2" id="${unique_id}">
@@ -14,7 +17,7 @@ function addPackage(e) {
             <div class="form-group">
                 <label>Item</label>                
                 <select type="text" class="custom-select inventory-items" name="item[]" required>
-                ${items.innerHTML}
+                ${items}
             </select>
             </div>
         </div>
@@ -48,6 +51,21 @@ function removeItem(id) {
 
 document.addEventListener("change", async e => {
   if (e.target.classList.contains("inventory-items")) {
+    const inventoryitems = document.querySelectorAll(".inventory-items");
+
+    let exist = 0;
+    if (inventoryitems.length > 0) {
+      inventoryitems.forEach(item => {
+        if (e.target.value === item.value && e.target.id !== item.id) {
+          exist++;
+        }
+      });
+    }
+    if (exist > 0) {
+      toastr.info("You have already added this item");
+      return;
+    }
+
     showLoader();
     const itemdetail = await getRequest(`inventory/item?itemid=${e.target.value}`);
     hideLoader();
@@ -61,6 +79,26 @@ if (registerpackageform)
   registerpackageform.addEventListener("submit", async e => {
     e.preventDefault();
     try {
+      const inventoryitems = document.querySelectorAll(".inventory-items");
+
+      let items = [];
+      let exist = 0;
+      if (inventoryitems.length > 0) {
+        inventoryitems.forEach(item => {
+          items.push(item.value);
+        });
+      }
+
+      items.map((item, i) => {
+        if (items.indexOf(item) !== i) {
+          exist++;
+        }
+      });
+      if (exist > 0) {
+        toastr.info("You have the same items in your item list");
+        return;
+      }
+
       showLoader();
       const registerpackagebtn = document.getElementById("registerpackagebtn");
 
@@ -112,8 +150,54 @@ async function sendPackage(packageid, reload = false) {
   }
 }
 
+if (editpackageform)
+  editpackageform.addEventListener("submit", async e => {
+    try {
+      e.preventDefault();
+      showLoader();
+      const data = new FormData(e.target);
+      const result = await postRequest("package/edit", data);
+
+      if (result.status) {
+        toastr.success(result.message);
+      } else {
+        toastr.error(result.message);
+      }
+    } catch ({ message: error }) {
+      toastr.error(result.message);
+    } finally {
+      hideLoader();
+    }
+  });
+
 async function sendPackageNow(packageid) {
   toastr.confirm("Are you sure you want to send this package now ?", { yes: () => sendPackage(packageid, true) });
 }
 
+async function deletePackage(packageid) {
+  try {
+    console.log("here");
+    showLoader();
+
+    const data = new FormData();
+    data.append("packageid", packageid);
+
+    const result = await postRequest("package/delete", data);
+
+    if (result.status) {
+      toastr.success(result.message);
+      window.location.reload();
+    } else {
+      toastr.error(result.message);
+    }
+  } catch ({ message: error }) {
+    toastr.error(result.message);
+  } finally {
+    hideLoader();
+  }
+}
+
+async function removePackageNow(packageid) {
+  toastr.confirm("Are you sure you want to delete this package ?", { yes: () => deletePackage(packageid) });
+}
 // if (downloaddetails) downloaddetails.addEventListener("click", () => makePDF(".waybill", "waybillinfo"));
