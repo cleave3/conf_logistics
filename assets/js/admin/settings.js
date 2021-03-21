@@ -22,7 +22,7 @@ const setEditDetails = async (type, id) => {
     if (result.status) {
       if (type === "pricing") {
         $(`#price_state option[value='${result.data.state_id}']`).prop("selected", true);
-        document.getElementById("price_amount").value = result.data.amount;
+        document.getElementById("price_amount").value = result.data.extra_charge;
         document.getElementById("price_city").value = result.data.city;
         document.getElementById("price_id").value = result.data.id;
       } else {
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // <td data-label="STATE : ">${data.state}</td>
         newrow += `<tr>
               <td data-label="CITY : ">${data.state} - ${data.city}</td>
-              <td data-label="AMOUNT : ">&#8358;${numberFormat(data.amount)}</td>
+              <td data-label="AMOUNT : ">&#8358;${numberFormat(data.extra_charge)}</td>
               <td data-label=" " class="d-md-flex justify-content-center">
                   <a class="btn btn-sm mx-1 btn-primary" href="#" data-toggle="modal" data-target="#editpricingmodal" title="Edit Pricing" onclick="setEditDetails('pricing' , '${
                     data.id

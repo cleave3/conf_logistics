@@ -54,7 +54,9 @@ include_once "common/header.php";
                                             <td data-label="ROLE : "><?= $user["userrole"] ?></td>
                                             <td data-label="STATE : "><?= $user["state"] ?></td>
                                             <td data-label="LGA : "><?= $user["city"] ?></td>
-                                            <td class="font-weight-bold <?= determineClass($user["status"]) ?>"><?= strtoupper($user["status"]) ?></td>
+                                            <td data-label="STATUS">
+                                                <span class="text-uppercase badge badge-<?= determineClass($user["status"]) ?> p-2"><?= $user["status"] ?></span>
+                                            </td>
                                             <td data-label="REG. DATE : "><?= date("Y-m-d H:m:s a", strtotime($user["created_at"])) ?></td>
                                             <td data-label="ACTIONS " class="d-md-flex justify-content-center">
                                                 <a class="btn btn-sm mx-1 btn-primary" href="/admin/users/edit?userid=<?= $user["id"] ?>" title="Edit package">

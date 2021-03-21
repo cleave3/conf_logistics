@@ -113,7 +113,7 @@ include_once "common/header.php";
                                                 <!-- <th>STATE</th> -->
                                                 <th>CITY</th>
                                                 <th>EXTRA&nbsp;CHARGE</th>
-                                                <th>WAYBILL&nbsp;AMOUNT</th>
+                                                <!-- <th>WAYBILL&nbsp;AMOUNT</th> -->
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -127,7 +127,7 @@ include_once "common/header.php";
                                                     <!-- <td data-label="STATE : "><?= $price["state"] ?></td> -->
                                                     <td data-label="CITY : "><?= $price["state"] ?> - <?= $price["city"] ?></td>
                                                     <td data-label="EXCHARGE CHARGE : "><?= $nairasymbol ?> <?= number_format($price["extra_charge"], 2) ?></td>
-                                                    <td data-label="WAYBILL AMOUNT : "><?= $nairasymbol ?> <?= number_format($price["waybill_charge"], 2) ?></td>
+                                                    <!-- <td data-label="WAYBILL AMOUNT : "><?= $nairasymbol ?> <?= number_format($price["waybill_charge"], 2) ?></td> -->
                                                     <td data-label=" " class="d-md-flex justify-content-center">
                                                         <a class="btn btn-sm mx-1 btn-primary" href="#" data-toggle="modal" data-target="#editpricingmodal" title="Edit Pricing" onclick="setEditDetails('pricing' , '<?= $price['id'] ?>')">
                                                             <img src="/assets/icons/edit.svg" width="20px" height="20px" />

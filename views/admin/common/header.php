@@ -29,24 +29,26 @@ function determineClass($status)
         case 'onhand':
         case 'pending':
         case 'processing':
-            return "text-warning";
+            return "warning";
         case 'sent':
-            return "text-primary";
+        case "paid":
+            return "primary";
         case "recieved":
-        case "active";
-        case "paid";
-        case "delivered";
-        case "verified";
+        case "active":
+        case "delivered":
+        case "verified":
         case "received":
-            return "text-success";
+        case "YES":
+            return "success";
         case "deactivated":
         case "suspended":
         case "inactive":
         case "unpaid":
         case "cancelled":
-            return "text-danger";
+        case "NO":
+            return "danger";
         default:
-            return "text-dark";
+            return "dark";
     }
 }
 

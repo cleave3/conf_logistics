@@ -57,6 +57,19 @@ class ClientController extends Controller
 		]);
 	}
 
+	public function getClientDetails($id)
+	{
+		Session::start();
+		Auth::checkAuth("userid");
+		return $this->findOne([
+			"tablename" => "clients A",
+			"condition" => "A.id = :id",
+			"bindparam" => [":id" => $id],
+			"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.status,A.created_at,A.updated_at, B.*,C.bankcode,C.accountnumber,C.accountname, D.bankname ",
+			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id LEFT JOIN client_account C ON A.id = C.client_id INNER JOIN banklist D ON C.bankcode = D.bankcode"
+		]);
+	}
+
 	public function index()
 	{
 		try {
@@ -159,8 +172,8 @@ class ClientController extends Controller
 			]);
 
 			if (!$client) throw new Exception("Invalid email or password");
-
 			if ($client["email_verified"] != "YES") throw new Exception("Your account is unverified, check your email for your verification link");
+			if ($client["status"] !== "active") throw new \Exception("You account has been deactivated, Contact Admin");
 
 			if (!Auth::verifyHash($password, $client["password"])) throw new Exception("Invalid email or password");
 
@@ -397,6 +410,28 @@ class ClientController extends Controller
 			]);
 
 			exit(Response::json(["status" => true, "message" => "Account details updated successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function status()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$id = Sanitize::string($this->body["clientid"]);
+			$status = Sanitize::string($this->body["status"]);
+
+			if (!$this->getclientbyId($id)) throw new \Exception("Client not found");
+
+			$this->update([
+				"tablename" => "clients",
+				"fields" => "status = :status",
+				"condition" => "id = :id",
+				"bindparam" => [":status" => $status, ":id" => $id]
+			]);
+
+			exit(Response::json(["status" => true, "message" => "client status updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

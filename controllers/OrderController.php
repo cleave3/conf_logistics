@@ -2,6 +2,7 @@
 
 namespace App\controllers;
 
+use App\middleware\Auth;
 use App\utils\Response;
 use App\utils\Sanitize;
 
@@ -25,6 +26,27 @@ class OrderController extends Controller
 			"bindparam" => [":id" => $this->client->getClientId()],
 			"fields" => "A.*, B.state, C.city",
 			"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id"
+		]);
+	}
+
+	public function getAllOrders()
+	{
+		Auth::checkAuth("userid");
+		// return $this->paginate([
+		// 	"tablename" => "orders A",
+		// 	"condition" => "1 ORDER BY A.created_at DESC",
+		// 	"fields" => "A.*, B.state, C.city, D.telephone, F.companyname",
+		// 	"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN clients D ON A.client_id = D.id INNER JOIN client_profile F ON A.client_id = F.client_id",
+		// 	"pageno" => $this->query["page"] ?? 1,
+		// 	"limit" => 10
+		// ]);
+		return $this->findAll([
+			"tablename" => "orders A",
+			"condition" => "1 ORDER BY A.created_at DESC",
+			"fields" => "A.*, B.state, C.city, D.telephone, F.companyname",
+			"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN clients D ON A.client_id = D.id INNER JOIN client_profile F ON A.client_id = F.client_id",
+			"pageno" => $this->query["page"] ?? 1,
+			"limit" => 10
 		]);
 	}
 
@@ -199,6 +221,17 @@ class OrderController extends Controller
 			"tablename" => "orders",
 			"condition" => "client_id =:clientid AND status =:status ORDER BY updated_at DESC",
 			"bindparam" => [":clientid" => $clientid, ":status" => "delivered"]
+		]);
+	}
+
+	public function getAllPayments()
+	{
+		Auth::checkAuth("userid");
+
+		return $this->findAll([
+			"tablename" => "orders",
+			"condition" => "status =:status ORDER BY updated_at DESC",
+			"bindparam" => [":status" => "delivered"]
 		]);
 	}
 }

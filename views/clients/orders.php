@@ -25,7 +25,7 @@ include_once "common/header.php";
                         <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
                             <thead role="rowgroup">
                                 <tr role="row">
-                                    <th role="columnheader">ORDER ID</th>
+                                    <th role="columnheader">ORDER&nbsp;ID</th>
                                     <th role="columnheader">CUSTOMER</th>
                                     <th role="columnheader">TELEPHONE</th>
                                     <th role="columnheader">STATE</th>
@@ -90,7 +90,10 @@ include_once "common/header.php";
     <?php include_once "common/js.php" ?>
     <script>
         $('#resulttable').DataTable({
-            fixedHeader: true
+            fixedHeader: true,
+            "order": [
+                [0, "desc"]
+            ]
         });
     </script>
 </body>

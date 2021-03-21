@@ -13,22 +13,34 @@
                 </a>
             </li>
             <li>
+            <li class="<?= $currentnav == "orders" ? "active" : "" ?>">
+                <a href="/admin/orders">
+                    <i class="nc-icon nc-cart-simple"></i>
+                    <p>Orders</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "package" ? "active" : "" ?>">
+                <a href="/clients/package">
+                    <i class="nc-icon nc-delivery-fast"></i>
+                    <p>WayBills</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "clients" ? "active" : "" ?>">
                 <a href="/admin/clients">
-                    <i class="nc-icon nc-delivery-fast"></i>
+                    <i class="nc-icon nc-satisfied"></i>
                     <p>Clients</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "users" ? "active" : "" ?>">
                 <a href="/admin/users">
-                    <i class="nc-icon nc-delivery-fast"></i>
+                    <i class="nc-icon nc-single-02"></i>
                     <p>Users</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "orders" ? "active" : "" ?>">
-                <a href="/admin/orders">
-                    <i class="nc-icon nc-cart-simple"></i>
-                    <p>Orders</p>
+            <li class="<?= $currentnav == "inventory" ? "active" : "" ?>">
+                <a href="/clients/inventory">
+                    <i class="nc-icon nc-box"></i>
+                    <p>Inventory</p>
                 </a>
             </li>
             <!-- <div role="tablist" aria-multiselectable="true">
@@ -51,12 +63,25 @@
                     </a>
                 </div>
             </div> -->
-            <!-- <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+
+            <li class="<?= $currentnav == "clients" ? "active" : "" ?>">
+                <a href="/admin/clients">
+                    <i class="nc-icon nc-bullet-list-67"></i>
+                    <p>Tasks</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
+                <a href="/admin/payments">
+                    <i class="nc-icon nc-credit-card"></i>
+                    <p>Payments</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
                 <a href="/admin/transactions">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Transaction History</p>
                 </a>
-            </li> -->
+            </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">
                 <a href="/admin/profile">
                     <i class="nc-icon nc-circle-10"></i>

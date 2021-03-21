@@ -69,7 +69,7 @@ class ConfigController extends Controller
 	{
 		return $this->findAll([
 			"tablename" => "delivery_pricing A",
-			"fields" => "A.id,A.city,A.amount,B.state",
+			"fields" => "A.id,A.city,A.extra_charge,B.state",
 			"condition" => "1 ORDER BY B.state ASC",
 			"joins" => "INNER JOIN states B ON A.state_id = B.id"
 		]);
@@ -79,7 +79,7 @@ class ConfigController extends Controller
 	{
 		return $this->findOne([
 			"tablename" => "delivery_pricing A",
-			"fields" => "A.city,A.amount,B.state",
+			"fields" => "A.city,A.extra_charge,B.state",
 			"condition" => "city = :city",
 			"bindparam" => [":city" => $city],
 			"joins" => "INNER JOIN states B ON A.state_id = B.id"
@@ -131,9 +131,9 @@ class ConfigController extends Controller
 
 			$this->create([
 				"tablename" => "delivery_pricing",
-				"fields" => "`state_id`, `city`, `amount`",
-				"values" => ":state,:city,:amount",
-				"bindparam" => [":state" => $state, ":city" => $city, ":amount" => $amount]
+				"fields" => "`state_id`, `city`, `extra_charge`",
+				"values" => ":state,:city,:extra_charge",
+				"bindparam" => [":state" => $state, ":city" => $city, ":extra_charge" => $amount]
 			]);
 
 			exit(Response::json(["status" => true, "message" => "pricing set successfully"]));
@@ -239,13 +239,13 @@ class ConfigController extends Controller
 
 			$state = Sanitize::integer($this->body["state"]) ?? $price["state_id"];
 			$city = Sanitize::string($this->body["city"]) ?? $price["city"];
-			$amount = Sanitize::integer($this->body["amount"]) ?? $price["amount"];
+			$amount = Sanitize::integer($this->body["amount"]) ?? $price["extra_charge"];
 
 			$this->update([
 				"tablename" => "delivery_pricing",
-				"fields" => "state_id = :state, city = :city, amount = :amount",
+				"fields" => "state_id = :state, city = :city, extra_charge = :extra_charge",
 				"condition" => "id = :id",
-				"bindparam" => [":state" => $state, ":city" => $city, ":amount" => $amount, ":id" => $id]
+				"bindparam" => [":state" => $state, ":city" => $city, ":extra_charge" => $amount, ":id" => $id]
 			]);
 
 			exit(Response::json(["status" => true, "message" => "pricing updated successfully"]));

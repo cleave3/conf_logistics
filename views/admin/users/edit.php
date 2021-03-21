@@ -13,7 +13,7 @@ $ac = new AuthController();
 $roles = $ac->getAllRoles();
 $states =  $pc->states()["data"];
 $user = $ac->getuserbyId($_GET["userid"]);
-$cities = $pc->cityobject($user["state"])["data"];
+$cities = $pc->cityobject($user["state"]);
 $statuses = [["value" => "active", "label" => "User Activated"], ["value" => "deactivated", "label" => "User Deactivated"]];
 ?>
 
@@ -27,7 +27,7 @@ $statuses = [["value" => "active", "label" => "User Activated"], ["value" => "de
                     <li class="breadcrumb-item">
                         <a href="/admin/users">Users</a>
                     </li>
-                    <li class="breadcrumb-item active"><?= $user["firstname"] ?> <?= $user["lastname"] ?></li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
 
                 <div class="col-md-12 mx-auto">

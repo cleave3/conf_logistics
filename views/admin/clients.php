@@ -27,15 +27,14 @@ include_once "common/header.php";
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>NAME</th>
+                                        <th>COMPANY&nbsp;NAME</th>
+                                        <th>CLIENT&nbsp;NAME</th>
                                         <th>TELEPHONE</th>
                                         <th>EMAIL</th>
-                                        <th>COMPANY&nbsp;NAME</th>
                                         <th>STATE</th>
                                         <th>CITY</th>
                                         <th>STATUS</th>
                                         <th>REGISTRATION&nbsp;DATE</th>
-                                        <th>ACTIONS</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -45,21 +44,20 @@ include_once "common/header.php";
                                     ?>
                                         <tr>
                                             <td data-label="">
-                                                <img class="img-fluid" src="/files/photo/<?= $client["image"] ?? "camera.svg" ?>" alt="..." style="width: 40px; height: 40px; cursor:pointer;">
-                                            </td>
-                                            <td data-label="NAME"><?= $client["firstname"] ?> <?= $client["lastname"] ?></td>
-                                            <td data-label="TELEPHONE : "><?= $client["telephone"] ?></td>
-                                            <td data-label="EMAIL : "><?= $client["email"] ?></td>
-                                            <td data-label="COMPANY NAME : "><?= $client["companyname"] ?></td>
-                                            <td data-label="STATE : "><?= $client["state"] ?></td>
-                                            <td data-label="CITY : "><?= $client["city_town"] ?></td>
-                                            <td class="font-weight-bold <?= determineClass($client["status"]) ?>"><?= strtoupper($client["status"]) ?></td>
-                                            <td data-label="REG. DATE : "><?= date("Y-m-d H:m:s a", strtotime($client["created_at"])) ?></td>
-                                            <td data-label="ACTIONS " class="d-md-flex justify-content-center">
                                                 <a class="btn btn-sm mx-1 btn-secondary" href="/admin/clients/details?clientid=<?= $client["id"] ?>" title="Client Details">
                                                     <img src="/assets/icons/details.svg" width="20px" height="20px" />
                                                 </a>
                                             </td>
+                                            <td data-label="COMPANY NAME : "><?= $client["companyname"] ?></td>
+                                            <td data-label="NAME"><?= $client["firstname"] ?> <?= $client["lastname"] ?></td>
+                                            <td data-label="TELEPHONE : "><?= $client["telephone"] ?></td>
+                                            <td data-label="EMAIL : "><?= $client["email"] ?></td>
+                                            <td data-label="STATE : "><?= $client["state"] ?></td>
+                                            <td data-label="CITY : "><?= $client["city_town"] ?></td>
+                                            <td data-label="STATUS">
+                                                <span class="text-uppercase badge badge-<?= determineClass($client["status"]) ?> p-2"><?= $client["status"] ?></span>
+                                            </td>
+                                            <td data-label="REG. DATE : "><?= date("Y-m-d H:m:s a", strtotime($client["created_at"])) ?></td>
                                         </tr>
                                     <?php
                                         $sn++;

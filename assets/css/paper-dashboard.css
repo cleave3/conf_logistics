@@ -4130,6 +4130,8 @@ License - nucleoapp.com/license/
   width: 260px;
   z-index: 4;
   padding-bottom: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .sidebar .sidebar-wrapper .dropdown .dropdown-backdrop,
 .off-canvas-sidebar .sidebar-wrapper .dropdown .dropdown-backdrop {
