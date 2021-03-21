@@ -1,53 +1,21 @@
 {
-    "package": {
-        "id": "8",
-        "client_id": "conf-68267-601abbe9406e0",
-        "package_title": "sample package",
-        "weight": "2",
-        "description": "test",
-        "image": "file20210320091705.jpg",
-        "status": "sent",
-        "destination": "4",
-        "driver_number": "08165124558",
-        "transport_company": "Agofure morors",
-        "instructions": "Call the driver to verify",
-        "created_at": "2021-03-20 09:17:05",
-        "updated_at": "2021-03-20 09:17:58"
-    },
-    "packageitems": [
-        {
-            "id": "11",
-            "item_id": "24",
-            "package_id": "8",
-            "unitcost": "17000",
-            "quantity": "20",
-            "location": "4",
-            "name": "white rice"
-        },
-        {
-            "id": "12",
-            "item_id": "21",
-            "package_id": "8",
-            "unitcost": "34000",
-            "quantity": "5",
-            "location": "4",
-            "name": "Power Bank"
-        }
-    ],
-    "owner": {
-        "id": "conf-68267-601abbe9406e0",
-        "email": "owhiroroeghele@gmail.com",
-        "telephone": "08165124558",
-        "client_id": "conf-68267-601abbe9406e0",
-        "companyname": "owhitech",
-        "firstname": "Cleave",
-        "lastname": "owhiroro",
-        "address": "15 omo avenue",
-        "bio": "correct guy man wey wan do business but e moni never long new",
-        "image": "file20210319075706.jpg",
-        "state": "Okpe",
-        "city_town": "Okpe",
-        "created_at": "2021-02-03 16:06:17",
-        "updated_at": "2021-03-19 19:57:06"
-    }
+    "id": "conf-68267-601abbe9406e0",
+    "email": "owhiroroeghele@gmail.com",
+    "telephone": "08165124558",
+    "profile_complete": "YES",
+    "email_verified": "YES",
+    "created_at": "2021-02-03 16:06:17",
+    "updated_at": "2021-03-19 19:57:06",
+    "client_id": "conf-68267-601abbe9406e0",
+    "companyname": "owhitech",
+    "firstname": "Cleave",
+    "lastname": "owhiroro",
+    "address": "15 omo avenue",
+    "bio": "correct guy man wey wan do business but e moni never long new",
+    "image": "file20210319075706.jpg",
+    "state": "Okpe",
+    "city_town": "Okpe",
+    "bankcode": "00103",
+    "accountnumber": "4567890765",
+    "accountname": "owhiroro cleave"
 }

@@ -36,11 +36,7 @@ class PublicController extends Controller
 
 			if (!isset($this->query["state"])) throw new \Exception("state not found in query param");
 
-			$cities = $this->findAll([
-				"tablename" => "cities",
-				"condition" => "state = :state",
-				"bindparam" => [":state" => $this->query["state"]]
-			]);
+			$cities = $this->cityobject($this->query["state"]);
 
 			exit(Response::json(["status" => true, "data" => $cities]));
 		} catch (\Exception $error) {
@@ -50,20 +46,11 @@ class PublicController extends Controller
 
 	public function cityobject($state)
 	{
-		try {
-
-			if (empty($state)) throw new \Exception("state is required");
-
-			$cities = $this->findAll([
-				"tablename" => "cities",
-				"condition" => "state = :state",
-				"bindparam" => [":state" => $this->query["state"] ?? $state]
-			]);
-
-			return Response::send(["status" => true, "data" => $cities]);
-		} catch (\Exception $error) {
-			return Response::send(["status" => false, "message" => $error->getMessage()]);
-		}
+		return $this->findAll([
+			"tablename" => "cities",
+			"condition" => "state = :state",
+			"bindparam" => [":state" => $state]
+		]);
 	}
 
 	public function getActiveLocations()

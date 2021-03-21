@@ -12,8 +12,7 @@ $data = $client["data"];
 $pc = new PublicController();
 $states =  $pc->states()["data"];
 $banks =  $pc->getBankList()["data"];
-$cities = $pc->cityobject($data["state"])["data"];
-
+$cities = $pc->cityobject($data["state"]);
 $title = "Client Profile";
 $currentnav = "profile";
 

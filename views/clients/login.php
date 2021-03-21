@@ -14,7 +14,7 @@ include_once "common/header.php";
 <body style="background: linear-gradient(#000000b3, #000000b3), url(/assets/img/truck.jpg) no-repeat; background-size:cover;background-position: center;">
     <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
 
-        <div class="row bg-white shadow" style="height: 90%; width: 90%; border-radius: 10px;background-color: #f4f3ef;opacity: 0.85;">
+        <div id="loginrow" class="row bg-white shadow" style="height: 90%; width: 90%; border-radius: 10px;background-color: #f4f3ef;opacity: 0.85;">
             <div class="col-md-5 w-100" style="display: grid; place-items: center">
                 <div class="card-body bg-white">
                     <?php if ($auth) { ?>

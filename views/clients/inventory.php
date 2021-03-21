@@ -7,6 +7,7 @@ $title = "Inventory";
 $currentnav = "inventory";
 $pc = new PackageController();
 $inventories = $pc->getPackageItemsWithDetails();
+// exit(json_encode($inventories));
 include_once "common/header.php";
 ?>
 

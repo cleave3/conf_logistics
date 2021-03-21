@@ -59,6 +59,13 @@ body {
   }
 }
 
+@media (max-width: 768px) {
+  #loginrow {
+    height: auto !important;
+    width: 95% !important;
+  }
+}
+
 #loader {
   position: absolute;
   right: 50px;

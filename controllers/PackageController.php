@@ -50,7 +50,7 @@ class PackageController extends Controller
 			$instructions = $this->body["instructions"];
 			$drivernumber = $this->body["drivernumber"];
 			$transportcompany = $this->body["transportcompany"];
-			$image = isset($this->file["image"]) ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/document/"]) : null;
+			$image = isset($this->file["image"]) && !empty($this->file["image"]["name"])  ? File::upload(["file" => $this->file["image"], "path" => __DIR__ . "/../files/document/"]) : null;
 
 			// register package	
 			$this->create([
