@@ -21,6 +21,9 @@ include $base . "common/header.php";
                     <li class="breadcrumb-item">
                         <a href="/admin/orders">Orders</a>
                     </li>
+                    <li class="breadcrumb-item">
+                        <a href="/admin/orders?type=<?= $_GET["type"] ?>"> <?= ucwords($_GET["type"]) ?> Orders</a>
+                    </li>
                     <li class="breadcrumb-item active">Details</li>
                 </ol>
                 <button class="btn btn-sm btn-primary mx-1" onclick="print()"><img src="/assets/icons/printer.svg" width="15px" height="15px" /> Print</button>

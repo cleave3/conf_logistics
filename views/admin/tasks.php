@@ -3,8 +3,8 @@
 use App\controllers\OrderController;
 
 include_once "common/authheader.php";
-$title = "Payment History";
-$currentnav = "payments";
+$title = "Deliveries";
+$currentnav = "tasks";
 $oc = new OrderController();
 $payments = $oc->getAllPayments();
 

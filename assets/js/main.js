@@ -72,20 +72,29 @@ function formatCurrencyInput(inputs) {
 
 function determineClass(status) {
   switch (status) {
-    case "onhand":
-    case "pending":
-      return "text-warning";
-    case "sent":
-      return "text-primary";
-    case "recieved":
-    case "active":
-      return "text-success";
-    case "deactivated":
-    case "suspended":
-    case "inactive":
-      return "text-danger";
-    default:
-      return "text-dark";
+    case 'onhand':
+      case 'pending':
+      case 'processing':
+          return "warning";
+      case 'sent':
+      case "paid":
+          return "primary";
+      case "recieved":
+      case "active":
+      case "delivered":
+      case "verified":
+      case "received":
+      case "YES":
+          return "success";
+      case "deactivated":
+      case "suspended":
+      case "inactive":
+      case "unpaid":
+      case "cancelled":
+      case "NO":
+          return "danger";
+      default:
+          return "dark";
   }
 }
 

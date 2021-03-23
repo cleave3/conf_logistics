@@ -6,8 +6,8 @@ include $base . "common/authheader.php";
 $pc = new PackageController();
 $package = $pc->getPackage();
 $base = __DIR__ . "/../";
-$title = "Client Package";
-$currentnav = "package";
+$title = "Waybills";
+$currentnav = "waybills";
 include $base . "common/header.php";
 ?>
 
@@ -19,14 +19,14 @@ include $base . "common/header.php";
             <div class="content">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="/clients/package">Packages</a>
+                        <a href="/admin/waybills">Waybills</a>
                     </li>
                     <li class="breadcrumb-item active">Details</li>
                 </ol>
                 <div class="d-flex justify-content-between">
                     <button class="btn btn-sm btn-primary mx-0" onclick="print()"><img src="/assets/icons/printer.svg" width="15px" height="15px" /> Print</button>
                     <?php if (!empty($package["package"]["image"])) { ?>
-                        <a class="btn btn-danger mx-0" href="/files/document/<?= $package['package']['image'] ?>" download="packagedocument">Download Attachment <img src="/assets/icons/file.svg" width="15px" height="15px" /></a>
+                        <a class="btn btn-danger mx-0" href="/files/document/<?= $package['package']['image'] ?>" download="waybilldocument">Download Attachment <img src="/assets/icons/file.svg" width="15px" height="15px" /></a>
                     <?php } ?>
                 </div>
                 <div class="waybill print-container">

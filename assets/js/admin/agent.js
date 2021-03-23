@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const state = document.getElementById("state");
   const city = document.getElementById("city");
-  const registeruserform = document.getElementById("registeruserform");
-  const edituserform = document.getElementById("edituserform");
+  const registeragentform = document.getElementById("registeragentform");
+  const editagentform = document.getElementById("editagentform");
 
-  if (registeruserform)
-    registeruserform.addEventListener("submit", async e => {
+  if (registeragentform)
+    registeragentform.addEventListener("submit", async e => {
       e.preventDefault();
       try {
         showLoader();
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const data = new FormData(e.target);
 
-        const result = await postRequest(`auth/register`, data);
+        const result = await postRequest(`agent/register`, data);
 
         if (result.status) {
           toastr.success(result.message);
@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-  if (edituserform)
-    edituserform.addEventListener("submit", async e => {
+  if (editagentform)
+    editagentform.addEventListener("submit", async e => {
       e.preventDefault();
       try {
         showLoader();
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const data = new FormData(e.target);
 
-        const result = await postRequest(`auth/edit`, data);
+        const result = await postRequest(`agent/edit`, data);
 
         if (result.status) {
           toastr.success(result.message);

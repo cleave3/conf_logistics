@@ -24,6 +24,21 @@ class DashboardController extends Controller
 		]);
 	}
 
+	public function totalordercount()
+	{
+		return $this->getCount(["tablename" => "orders"]);
+	}
+
+	public function totalunassignedordercount()
+	{
+		return $this->getCount(["tablename" => "orders", "condition" => "id NOT IN (SELECT order_id FROM tasks)"]);
+	}
+
+	public function orderscountbystaus($status)
+	{
+		return $this->getCount(["tablename" => "orders", "condition" => "status =:status", "bindparam" => [":status" => $status]]);
+	}
+
 	public function clienttotalwaybillcount($clientid)
 	{
 		return $this->getCount([
@@ -95,6 +110,22 @@ class DashboardController extends Controller
 			"unpaidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "unpaid"),
 			"paidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "paid"),
 			"verifiedpaymentscount" => $this->clientpaymentscountbystatus($clientid, "verified"),
+		];
+	}
+
+	public function ordersStats()
+	{
+		Auth::checkAuth("userid");
+		return [
+			"totalorders" => $this->totalordercount(),
+			"pendingorders" => $this->orderscountbystaus("pending"),
+			"cancelledorders" => $this->orderscountbystaus("cancelled"),
+			"deliveredorders" => $this->orderscountbystaus("delivered"),
+			"rescheduledorders" => $this->orderscountbystaus("rescheduled"),
+			"intransitorders" => $this->orderscountbystaus("intransit"),
+			"noresponseorders" => $this->orderscountbystaus("noresponse"),
+			"confirmedorders" => $this->orderscountbystaus("confirmed"),
+			"unassigned" => $this->totalunassignedordercount()
 		];
 	}
 }

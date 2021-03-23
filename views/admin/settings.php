@@ -11,7 +11,7 @@ $pc = new PublicController();
 $settings = $cc->getSettings();
 $configs = $cc->getConfigs();
 $prices = $cc->getDeliveryPricing();
-$locations = $cc->getActiveWayBillLocations();
+$locations = $cc->getAllWayBillLocations();
 $states =  $pc->states()["data"];
 include_once "common/header.php";
 ?>
@@ -29,7 +29,6 @@ include_once "common/header.php";
                         <div class="nav d-flex d-md-block nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="basic-tab" data-toggle="pill" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Basic Settings</a>
                             <a class="nav-link" id="configuration-tab" data-toggle="pill" href="#configuration" role="tab" aria-controls="configuration" aria-selected="false">Configurations</a>
-                            <a class="nav-link" id="permissions-tab" data-toggle="pill" href="#permissions" role="tab" aria-controls="permissions" aria-selected="false">Permissions</a>
                             <a class="nav-link" id="pricing-tab" data-toggle="pill" href="#pricing" role="tab" aria-controls="pricing" aria-selected="false">Pricing</a>
                             <a class="nav-link" id="location-tab" data-toggle="pill" href="#location" role="tab" aria-controls="location" aria-selected="false">Waybill locations</a>
                         </div>
@@ -98,9 +97,6 @@ include_once "common/header.php";
                                     </form>
                                 <?php } ?>
                             </div>
-                            <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
-                                Implement permission settings here
-                            </div>
                             <div class="tab-pane fade" id="pricing" role="tabpanel" aria-labelledby="pricing-tab">
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary m-1" data-toggle="modal" data-target="#addpricingmodal" title="Add new">Add&nbsp;New&nbsp;<i class="fa fa-book"></i></button>
@@ -167,7 +163,9 @@ include_once "common/header.php";
                                                     <!-- <td data-label="STATE : "><?= $location["state"] ?></td> -->
                                                     <td data-label="LOCATION : "><?= $location["state"] ?> - <?= $location["location"] ?></td>
                                                     <td data-label="AMOUNT : "><?= $nairasymbol ?> <?= number_format($location["amount"], 2) ?></td>
-                                                    <td data-label="STATUS : " class="<?= determineClass($location["status"]) ?>"><?= $location["status"] ?></td>
+                                                    <td data-label="STATUS : ">
+                                                        <span class="badge badge-<?= determineClass($location["status"]) ?> p-2"><?= $location["status"] ?></span>
+                                                    </td>
                                                     <td data-label=" " class="d-md-flex justify-content-center">
                                                         <a class="btn btn-sm mx-1 btn-primary" href="#" data-toggle="modal" data-target="#editlocationmodal" title="Edit Pricing" onclick="setEditDetails('location' , '<?= $location['id'] ?>')" title="Edit Location">
                                                             <img src="/assets/icons/edit.svg" width="20px" height="20px" />

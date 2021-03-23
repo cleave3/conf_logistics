@@ -43,6 +43,24 @@ class EmailTemplate
           <p>Thanks,<br/>Confidebat Team</p>';
   }
 
+  public static function welcomeagent($recipient, $email, $password)
+  {
+    return '<p>Dear ' . $recipient . ',</p>
+          <div>Your Account has been created,<br/><br/>
+              <div>Use the credentials below to login to your Account</div>
+              <div>Email: ' . $email . '</div>
+              <div>Password: ' . $password . '</div>
+              <div style="margin-top: 50px;">
+              <a style="padding: 10px;text-decoration:none;border:none;background-color:#4caf50;color:white;margin: 10px auto;" href="' . getenv("BASE_URL") . '/agents/login">Click here</a>
+            </div>
+              </div>
+              <br/>
+              <p>to login to your account</p>
+              <p>Once you are logged in, you can update your profile and change your password</p>
+    
+          <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
   public static function forgotpassword($recipient, $token, $confirmationlink)
   {
     return '<p>Dear ' . $recipient . ',</p>

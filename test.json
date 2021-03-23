@@ -1,48 +1,10 @@
 {
-    "totalrecords": 5,
-    "rows": 2,
-    "offset": 0,
-    "limit": 2,
-    "totalpages": 3,
-    "currentpage": 1,
-    "data": [
-        {
-            "id": "7",
-            "client_id": "conf-68267-601abbe9406e0",
-            "customer": "Ajiri trust",
-            "telephone": "08165124558",
-            "address": "main street new addition",
-            "state_id": "11",
-            "city_id": "2",
-            "totalamount": "70000",
-            "delivery_fee": "7000",
-            "status": "delivered",
-            "payment_status": "verified",
-            "description": "call him before 9am",
-            "created_at": "2021-03-20 09:25:18",
-            "updated_at": "2021-03-20 09:29:07",
-            "state": "Delta",
-            "city": "Sapele 2",
-            "companyname": "owhitech"
-        },
-        {
-            "id": "6",
-            "client_id": "conf-68267-601abbe9406e0",
-            "customer": "cleave",
-            "telephone": "08165124558",
-            "address": "main street",
-            "state_id": "2",
-            "city_id": "41",
-            "totalamount": "34000",
-            "delivery_fee": "5003",
-            "status": "cancelled",
-            "payment_status": "unpaid",
-            "description": "",
-            "created_at": "2021-03-18 22:43:27",
-            "updated_at": "2021-03-19 18:24:43",
-            "state": "Abia",
-            "city": "new one",
-            "companyname": "owhitech"
-        }
-    ]
+    "totalorders": 5,
+    "pendingorders": 0,
+    "cancelledorders": 1,
+    "deliveredorders": 3,
+    "rescheduledorders": 0,
+    "intransitorders": 0,
+    "onresponseorders": 0,
+    "unassigned": 5
 }

@@ -45,9 +45,34 @@ class OrderController extends Controller
 			"condition" => "1 ORDER BY A.created_at DESC",
 			"fields" => "A.*, B.state, C.city, D.telephone, F.companyname",
 			"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN clients D ON A.client_id = D.id INNER JOIN client_profile F ON A.client_id = F.client_id",
-			"pageno" => $this->query["page"] ?? 1,
-			"limit" => 10
+			// "pageno" => $this->query["page"] ?? 1,
+			// "limit" => 10
 		]);
+	}
+
+	public function getAllOrdersByStatus($status)
+	{
+		Auth::checkAuth("userid");
+		if ($status == "unassigned") {
+			return $this->findAll([
+				"tablename" => "orders A",
+				"condition" => "A.id NOT IN (SELECT order_id FROM tasks) ORDER BY A.created_at DESC",
+				"fields" => "A.*, B.state, C.city, D.telephone, F.companyname",
+				"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN clients D ON A.client_id = D.id INNER JOIN client_profile F ON A.client_id = F.client_id",
+				// "pageno" => $this->query["page"] ?? 1,
+				// "limit" => 10 
+			]);
+		} else {
+			return $this->findAll([
+				"tablename" => "orders A",
+				"condition" => "A.status =:status ORDER BY A.created_at DESC",
+				"fields" => "A.*, B.state, C.city, D.telephone, F.companyname",
+				"joins" => "INNER JOIN states B ON A.state_id = B.id INNER JOIN delivery_pricing C ON A.city_id = C.id INNER JOIN clients D ON A.client_id = D.id INNER JOIN client_profile F ON A.client_id = F.client_id",
+				"bindparam" => [":status" => $status]
+				// "pageno" => $this->query["page"] ?? 1,
+				// "limit" => 10 
+			]);
+		}
 	}
 
 	public function getOrder($orderid)

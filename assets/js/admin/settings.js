@@ -123,7 +123,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         newrow += `<tr>
           <td data-label="LOCATION : ">${data.state} - ${data.location}</td>
           <td data-label="AMOUNT : ">&#8358;${numberFormat(data.amount)}</td>
-          <td data-label="STATUS : " class="${determineClass(data.status)}">${data.status}</td>
+          <td data-label="STATUS : " >
+          <span class="badge badge-${determineClass(data.status)} p-2">${data.status}</span>
+          </td>
           <td data-label=" " class="d-md-flex justify-content-center">
               <a class="btn btn-sm mx-1 btn-primary" data-toggle="modal" data-target="#editlocationmodal" title="Edit Pricing" onclick="setEditDetails('location' , '${
                 data.id

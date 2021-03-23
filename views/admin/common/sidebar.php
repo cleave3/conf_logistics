@@ -19,8 +19,8 @@
                     <p>Orders</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "package" ? "active" : "" ?>">
-                <a href="/clients/package">
+            <li class="<?= $currentnav == "waybills" ? "active" : "" ?>">
+                <a href="/admin/waybills">
                     <i class="nc-icon nc-delivery-fast"></i>
                     <p>WayBills</p>
                 </a>
@@ -31,6 +31,12 @@
                     <p>Clients</p>
                 </a>
             </li>
+            <li class="<?= $currentnav == "agents" ? "active" : "" ?>">
+                <a href="/admin/agents">
+                    <i class="nc-icon nc-user-run"></i>
+                    <p>Delivery Agents</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "users" ? "active" : "" ?>">
                 <a href="/admin/users">
                     <i class="nc-icon nc-single-02"></i>
@@ -38,48 +44,21 @@
                 </a>
             </li>
             <li class="<?= $currentnav == "inventory" ? "active" : "" ?>">
-                <a href="/clients/inventory">
+                <a href="/admin/inventory">
                     <i class="nc-icon nc-box"></i>
                     <p>Inventory</p>
                 </a>
             </li>
-            <!-- <div role="tablist" aria-multiselectable="true">
-                <div class="card-header <?= $currentnav == "inventory" ? "active" : "" ?>" role="tab" id="inventorytab">
-                    <a style="text-decoration: none;" class="text-white" data-toggle="collapse" data-parent="#inventorytab" href="#inventorytabcontent" aria-expanded="true" aria-controls="inventorytabcontent">
-                        <i class="nc-icon nc-box"></i>
-                        <p>Inventory<span class="fa fa-chevron-down mt-2 pull-right text-white" style="font-size: 13px;"></span></p>
-                    </a>
-                </div>
-                <div id="inventorytabcontent" class="collapse" role="tabpanel">
-                    <a href="/admin/stockinventory" class="p-1" style="text-decoration: none;">
-                        <li class="p-2 ml-4">
-                            Items in Stock
-                        </li>
-                    </a>
-                    <a href="/admin/waybillinventory" class="p-1" style="text-decoration: none;">
-                        <li class="p-2 ml-4">
-                            Way billed Items
-                        </li>
-                    </a>
-                </div>
-            </div> -->
-
-            <li class="<?= $currentnav == "clients" ? "active" : "" ?>">
-                <a href="/admin/clients">
+            <li class="<?= $currentnav == "tasks" ? "active" : "" ?>">
+                <a href="/admin/tasks">
                     <i class="nc-icon nc-bullet-list-67"></i>
-                    <p>Tasks</p>
+                    <p>Delivery Tasks</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
                 <a href="/admin/payments">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Payments</p>
-                </a>
-            </li>
-            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
-                <a href="/admin/transactions">
-                    <i class="nc-icon nc-credit-card"></i>
-                    <p>Transaction History</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">
