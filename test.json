@@ -1,10 +1,15 @@
 {
-    "totalorders": 5,
-    "pendingorders": 0,
-    "cancelledorders": 1,
-    "deliveredorders": 3,
-    "rescheduledorders": 0,
-    "intransitorders": 0,
-    "onresponseorders": 0,
-    "unassigned": 5
+    "id": "agent-605a15b8410b5605a15b8410ba",
+    "email": "owhiroroeghele@gmail.com",
+    "telephone": "08165124558",
+    "firstname": "Agent 1",
+    "lastname": "Agent 1",
+    "address": "new",
+    "bio": "hbjhbbh",
+    "image": null,
+    "state": "FCT",
+    "city": "Abaji",
+    "status": "active",
+    "created_at": "2021-03-23 17:22:16",
+    "updated_at": null
 }

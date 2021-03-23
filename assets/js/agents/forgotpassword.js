@@ -8,7 +8,7 @@ document.getElementById("forgotpasswordform").addEventListener("submit", async e
 
     const data = new FormData(e.target);
 
-    const result = await postRequest("auth/forgotpassword", data);
+    const result = await postRequest("agent/forgotpassword", data);
 
     if (result.status) {
       toastr.success(result.message);

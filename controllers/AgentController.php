@@ -107,7 +107,6 @@ class AgentController extends Controller
 			Session::set([
 				"agentid" => $agent["id"],
 				"image" => $agent["image"],
-				"permissions" => $agent["permissions"],
 				"agentname" => $agent["firstname"] . " " . $agent["lastname"],
 			]);
 
@@ -214,34 +213,26 @@ class AgentController extends Controller
 
 	public function profile()
 	{
-		try {
-			$id = $this->getagentId();
+		$id = $this->getagentId();
 
-			$agent = $this->findOne([
-				"tablename" => "agents A",
-				"condition" => "A.id = :id",
-				"bindparam" => [":id" => $id],
-				"fields" => "A.*, B.role as agentrole,B.permissions",
-				"joins" => "INNER JOIN roles B ON A.role = B.id"
-			]);
+		$agent = $this->findOne([
+			"tablename" => "agents A",
+			"condition" => "A.id = :id",
+			"fields" => "A.*,B.bankcode,B.accountnumber,B.accountname",
+			"bindparam" => [":id" => $id],
+			"joins" => "INNER JOIN agent_account B ON A.id = B.agent_id"
+		]);
 
-			$agent = Helpers::removefield($agent, ["password", "reset_token", "token_expiration"]);
+		$agent = Helpers::removefield($agent, ["password", "reset_token", "token_expiration"]);
 
-			return $agent;
-		} catch (\Exception $error) {
-			return $error->getMessage();
-		}
+		return $agent;
 	}
 
 	public function updateprofile()
 	{
 		try {
 			$id = $this->getagentId();
-			$agent = $this->findOne([
-				"tablename" => "agents",
-				"condition" => "id = :id",
-				"bindparam" => [":id" => $id],
-			]);
+			$agent = $this->findOne(["tablename" => "agents", "condition" => "id = :id", "bindparam" => [":id" => $id]]);
 
 			if (!$agent) throw new Exception("agent Account not found");
 
@@ -258,6 +249,14 @@ class AgentController extends Controller
 				"fields" => "telephone = :telephone,firstname = :firstname, lastname = :lastname, address = :address, bio = :bio, state = :state, city = :lga",
 				"condition" => "id = :id",
 				"bindparam" => [":telephone" => $telephone, ":firstname" => $firstname, ":lastname" => $lastname, ":address" => $address, ":bio" => $bio, ":state" => $state, ":lga" => $lga, ":id" => $id]
+			]);
+
+			$agent = $this->findOne(["tablename" => "agents", "condition" => "id = :id", "bindparam" => [":id" => $id]]);
+
+			Session::start();
+			Session::set([
+				"image" => $agent["image"],
+				"agentname" => $agent["firstname"] . " " . $agent["lastname"],
 			]);
 
 			exit(Response::json(["status" => true, "message" => "profile updated successfully"]));
@@ -319,6 +318,45 @@ class AgentController extends Controller
 			]);
 
 			exit(Response::json(["status" => true, "message" => "Changes saved successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function submitbankdetails()
+	{
+		try {
+			$id = $this->getagentId();
+
+			$accountdetails = $this->findOne([
+				"tablename" => "agent_account",
+				"condition" => "agent_id = :id",
+				"bindparam" => [":id" => $id]
+			]);
+
+			$bankcode = $this->body["bankcode"] ?? $accountdetails["bankcode"];
+			$accountnumber = $this->body["accountnumber"] ?? $accountdetails["accountnumber"];
+			$accountname = $this->body["accountname"] ?? $accountdetails["accountname"];
+
+			if (!$accountdetails) {
+				$this->create([
+					"tablename" => "agent_account",
+					"fields" => "`agent_id`,`bankcode`, `accountnumber`, `accountname`",
+					"values" => ":id,:bankcode,:accountnumber,:accountname",
+					"bindparam" => [":id" => $id, ":bankcode" => $bankcode, ":accountnumber" => $accountnumber, "accountname" => $accountname]
+				]);
+
+				exit(Response::json(["status" => true, "message" => "Account details submitted successfully"]));
+			}
+
+			$this->update([
+				"tablename" => "agent_account",
+				"fields" => "bankcode = :bankcode,accountnumber = :accountnumber,accountname = :accountname",
+				"condition" => "agent_id = :id",
+				"bindparam" => [":bankcode" => $bankcode, ":accountnumber" => $accountnumber, "accountname" => $accountname, ":id" => $id]
+			]);
+
+			exit(Response::json(["status" => true, "message" => "Account details updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
