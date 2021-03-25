@@ -267,6 +267,12 @@ class AuthController extends Controller
 				"bindparam" => [":telephone" => $telephone, ":firstname" => $firstname, ":lastname" => $lastname, ":address" => $address, ":bio" => $bio, ":state" => $state, ":lga" => $lga, ":id" => $id]
 			]);
 
+			Session::start();
+			Session::set([
+				"image" => $user["image"],
+				"username" => $user["firstname"] . " " . $user["lastname"],
+			]);
+
 			exit(Response::json(["status" => true, "message" => "profile updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));

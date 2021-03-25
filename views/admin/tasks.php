@@ -56,13 +56,13 @@ include_once "common/header.php";
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="form-group">
                             <label for="startdate">Start Date</label>
-                            <input type="date" id="startdate" class="form-control">
+                            <input type="date" id="startdate" class="form-control" value="<?= date("Y-m-d", strtotime("-1month")) ?>">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="form-group">
                             <label for="enddate">End Date</label>
-                            <input type="date" id="enddate" class="form-control">
+                            <input type="date" id="enddate" class="form-control" value="<?= date("Y-m-d") ?>">
                         </div>
                     </div>
                 </div>

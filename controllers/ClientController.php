@@ -350,6 +350,12 @@ class ClientController extends Controller
 				"bindparam" => [":firstname" => $firstname, ":lastname" => $lastname, ":address" => $address, ":bio" => $bio, ":state" => $state, ":lga" => $lga, ":id" => $id]
 			]);
 
+			Session::start();
+			Session::set([
+				"username" => $client["firstname"] . " " . $client["lastname"],
+				"image" => $client["image"]
+			]);
+
 			exit(Response::json(["status" => true, "message" => "profile updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));

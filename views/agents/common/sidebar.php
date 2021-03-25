@@ -12,10 +12,10 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "tasks" ? "active" : "" ?>">
-                <a href="/agents/tasks">
+            <li class="<?= $currentnav == "deliveries" ? "active" : "" ?>">
+                <a href="/agents/deliveries">
                     <i class="nc-icon nc-bullet-list-67"></i>
-                    <p>Tasks</p>
+                    <p>Deliveries</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">

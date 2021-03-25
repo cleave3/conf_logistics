@@ -49,13 +49,8 @@ class TaskController extends Controller
 
 	public function getAssignableTasks()
 	{
-		// try {
 		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.agentfee,B.sendpayment,B.agentpayment,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A LEFT JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE A.status NOT IN ('cancelled','delivered', 'intransit')
 			");
-		// 	return Response::json(["status" => true, "data" => $tasks]);
-		// } catch (\Exception $error) {
-		// 	return Response::json(["status" => false, "message" => $error->getMessage()]);
-		// }
 	}
 
 	public function add($agentid, $orderid)
@@ -126,5 +121,13 @@ class TaskController extends Controller
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
+	}
+
+	public function agentTask()
+	{
+		Auth::checkAuth("agentid");
+		$agentid = Session::get("agentid");
+
+		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' ORDER BY B.created_at DESC");
 	}
 }

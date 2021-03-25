@@ -118,14 +118,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr role="row">
             <th role="columnheader">S/N</th>
             <th role="columnheader">SELLER</th>
-            <th role="columnheader">SELLER&nbsp;TELEPHONE</th>
+            <th role="columnheader">SELLER&nbsp;TEL</th>
             <th role="columnheader">CUSTOMER</th>
-            <th role="columnheader">CUSTOMER&nbsp;TELEPHONE</th>
+            <th role="columnheader">CUSTOMER&nbsp;TEL</th>
             <th role="columnheader">ADDRESS</th>
             <th role="columnheader">ORDER&nbsp;ID</th>
+            <th role="columnheader">AMOUNT (₦)</th>
+            <th role="columnheader">FEE (₦)</th>
             <th role="columnheader">STATUS</th>
             <th role="columnheader">ASSIGNER</th>
-            <th role="columnheader">DELIVERY&nbsp;AGENT</th>
+            <th role="columnheader">AGENT</th>
             <th role="columnheader">ASSIGNED&nbsp;AT</th>
         </tr>
     </thead>
@@ -142,11 +144,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <td role="cell" data-label="CUSTOMER TELEPHONE : ">${task["customertelephone"]}</td>
       <td role="cell" data-label="ADDRESS : ">${task["deliveryaddress"]}</td>
       <td role="cell" data-label="ORDER ID : ">#${task["order_id"]}</td>
+      <td role="cell" data-label="AMOUNT : ">${number_format(task["totalamount"])}</td>
+      <td role="cell" data-label="FEE : ">${number_format(task["delivery_fee"])}</td>
       <td data-label="STATUS">
           <span class="text-uppercase badge badge-${determineClass(task["orderstatus"])} p-2">${task["orderstatus"]}</span>
       </td>
       <td role="cell" data-label="ASSIGNER : ">${task["assigner"]}</td>
-      <td role="cell" data-label="DELIVERY AGENT : ">${task["assignee"]}</td>
+      <td role="cell" data-label="AGENT : ">${task["assignee"]}</td>
       <td role="cell" data-label="CREATED AT : ">${task["created_at"]}</td>
   </tr>`;
     });
