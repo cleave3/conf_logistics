@@ -2,10 +2,10 @@
 
 use App\controllers\OrderController;
 
+$base = __DIR__ . "/../";
 include $base . "common/authheader.php";
 $oc = new OrderController();
 $order = $oc->getOrderDetails($_GET["orderid"]);
-$base = __DIR__ . "/../";
 $title = "Order Details";
 $currentnav = "orders";
 include $base . "common/header.php";

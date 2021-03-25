@@ -13,6 +13,6 @@ $emailverified = Session::get("emailverified");
 $profileverified = Session::get("profileverified");
 
 if (!$adminid || !$userid) {
-    header("location:login");
+    header("location:/admin/login");
     exit;
 }

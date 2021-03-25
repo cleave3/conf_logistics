@@ -292,6 +292,16 @@ class AgentController extends Controller
 		]);
 	}
 
+	public function getActiveAgents()
+	{
+		return $this->findAll([
+			"tablename" => "agents A",
+			"condition" => "status = :status",
+			"bindparam" => [":status" => "active"],
+			"fields" => "A.id,A.email,A.telephone,A.firstname,A.lastname,A.address,A.bio,A.image,A.state,A.city,A.status,A.created_at,A.updated_at",
+		]);
+	}
+
 	public function edit()
 	{
 		try {

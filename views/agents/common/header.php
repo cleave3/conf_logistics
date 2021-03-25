@@ -29,9 +29,11 @@ function determineClass($status)
         case 'onhand':
         case 'pending':
         case 'processing':
+        case 'noresponse':
             return "warning";
         case 'sent':
         case "paid":
+        case "confirmed":
             return "primary";
         case "recieved":
         case "active":
