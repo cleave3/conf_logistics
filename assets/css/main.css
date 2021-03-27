@@ -196,3 +196,21 @@ input:disabled {
     display: none;
   }
 }
+
+.notification-indicator {
+  width: 20px;
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .notification-indicator {
+    width: 20px;
+    position: absolute;
+    top: 5px;
+    left: 25px;
+    text-align: center;
+  }
+}

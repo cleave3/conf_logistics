@@ -1,228 +1,112 @@
 <?php
 
 use App\controllers\OrderController;
+use App\controllers\TaskController;
 
 $base = __DIR__ . "/../";
 include $base . "common/authheader.php";
 $oc = new OrderController();
 $order = $oc->getOrderDetails($_GET["orderid"]);
+$task = new TaskController();
 $title = "Delivery Payment";
 $currentnav = "deliveries";
 
-//get the order details
-
-//if not found display not found
-
-// set amount and order id
-
-//set conditions for paystack and bank payin
-
-//
-
-$statuses = [
-    ["value" => "cancelled", "label" => ucwords("cancelled")],
-    ["value" => "confirmed", "label" => ucwords("confirmed")],
-    ["value" => "delivered", "label" => ucwords("delivered")],
-    ["value" => "intransit", "label" => ucwords("intransit")],
-    ["value" => "processing", "label" => ucwords("Processing")],
-    ["value" => "noresponse", "label" => ucwords("noresponse")],
-    ["value" => "sent", "label" => ucwords("sent")],
-    ["value" => "rescheduled", "label" => ucwords("rescheduled")],
-];
 include $base . "common/header.php";
 ?>
 
 <body class="">
-    <div class="wrapper ">
+    <div class="wrapper">
         <?php include $base . "common/sidebar.php" ?>
         <div class="main-panel" style="height: 100vh;">
             <?php include $base . "common/nav.php" ?>
             <div class="content">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="/agents/deliveries">Deliveries</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="/agents/deliveries/detail?orderid=<?= $_GET["orderid"] ?>">Detail</a>
-                    </li>
-                    <li class="breadcrumb-item active">Payment</li>
-                </ol>
-                <div class="d-flex flex-wrap justify-content-between">
-                    <div>
-                        <button class="btn btn-sm btn-primary mx-1" onclick="print()"><img src="/assets/icons/printer.svg" width="15px" height="15px" /> Print</button>
-                        <button type="button" class="btn btn-primary btn-sm mx-1" data-toggle="modal" data-target="#orderhistorymodal">
-                            <img src="/assets/icons/history.svg" width="15px" height="15px" /> Order history
-                        </button>
-                        <?php if ($order["order"]["status"] !== "delivered") { ?>
-                            <a href="/agents/deliveries/payment?orderid=<?= $order["order"]["id"] ?>" class="btn btn-transparent btn-sm mx-1">
-                                <img src="/assets/icons/money.svg" width="15px" height="15px" />Payment
-                            </a>
-                        <?php } ?>
-                    </div>
-                    <div>
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <label for="status" class="mx-1">Update Order status</label>
-                                <select id="status" name="status" class="custom-select">
-                                    <?php foreach ($statuses as $status) { ?>
-                                        <?php if ($order["order"]["status"] === $status["value"]) { ?>
-                                            <option value="<?= $status["value"] ?>" selected><?= $status["label"] ?></option>
-                                        <?php } else { ?>
-                                            <option value="<?= $status["value"] ?>"><?= $status["label"] ?></option>
-                                        <?php } ?>
-                                    <?php } ?>
-                                </select>
-                                <input name="orderid" type="hidden" />
-                                <button class="btn btn-info mx-1">update</button>
+                <?php if ($order["order"]) { ?>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/agents/deliveries">Deliveries</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/agents/deliveries/detail?orderid=<?= $_GET["orderid"] ?>">Detail</a>
+                        </li>
+                        <li class="breadcrumb-item active">Payment</li>
+                    </ol>
+                    <?php if ($task->getTaskByOrderId($order["order"]["id"])["sendpayment"] === "YES") { ?>
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="text-center">PAYMENT HAS ALREADY BEEN SUBMITTED FOR THIS DELIVERY <i class="fa fa-credit-card" aria-hidden="true"></i></h6>
+                                <div class="d-flex justify-content-center">
+                                    <a class="my-2 btn btn-dark" href="/agents/deliveries"><i class="fa fa-chevron-left" aria-hidden="true"></i> Go Back</a>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    <?php } else { ?>
+                        <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 250px);">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="text-center">SUBMIT PAYMENT <i class="fa fa-credit-card" aria-hidden="true"></i></h6>
+                                    <form id="paymentform" autocomplete="off">
+                                        <input type="hidden" name="orderid" value="<?= $_GET["orderid"] ?>" />
+                                        <div class="form-group">
+                                            <label for="paymentoption">select payment option</label>
+                                            <select name="paymentoption" id="paymentoption" class="custom-select">
+                                                <option value="card" selected>Card Payment</option>
+                                                <option value="bank">Bank Payment/Mobile transfer</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="amount">Amount</label>
+                                            <input type="text" class="form-control" id="amount" placeholder="Enter Amount" value="<?= $order["order"]["totalamount"] ?>" readonly />
+                                        </div>
+                                        <div class="form-submit-card">
+                                            <div class="form-group">
+                                                <label for="email">Email <small class="text-muted"></small></label>
+                                                <input type="email" id="email" class="form-control" placeholder="example@mail.com">
+                                                <small class="text-danger d-none">please enter a valid email address</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="first-name">First Name</label>
+                                                <input type="text" class="form-control" id="first-name" placeholder="First Name" /><small class="text-danger d-none">firstname is required</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="last-name">Last Name</label>
+                                                <input type="text" class="form-control" id="last-name" placeholder="Last Name" /><small class="text-danger d-none">lastname is required</small>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-success w-100 text-white" id="paymentbtn">Proceed&nbsp;to&nbsp;payment&nbsp;<i class="fa fa-chevron-right"></i></button>
+                                        </div>
+                                        <div class="form-submit-bank d-none">
+                                            <div class="form-group">
+                                                <label for="proof">Proof of payment <small class="text-danger">(only images and pdf are allowed)</small> </label>
+                                                <input type="file" id="proof" accept="image/*,.pdf" class="form-control" name="proof" required />
+                                                <small class="text-danger d-none">proof is required</small>
+                                            </div>
+                                            <button type="submit" class="btn btn-sm btn-success w-100 text-white" id="submitpayment">Submit&nbsp;payment&nbsp;<i class="fa fa-chevron-right"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } else { ?>
+                    <div class="d-flex justify-content-center align-items-center my-5" style="height: 300px;">
+                        <div>
+                            <p class="text-center font-weight-bold">Delivery not found</p>
+                            <img src="/assets/icons/empty.svg" class="img-fluid" width="200px" height="200px" />
+                            <div class="d-flex justify-content-center">
+                                <a class="my-2 btn btn-dark" href="/agents/deliveries"><i class="fa fa-chevron-left" aria-hidden="true"></i> Go Back</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <?php if (in_array($order["order"]["status"], ["delivered"])) { ?>
-                    <button type="button" class="btn btn-transparent btn-sm mx-1" id="verifybtn" data-orderid="<?= $order["order"]["id"] ?>">
-                        <img src="/assets/icons/money.svg" width="15px" height="15px" />Payment
-                    </button>
                 <?php } ?>
-                <div class="order print-container">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title text-left">Seller: <?= strtoupper($order["order"]["companyname"]) ?></h3>
-                            <p class="text-left">Seller Telephone: <?= $order["order"]["companytelephone"] ?></p>
-                        </div>
-                        <div class="card-body">
-                            <table style="border-collapse: collapse; width: 100%; border-top: 1.5px solid #DDDDDD; border-left: 1.5px solid #DDDDDD; margin-bottom: 20px;">
-                                <thead>
-                                    <tr>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;" colspan="3">ORDER DETAIL</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
-                                            <b>Date : </b> <?= date("Y-m-d H:m:s a", strtotime($order["order"]["created_at"])) ?><br />
-                                        </td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" class="text-uppercase">
-                                            <b>Order Status : </b><span class="badge badge-<?= determineClass($order["order"]["status"]) ?> p-2"><?= $order["order"]["status"] ?></span>
-                                        </td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
-                                            <b>Order Amount : </b> <?= number_format($order["order"]["totalamount"], 2) ?><br />
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
-                                            <b>Customer : </b> <?= $order["order"]["customer"] ?><br />
-                                        </td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" colspan="2">
-                                            <b>Customer Telephone : </b> <?= $order["order"]["telephone"] ?><br />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" colspan="3">
-                                            <b>Description : </b> <?= $order["order"]["description"] ?><br />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table style="border-collapse: collapse; width: 100%; border-top: 1.5px solid #DDDDDD; border-left: 1.5px solid #DDDDDD; margin-bottom: 20px;">
-                                <thead>
-                                    <tr>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;">State</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;">City</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;">Address</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;"> <?= $order["order"]["state"] ?></td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;"> <?= $order["order"]["city"] ?></td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;"> <?= $order["order"]["address"] ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="text-center p-2">ORDER ITEMS</div>
-                            <table style="border-collapse: collapse; width: 100%; border-top: 1.5px solid #DDDDDD; border-left: 1.5px solid #DDDDDD; margin-bottom: 20px;">
-                                <thead>
-                                    <tr>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;">S/N</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;">ITEM</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: right; padding: 15px; color: #222222;">QTY</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: right; padding: 15px; color: #222222;">COST</td>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: right; padding: 15px; color: #222222;">Total</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sn = 1;
-                                    $grandtotal = 0;
-                                    foreach ($order["orderitems"] as $item) {
-                                        $total = floatval($item["cost"]) * floatval($item["quantity"]);
-                                    ?>
-                                        <tr>
-                                            <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;"><?= $sn ?></td>
-                                            <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: right; padding: 15px;"><?= $item["name"] ?></td>
-                                            <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: right; padding: 15px;"><?= $item["quantity"] ?></td>
-                                            <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: right; padding: 15px;"><?= number_format($item["cost"], 2) ?></td>
-                                            <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: right; padding: 15px;"><?= number_format($total, 2) ?></td>
-                                        </tr>
-                                    <?php
-                                        $grandtotal += $total;
-                                        $sn++;
-                                    }
-                                    ?>
-                                    <tr>
-                                        <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;" colspan="4">TOTAL</td>
-                                        <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: right; padding: 15px;"><?= number_format($grandtotal, 2) ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade" id="orderhistorymodal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title"></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <table style="border-collapse: collapse; width: 100%; border-top: 1.5px solid #DDDDDD; border-left: 1.5px solid #DDDDDD; margin-bottom: 20px;">
-                                    <thead>
-                                        <tr>
-                                            <td style="font-size: 12px; border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; background-color: #EFEFEF; font-weight: bold; text-align: left; padding: 15px; color: #222222;" colspan="2">ORDER HISTORY</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($order["orderhistory"] as $history) { ?>
-                                            <tr>
-                                                <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
-                                                    <?= date("Y-m-d H:m:s a", strtotime($history["created_at"])) ?><br />
-                                                </td>
-                                                <td style="font-size: 12px;	border-right: 1.5px solid #DDDDDD; border-bottom: 1.5px solid #DDDDDD; text-align: left; padding: 15px;">
-                                                    <?= $history["description"] ?><br />
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <?php include $base . "common/footer.php" ?>
         </div>
     </div>
 
     <?php include $base . "common/js.php" ?>
-    <!-- <script src="/assets/js/client/orders.js"></script> -->
+    <?php if ($order["order"] && $task->getTaskByOrderId($order["order"]["id"])["sendpayment"] !== "YES") { ?>
+        <script src="/assets/js/plugins/psinline.js"></script>
+        <script src="/assets/js/agents/payment.js"></script>
+    <?php } ?>
 </body>
 
 </html>

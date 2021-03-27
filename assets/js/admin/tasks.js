@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resultcontainer.innerHTML = "";
 
     if (data.length < 1) {
-      resultcontainer.innerHTML = `<div class="d-flex justify-content-center align-items-center my-5" style="300px">
+      resultcontainer.innerHTML = `<div class="d-flex justify-content-center align-items-center my-5" style="height: 300px;">
             <div>
                 <p class="text-center font-weight-bold">Your Search returned 0 results</p>
                 <img src="/assets/icons/empty.svg" class="img-fluid" width="200px" height="200px"/>

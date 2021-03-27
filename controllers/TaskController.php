@@ -3,6 +3,7 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\utils\File;
 use App\utils\Response;
 use App\utils\Sanitize;
 use App\utils\Session;
@@ -75,7 +76,7 @@ class TaskController extends Controller
 			"tablename" => "tasks",
 			"fields" => "`agent_id`=:agentid, `order_id`=:orderid, `user_id`=:userid, `agentfee`=:agentfee,`sendpayment`=:sendpayment,`agentpayment`=:agentpayment",
 			"condition" => "id =:taskid",
-			"bindparam" => [":taskid" => $taskid, "agentid" => $agentid, ":orderid" => $orderid, ":userid" => $userid, "agentfee" => $agentfee, ":sendpayment" => $sendpayment, "agentpayment" => $agentpayment]
+			"bindparam" => [":taskid" => $taskid, "agentid" => $agentid, ":orderid" => $orderid, ":userid" => $userid, "agentfee" => $agentfee, ":sendpayment" => $sendpayment, ":agentpayment" => $agentpayment]
 		]);
 	}
 
@@ -128,6 +129,87 @@ class TaskController extends Controller
 		Auth::checkAuth("agentid");
 		$agentid = Session::get("agentid");
 
-		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' ORDER BY B.created_at DESC");
+		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.sendpayment_status,B.payment_method,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' ORDER BY B.created_at DESC");
+	}
+
+	public function updateorderstatus()
+	{
+		try {
+			Auth::checkAuth("agentid");
+			$orderid = Sanitize::string($this->body["orderid"]);
+			$status = Sanitize::string($this->body["status"]);
+
+			$this->update([
+				"tablename" => "orders",
+				"fields" => "status =:status",
+				"condition" => "id =:orderid",
+				"bindparam" => [":status" => $status, ":orderid" => $orderid]
+			]);
+
+			$order = new OrderController();
+
+			$order->addOrderHistory($orderid, $status, "order status was updated to $status");
+
+			//notify client when status = delivered
+			exit(Response::json(["status" => true, "message" => "order updated successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function updateTask($taskid, $sendpayment, $sendpaymentstatus, $paymentmethod, $proof, $agentpayment)
+	{
+		return $this->update([
+			"tablename" => "tasks",
+			"fields" => "`sendpayment`=:sendpayment,`sendpayment_status`=:paymentstatus,`payment_method`=:method,`proof`=:proof,`agentpayment`=:agentpayment",
+			"condition" => "id =:taskid",
+			"bindparam" => [":taskid" => $taskid, ":sendpayment" => $sendpayment, ":agentpayment" => $agentpayment, ":paymentstatus" => $sendpaymentstatus, ":proof" => $proof, ":method" => $paymentmethod]
+		]);
+	}
+
+	public function getTaskByOrderId($orderid)
+	{
+		return $this->findOne(["tablename" => "tasks", "condition" => "order_id =:orderid", "bindparam" => [":orderid" => $orderid]]);
+	}
+
+	public function deliverypayment()
+	{
+		try {
+			Auth::checkAuth("agentid");
+			$task = $this->getTaskByOrderId($this->body["orderid"]);
+			if (!$task) throw new \Exception("task not found");
+			$paymentmethod = Sanitize::string($this->body["paymentoption"]);
+			$sendpayment = "YES";
+			if ($paymentmethod === "card") {
+				$reference = $this->body["ref"];
+				$sendpaymentstatus = "verified";
+
+				$tc = new TransactionController();
+				$transaction = json_decode($tc->paystackverify($reference));
+
+				if ($transaction->data->status !== "success") throw new \Exception("unable to verify transaction");
+
+				$this->updateTask($task["id"], $sendpayment, $sendpaymentstatus, "paystack", $task["proof"], $task["agentpayment"]);
+			} else {
+				if (!isset($this->file["proof"]) || (isset($this->file["proof"]) && !empty($this->file["image"]["name"]))) {
+					throw new \Exception("proof of payment is required");
+				}
+
+				$proof = File::upload([
+					"file" => $this->file["proof"],
+					"path" => __DIR__ . "/../files/document/",
+					"allowedformats" => ["pdf", "jpg", "gif", "jpeg", "png", "PNG", "JPG", "JPEG", "PDF", "GIF"],
+					"maxsize" => 5
+				]);
+				$sendpaymentstatus = "submitted";
+				$this->updateTask($task["id"], $sendpayment, $sendpaymentstatus, "Bank Payment/Mobile transfer", $proof, $task["agentpayment"]);
+			}
+
+			//notify admin of sent payment
+
+			exit(Response::json(["status" => true, "message" => "payment submitted successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
 	}
 }

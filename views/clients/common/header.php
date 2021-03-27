@@ -33,6 +33,8 @@ function determineClass($status)
             return "warning";
         case 'sent':
         case "paid":
+        case "submitted":
+        case "intransit":
         case "confirmed":
             return "primary";
         case "recieved":

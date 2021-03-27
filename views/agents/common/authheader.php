@@ -9,6 +9,6 @@ $image = Session::get("image");
 $image = !$image ? "default.jpg" : $image;
 
 if (!$agentid) {
-    header("location:login");
+    header("location:/agents/login");
     exit;
 }

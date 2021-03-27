@@ -17,7 +17,7 @@ $statuses = [
     ["value" => "intransit", "label" => ucwords("intransit")],
     ["value" => "processing", "label" => ucwords("Processing")],
     ["value" => "noresponse", "label" => ucwords("noresponse")],
-    ["value" => "sent", "label" => ucwords("sent")],
+    ["value" => "pending", "label" => ucwords("pending")],
     ["value" => "rescheduled", "label" => ucwords("rescheduled")],
 ];
 include_once "common/header.php";

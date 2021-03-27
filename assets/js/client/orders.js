@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let waybillitems = [];
   const deliveryfee = await getdeliveryfee();
   const itemlist = await getitems();
+  console.log(itemlist);
   let extracharge = 0;
   let waybillfee = 0;
   let bckwaybill = 0;
@@ -76,7 +77,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         calculateOrderDetails();
         showLoader();
         const result = await getRequest(`public/deliverypricing?stateid=${e.target.value}`);
-        console.log(result);
         prices = result.data;
         let options = `<option value="">--SELECT CITY--</option>`;
         for (let i = 0; i < result.data.length; i++) {

@@ -10,7 +10,7 @@ $currentnav = "orders";
 include $base . "common/header.php";
 $pc = new PublicController();
 $pac = new PackageController();
-$items = $pac->getPackageItemsWithDetails();
+$items = $pac->getClientPackageItemsWithDetails();
 $states = $pc->getStatesForDelivery();
 ?>
 

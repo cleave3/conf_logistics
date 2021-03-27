@@ -3,6 +3,8 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\utils\Response;
+use CURLFile;
 
 class DashboardController extends Controller
 {
@@ -87,6 +89,23 @@ class DashboardController extends Controller
 		return floatval($payment[0]["amount"]);
 	}
 
+
+	public function ordersStats()
+	{
+		Auth::checkAuth("userid");
+		return [
+			"totalorders" => $this->totalordercount(),
+			"pendingorders" => $this->orderscountbystaus("pending"),
+			"cancelledorders" => $this->orderscountbystaus("cancelled"),
+			"deliveredorders" => $this->orderscountbystaus("delivered"),
+			"rescheduledorders" => $this->orderscountbystaus("rescheduled"),
+			"intransitorders" => $this->orderscountbystaus("intransit"),
+			"noresponseorders" => $this->orderscountbystaus("noresponse"),
+			"confirmedorders" => $this->orderscountbystaus("confirmed"),
+			"unassigned" => $this->totalunassignedordercount()
+		];
+	}
+
 	public function clientDashboardStats()
 	{
 		$client = new ClientController();
@@ -113,19 +132,89 @@ class DashboardController extends Controller
 		];
 	}
 
-	public function ordersStats()
+	public function agenttotaltask($agentid)
 	{
-		Auth::checkAuth("userid");
+		return $this->getCount([
+			"tablename" => "tasks",
+			"condition" => "agent_id = :agentid",
+			"bindparam" => [":agentid" => $agentid]
+		]);
+	}
+
+	public function agentcompletedtaskcount($agentid)
+	{
+		return $this->getCount([
+			"tablename" => "tasks A",
+			"condition" => "agent_id = :agentid AND B.status = 'delivered'",
+			"joins" => "INNER JOIN orders B ON A.order_id = B.id",
+			"bindparam" => [":agentid" => $agentid]
+		]);
+	}
+
+	public function agentuncompletedtaskcount($agentid)
+	{
+		return $this->getCount([
+			"tablename" => "tasks A",
+			"condition" => "agent_id = :agentid AND B.status <> 'delivered'",
+			"joins" => "INNER JOIN orders B ON A.order_id = B.id",
+			"bindparam" => [":agentid" => $agentid]
+		]);
+	}
+
+	public function agentuncompletedtask($agentid)
+	{
+		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.sendpayment_status,B.payment_method,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' AND A.status <> 'delivered' ORDER BY B.created_at DESC");
+	}
+
+	public function agentmonthlycompleted($agentid)
+	{
+		return $this->exec_query("SELECT DISTINCT MONTH(A.created_at) AS month, MONTHNAME(A.created_at) as monthname, COUNT(A.id) as deliveries FROM tasks A INNER JOIN orders B WHERE B.status ='delivered' AND YEAR(NOW()) = YEAR(A.created_at) AND A.order_id = B.id AND A.agent_id = '$agentid' GROUP BY month ORDER BY A.created_at");
+	}
+
+	public function pendingdeliveries()
+	{
+		$agent = new AgentController();
+		$agentid = $agent->getagentId();
+		return $this->findAll([
+			"tablename" => "tasks A",
+			"condition" => "A.agent_id = :agentid AND B.status = 'pending' ORDER BY A.created_at",
+			"joins" => "INNER JOIN orders B ON A.order_id = B.id",
+			"bindparam" => [":agentid" => $agentid]
+		]);
+	}
+
+	public function agentDashboardStats()
+	{
+		$agent = new AgentController();
+		$agentid = $agent->getagentId();
 		return [
-			"totalorders" => $this->totalordercount(),
-			"pendingorders" => $this->orderscountbystaus("pending"),
-			"cancelledorders" => $this->orderscountbystaus("cancelled"),
-			"deliveredorders" => $this->orderscountbystaus("delivered"),
-			"rescheduledorders" => $this->orderscountbystaus("rescheduled"),
-			"intransitorders" => $this->orderscountbystaus("intransit"),
-			"noresponseorders" => $this->orderscountbystaus("noresponse"),
-			"confirmedorders" => $this->orderscountbystaus("confirmed"),
-			"unassigned" => $this->totalunassignedordercount()
+			"total" => $this->agenttotaltask($agentid),
+			"totalcompleted" => $this->agentcompletedtaskcount($agentid),
+			"totaluncompleted" => $this->agentuncompletedtaskcount($agentid),
+			"uncompleted" => $this->agentuncompletedtask($agentid)
 		];
+	}
+
+	public function agentstats()
+	{
+		try {
+			$agent = new AgentController();
+			$agentid = $agent->getagentId();
+			$labels = [];
+			$data = [];
+
+			$completed = $this->agentmonthlycompleted($agentid);
+
+			if (count($completed) > 0) {
+				foreach ($completed as $c) {
+					$labels[] = $c["monthname"];
+					$data[] = intval($c["deliveries"]);
+				}
+			}
+
+			exit(Response::json(["status" => true, "data" => ["labels" => $labels, "data" => $data]]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
 	}
 }

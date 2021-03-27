@@ -10,6 +10,8 @@ $tc = new TaskController();
 
 $tasks = $tc->agentTask();
 
+// exit(json_encode($tasks));
+
 include_once "common/header.php";
 ?>
 
@@ -36,6 +38,7 @@ include_once "common/header.php";
                                         <th role="columnheader">ADDRESS</th>
                                         <th role="columnheader">ORDER&nbsp;ID</th>
                                         <th role="columnheader">STATUS</th>
+                                        <th role="columnheader">SEND&nbsp;PAYMENT/STATUS</th>
                                         <th role="columnheader">ASSIGNED&nbsp;AT</th>
                                         <th role="columnheader">UPDATED&nbsp;AT</th>
                                     </tr>
@@ -60,6 +63,9 @@ include_once "common/header.php";
                                             <td role="cell" data-label="ORDER ID : ">#<?= $task["order_id"] ?></td>
                                             <td data-label="STATUS">
                                                 <span class="text-uppercase badge badge-<?= determineClass($task["orderstatus"]) ?> p-2"><?= $task["orderstatus"] ?></span>
+                                            </td>
+                                            <td data-label="SEND PAYMENT/STATUS">
+                                                <span class="text-uppercase badge badge-<?= determineClass($task["sendpayment"]) ?> p-2"><?= $task["sendpayment"] ?></span> / <span class="text-uppercase badge badge-<?= determineClass($task["sendpayment_status"]) ?> p-2"><?= $task["sendpayment_status"] ?></span>
                                             </td>
                                             <td role="cell" data-label="CREATED AT : "><?= empty($task["created_at"]) ? "never" : date("Y-m-d, H:m:s a", strtotime($task["created_at"])) ?></td>
                                             <td role="cell" data-label="UPDATED AT : "><?= empty($task["updated_at"]) ? "never" : date("Y-m-d, H:m:s a", strtotime($task["updated_at"])) ?></td>

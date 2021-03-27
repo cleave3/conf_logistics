@@ -289,7 +289,7 @@ class PackageController extends Controller
 	{
 		try {
 			$this->getClientId();
-			$package = $this->getPackageItemsWithDetails();
+			$package = $this->getClientPackageItemsWithDetails();
 			exit(Response::json(["status" => true, "message" => "record retrieved", "data" => $package]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
