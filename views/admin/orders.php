@@ -17,7 +17,7 @@ include_once "common/header.php";
         <div class="main-panel" style="height: 100vh;">
             <?php include "common/nav.php" ?>
             <div class="content">
-                <?php if (!isset($_GET["type"]) || !in_array($_GET["type"], ['all', 'sent', 'processing', 'confirmed', 'rescheduled', 'delivered', 'intransit', 'cancelled', 'noreponse', 'assigned', 'unassigned'])) { ?>
+                <?php if (!isset($_GET["type"]) || !in_array($_GET["type"], ['all', 'sent', 'pending', 'processing', 'confirmed', 'rescheduled', 'delivered', 'intransit', 'cancelled', 'noreponse', 'assigned', 'unassigned'])) { ?>
                     <?php $stats = $dc->ordersStats(); ?>
                     <div class="row">
                         <div class="col-md-4">

@@ -266,6 +266,33 @@ include_once "common/header.php";
             </div>
           </div>
           <!-- Waybills -->
+
+          <!-- Month Orders stats -->
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-header ">
+                <h5 class="card-title">Monthly Order Stats</h5>
+                <p class="card-category"><?= $stats["period"] ?> Monthly performance</p>
+              </div>
+              <div class="card-body ">
+                <canvas id="monthlystats" width="400" height="100"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- Month Orders stats -->
+
+          <!-- Orders stats by stats -->
+          <div class="col-md-12">
+            <div class="card ">
+              <div class="card-header ">
+                <h5 class="card-title">Order Stats By State</h5>
+              </div>
+              <div class="card-body ">
+                <canvas id="statestats" width="400" height="100"></canvas>
+              </div>
+            </div>
+          </div>
+          <!--Orders stats by stats -->
         </div>
       </div>
       <?php include_once "common/footer.php" ?>
@@ -273,6 +300,8 @@ include_once "common/header.php";
   </div>
 
   <?php include_once "common/js.php" ?>
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <script src="/assets/js/client/dashboard.js"></script>
 </body>
 
 </html>

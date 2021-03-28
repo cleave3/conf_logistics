@@ -103,7 +103,7 @@ include_once "common/header.php";
                         <div class="card ">
                             <div class="card-header ">
                                 <h5 class="card-title">Monthly Delivery Stats</h5>
-                                <p class="card-category"><?= date("Y") ?> Monthly performance</p>
+                                <p class="card-category"><?= $stats["period"] ?> Monthly performance</p>
                             </div>
                             <div class="card-body ">
                                 <canvas id="monthlystats" width="400" height="100"></canvas>

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   async function getStats() {
     try {
-      const result = await getRequest("dashboard/agentstats");
+      const result = await getRequest("dashboard/clientstats");
 
       if (result.status) {
         drawChart("bar", "#monthlystats", {
@@ -24,6 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
               pointHoverRadius: 3,
               // borderWidth: 3,
               data: result.data.uncompleted,
+            },
+          ],
+        });
+        drawChart("line", "#statestats", {
+          labels: result.statestats.labels,
+          datasets: [
+            {
+              label: "states",
+              borderColor: "#51cbce",
+              backgroundColor: "#51cbce",
+              pointRadius: 2,
+              pointHoverRadius: 3,
+              // borderWidth: 3,
+              data: result.statestats.data,
+              fill: false,
             },
           ],
         });

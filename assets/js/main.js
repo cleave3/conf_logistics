@@ -100,16 +100,57 @@ function determineClass(status) {
   }
 }
 
-// function makePDF(element, filename = "document") {
-//   const doc = new jsPDF();
-//   doc.html(document.querySelector(element), {
-//     callback: function (doc) {
-//       doc.save();
-//     },
-//     margin: 5,
-//     filename: `${filename}.pdf`,
-//   });
-// }
-
 const showLoader = () => document.getElementById("loader").classList.remove("d-none");
 const hideLoader = () => document.getElementById("loader").classList.add("d-none");
+
+function drawChart(type, target, data) {
+  const ctx = document.querySelector(target).getContext("2d");
+
+  const myChart = new Chart(ctx, {
+    type: type,
+
+    data,
+    options: {
+      legend: {
+        display: true,
+      },
+
+      tooltips: {
+        enabled: true,
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              fontColor: "#9f9f9f",
+              beginAtZero: false,
+              maxTicksLimit: 5,
+              //padding: 20
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "#ccc",
+              color: "rgba(255,255,255,0.05)",
+            },
+          },
+        ],
+
+        xAxes: [
+          {
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: "rgba(255,255,255,0.1)",
+              zeroLineColor: "transparent",
+              display: false,
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9f9f9f",
+            },
+          },
+        ],
+      },
+    },
+  });
+}
