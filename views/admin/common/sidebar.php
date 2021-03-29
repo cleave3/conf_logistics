@@ -58,7 +58,7 @@
             <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
                 <a href="/admin/payments">
                     <i class="nc-icon nc-credit-card"></i>
-                    <p>Payments</p>
+                    <p>Payment Submission</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">

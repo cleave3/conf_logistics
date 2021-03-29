@@ -139,6 +139,12 @@ class TaskController extends Controller
 			$orderid = Sanitize::string($this->body["orderid"]);
 			$status = Sanitize::string($this->body["status"]);
 
+			$order = $this->findOne(["tablename" => "orders", "condition" => "id = :id", "bindparam" => [":id" => $orderid]]);
+
+			if (!$order) throw new \Exception("order not found");
+
+			if ($order["status"] === "delivered") throw new \Exception("Order already delivered");
+
 			$this->update([
 				"tablename" => "orders",
 				"fields" => "status =:status",
@@ -150,7 +156,14 @@ class TaskController extends Controller
 
 			$order->addOrderHistory($orderid, $status, "order status was updated to $status");
 
-			//notify client when status = delivered
+			if ($status === "delivered") {
+				//get order items
+
+				//for each order item 
+				// deduct items from package items
+				//notify client when status = delivered
+			}
+
 			exit(Response::json(["status" => true, "message" => "order updated successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
@@ -189,7 +202,7 @@ class TaskController extends Controller
 
 				if ($transaction->data->status !== "success") throw new \Exception("unable to verify transaction");
 
-				$this->updateTask($task["id"], $sendpayment, $sendpaymentstatus, "paystack", $task["proof"], $task["agentpayment"]);
+				$this->updateTask($task["id"], $sendpayment, $sendpaymentstatus, "paystack", "Reference :" . $reference, $task["agentpayment"]);
 			} else {
 				if (!isset($this->file["proof"]) || (isset($this->file["proof"]) && !empty($this->file["image"]["name"]))) {
 					throw new \Exception("proof of payment is required");
@@ -208,6 +221,27 @@ class TaskController extends Controller
 			//notify admin of sent payment
 
 			exit(Response::json(["status" => true, "message" => "payment submitted successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function verifysubmission()
+	{
+		try {
+			$taskid = $this->body["taskid"];
+			$task = $this->findOne(["tablename" => "tasks", "condition" => "id =:id", "bindparam" => [":id" => $taskid]]);
+
+			if (!$task) throw new \Exception("submission not found");
+
+			$this->update([
+				"tablename" => "tasks",
+				"fields" => "`sendpayment_status`=:paymentstatus",
+				"condition" => "id =:taskid",
+				"bindparam" => [":taskid" => $taskid, ":paymentstatus" => "verified"]
+			]);
+
+			exit(Response::json(["status" => true, "message" => "submission verified successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

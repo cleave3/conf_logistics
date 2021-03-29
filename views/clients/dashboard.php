@@ -31,7 +31,7 @@ include_once "common/header.php";
                   <div class="col-7 col-md-8">
                     <div class="numbers">
                       <p class="card-category">Verified Payments</p>
-                      <p class="card-title">₦ <?= number_format($stats["verifiedpayments"], 2) ?>
+                      <p class="card-title">₦ <?= number_format($stats["verifiedpayments"]) ?>
                       <p>
                       <p class="card-title"><?= $stats["verifiedpaymentscount"] ?>
                       <p>
@@ -59,7 +59,7 @@ include_once "common/header.php";
                   <div class="col-7 col-md-8">
                     <div class="numbers">
                       <p class="card-category">Unverified Payments</p>
-                      <p class="card-title">₦ <?= number_format($stats["paidpayments"], 2) ?>
+                      <p class="card-title">₦ <?= number_format($stats["paidpayments"]) ?>
                       <p>
                       <p class="card-title"><?= $stats["paidpaymentscount"] ?>
                       <p>
@@ -87,7 +87,7 @@ include_once "common/header.php";
                   <div class="col-7 col-md-8">
                     <div class="numbers">
                       <p class="card-category">Unpaid Payments</p>
-                      <p class="card-title">₦ <?= number_format($stats["unpaidpayments"], 2) ?>
+                      <p class="card-title">₦ <?= number_format($stats["unpaidpayments"]) ?>
                       <p>
                       <p class="card-title"><?= $stats["unpaidpaymentscount"] ?>
                       <p>

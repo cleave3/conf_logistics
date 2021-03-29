@@ -4,6 +4,6 @@ use App\utils\Session;
 
 Session::destroy();
 if (!isset($auth)) {
-    header("location:login");
+    header("location:/clients/login");
     exit;
 }

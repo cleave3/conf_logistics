@@ -31,7 +31,7 @@ include_once "common/header.php";
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
                                             <p class="card-category">Verified Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["verifiedpayments"], 2) ?>
+                                            <p class="card-title">₦ <?= number_format($stats["verifiedpayments"]) ?>
                                             <p>
                                             <p class="card-title"><?= $stats["verifiedpaymentscount"] ?>
                                             <p>
@@ -42,7 +42,7 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/payments?status=verified">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@ include_once "common/header.php";
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
                                             <p class="card-category">Unverified Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["paidpayments"], 2) ?>
+                                            <p class="card-title">₦ <?= number_format($stats["paidpayments"]) ?>
                                             <p>
                                             <p class="card-title"><?= $stats["paidpaymentscount"] ?>
                                             <p>
@@ -70,7 +70,7 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/payments?status=paid">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@ include_once "common/header.php";
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
                                             <p class="card-category">Unpaid Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["unpaidpayments"], 2) ?>
+                                            <p class="card-title">₦ <?= number_format($stats["unpaidpayments"]) ?>
                                             <p>
                                             <p class="card-title"><?= $stats["unpaidpaymentscount"] ?>
                                             <p>
@@ -98,7 +98,7 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/payments?status=unpaid">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -362,7 +362,7 @@ include_once "common/header.php";
                     <!-- Month Orders stats -->
 
                     <!-- Orders stats by stats -->
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="card ">
                             <div class="card-header ">
                                 <h5 class="card-title">Order Stats By State</h5>
@@ -376,7 +376,7 @@ include_once "common/header.php";
                     <!--Orders stats by stats -->
 
                     <!-- Orders stats by stats -->
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="card ">
                             <div class="card-header ">
                                 <h5 class="card-title">Delivery Stats</h5>
@@ -451,6 +451,11 @@ include_once "common/header.php";
     <?php include_once "common/js.php" ?>
     <script src="/assets/js/plugins/chartjs.min.js"></script>
     <script src="/assets/js/admin/dashboard.js"></script>
+    <script>
+        $('#resulttable').DataTable({
+            fixedHeader: true
+        });
+    </script>
 </body>
 
 </html>

@@ -12,7 +12,7 @@ $image = !$image ? "default.jpg" : $image;
 $emailverified = Session::get("emailverified");
 $profileverified = Session::get("profileverified");
 
-if (!$adminid || !$userid) {
+if (!$adminid && !$userid) {
     header("location:/admin/login");
     exit;
 }

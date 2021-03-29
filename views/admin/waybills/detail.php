@@ -1,7 +1,9 @@
 <?php
 
 use App\controllers\PackageController;
+use App\utils\Session;
 
+Session::start();
 include $base . "common/authheader.php";
 $pc = new PackageController();
 $package = $pc->getPackage();

@@ -3,7 +3,7 @@
 use App\controllers\OrderController;
 
 include_once "common/authheader.php";
-$title = "Payment History";
+$title = "Payment Submission";
 $currentnav = "payments";
 $oc = new OrderController();
 $payments = $oc->getAllPayments();
@@ -19,17 +19,20 @@ include_once "common/header.php";
             <div class="content">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">PAYMENTS</h4>
+                        <h4 class="card-title">AGENT PAYMENTS SUBMISSION</h4>
                     </div>
                     <div class="card-body responsivetable table-responsive">
                         <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
                             <thead role="rowgroup">
                                 <tr role="row">
-                                    <th>ORDER ID</th>
+                                    <th>ORDER&nbsp;ID</th>
                                     <th>AMOUNT</th>
-                                    <th>DELIVERY&nbsp;FEE</th>
-                                    <th>BALANCE <br /><small class="text-muted">(Amount to be paid to client)</small></th>
-                                    <th>STATUS</th>
+                                    <th>FEE</th>
+                                    <th>BALANCE</th>
+                                    <th>AGENT</th>
+                                    <th>SUBMISSION&nbsp;STATUS</th>
+                                    <th>PAY&nbsp;METHOD</th>
+                                    <th>PROOF</th>
                                     <th>UPDATED&nbsp;AT</th>
                                     <th>ACTIONS</th>
                                 </tr>
@@ -48,20 +51,33 @@ include_once "common/header.php";
                                         <td role="cell" data-label="BALANCE : ">
                                             <?= number_format(($payment["totalamount"] - $payment["delivery_fee"]), 2) ?>
                                         </td>
-                                        <td class="text-uppercase" role="cell" data-label="PAYMENT STATUS : ">
-                                            <span class="badge badge-<?= determineClass($payment["payment_status"]) ?> p-2"><?= $payment["payment_status"] ?></span>
+                                        <td role="cell" data-label="AGENT : ">
+                                            <?= $payment["agent"] ?>
+                                        </td>
+                                        <td role="cell" data-label="SUBMISSION STATUS : ">
+                                            <span class="badge badge-<?= determineClass($payment["sendpayment_status"]) ?> p-2"><?= $payment["sendpayment_status"] ?></span>
+                                        </td>
+                                        <td role="cell" data-label="PAY METHOD : ">
+                                            <?= $payment["payment_method"] ?>
+                                        </td>
+                                        <td role="cell" data-label="PROOF : ">
+                                            <?php if (!empty($payment["proof"]) && $payment["payment_method"] != "paystack") { ?>
+                                                <a title="download payment submission proof" class="btn btn-primary mx-0" href="/files/document/<?= $payment["proof"] ?>" download="paymentproof"><img src="/assets/icons/file.svg" width="15px" height="15px" /></a>
+                                            <?php } else if ($payment["payment_method"] === "paystack") { ?>
+                                                <span><?= $payment["proof"] ?></span>
+                                            <?php } ?>
                                         </td>
                                         <td role="cell" data-label="UPDATED AT : ">
                                             <?= empty($payment["updated_at"]) ? "never" : date("Y-m-d, H:m:s a", strtotime($payment["updated_at"])) ?>
                                         </td>
                                         <td>
-                                            <?php if ($payment["payment_status"] === "unpaid") { ?>
-                                                <button type="button" class="btn btn-transparent btn-sm mx-1" id="paymentbtn" data-orderid="<?= $payment["id"] ?>">
-                                                    <img src="/assets/icons/money.svg" width="15px" height="15px" /> Make Payment
+                                            <?php if ($payment["sendpayment_status"] !== "verified") { ?>
+                                                <button onclick="confirmSubmissionVerify(<?= $payment['taskid'] ?>)" title="verify agent payment submission" class="btn btn-primary btn-sm mx-1">
+                                                    <i class="fa fa-check" aria-hidden="true"></i>
                                                 </button>
                                             <?php } else { ?>
-                                                <button type="button" class="btn btn-transparent btn-sm mx-1" disabled>
-                                                    <img src="/assets/icons/money.svg" width="15px" height="15px" /> Make Payment
+                                                <button type="button" class="btn btn-primary btn-sm mx-1" disabled>
+                                                    <i class="fa fa-check" aria-hidden="true"></i>
                                                 </button>
                                             <?php } ?>
                                         </td>
@@ -80,7 +96,7 @@ include_once "common/header.php";
 
     <?php include_once "common/js.php" ?>
 
-    <!-- <script src="/assets/js/client/orders.js"></script> -->
+    <script src="/assets/js/admin/payments.js"></script>
     <script>
         $('#resulttable').DataTable({
             fixedHeader: true,

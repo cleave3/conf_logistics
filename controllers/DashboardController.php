@@ -378,9 +378,18 @@ class DashboardController extends Controller
 		$agentid = $agent->getagentId();
 		return $this->findAll([
 			"tablename" => "tasks A",
-			"condition" => "A.agent_id = :agentid AND B.status = 'pending' ORDER BY A.created_at",
+			"condition" => "A.agent_id = :agentid AND B.status = 'pending' ORDER BY A.created_at DESC",
 			"joins" => "INNER JOIN orders B ON A.order_id = B.id",
 			"bindparam" => [":agentid" => $agentid]
+		]);
+	}
+
+	public function pendingorders()
+	{
+		Auth::checkAuth("userid");
+		return $this->findAll([
+			"tablename" => "orders",
+			"condition" => "status = 'pending' ORDER BY created_at DESC",
 		]);
 	}
 

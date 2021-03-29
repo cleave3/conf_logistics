@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
           datasets: [
             {
               label: "Delivery Agents",
-              borderColor: "#51cbce",
-              backgroundColor: "#51cbce",
+              borderColor: "#fcc468",
+              backgroundColor: "#fcc468",
               pointRadius: 2,
               pointHoverRadius: 3,
               // borderWidth: 3,
