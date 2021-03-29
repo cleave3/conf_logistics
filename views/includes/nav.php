@@ -6,8 +6,9 @@ $nav = "nav-item";
 $dashboardlink = "#";
 if (isset($_SESSION["clientid"])) $dashboardlink = "/clients/dashboard";
 if (isset($_SESSION["userid"])) $dashboardlink = "/admin/dashboard";
+if (isset($_SESSION["agentid"])) $dashboardlink = "/agents/dashboard";
 
-$auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]);
+$auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]) || isset($_SESSION["agentid"]);
 ?>
 <div class="header-top-w3layouts">
     <div class="container">
@@ -61,8 +62,8 @@ $auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]);
                             <a class="nav-link" href="/contact">Contact</a>
                         </li>
                         <?php if (!$auth) { ?>
-                            <li class="">
-                                <a class="nav-link" href="/clients/login">Sign In</a>
+                            <li class="<?= $title == "Login" ? $activenav : $nav ?>">
+                                <a class="nav-link" href="/login">Sign In</a>
                             </li>
                         <?php } ?>
 

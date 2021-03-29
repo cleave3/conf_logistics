@@ -15,9 +15,9 @@ include_once "common/header.php";
     <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="admin-login bg-light">
             <h3 class="text-center">Agent Login</h3>
-            <div class="d-none d-md-flex justify-content-center my-2">
-                <img src="/assets/icons/delivery_agent.svg" width="50%" class="img-fluid">
-            </div>
+            <!-- <div class="d-none d-md-flex justify-content-center my-2"> -->
+            <!-- <img src="/assets/icons/delivery_agent.svg" width="50%" class="img-fluid"> -->
+            <!-- </div> -->
             <?php if ($auth) { ?>
                 <div class="d-flex flex-wrap">
                     <a href="/agents/dashboard" class="btn btn-info text-uppercase">CONTINUE AS <?= $user ?> <i class="fa fa-user"></i></a>
