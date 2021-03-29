@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "https://delivery.confibay.com/api";
 
 async function postRequest(url, data, headers = new Headers()) {
   try {

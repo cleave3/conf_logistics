@@ -55,7 +55,7 @@ if (submitpayment)
 function payWithPayStack() {
   if (!checkFormValidity()) return;
   let handler = PaystackPop.setup({
-    key: "pk_test_d78727efe914e840cdda7f6d0ef81a9bcd0d1e59",
+    key: "pk_test_baf73a0d967ff7d74db7463d792619cd89e8412c",
     email: document.getElementById("email").value,
     amount: Number(document.getElementById("amount").value) * 100,
     firstname: document.getElementById("first-name").value,

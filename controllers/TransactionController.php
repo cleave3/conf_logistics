@@ -26,7 +26,7 @@ class TransactionController extends Controller
 	function paystackverify($ref)
 	{
 		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
 			"Cache-Control: no-cache",
 		);
 		return Http::get("https://api.paystack.co/transaction/verify/" . $ref, $headers);
