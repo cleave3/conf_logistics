@@ -265,7 +265,7 @@ class DashboardController extends Controller
 	{
 		$periods = [];
 
-		for ($i = 11; $i >= 0; $i--) {
+		for ($i = 12; $i > 0; $i--) {
 
 			if ($i == 0) {
 				$tag = date("M", strtotime("this month"));
