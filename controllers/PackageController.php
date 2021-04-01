@@ -42,7 +42,7 @@ class PackageController extends Controller
 		return $this->findAll([
 			"tablename" => "package A",
 			"condition" => "A.status IN ('sent', 'received') ORDER BY created_at DESC",
-			"fields" => "A.*, B.location, c.companyname, D.telephone",
+			"fields" => "A.*, B.location, C.companyname, D.telephone",
 			"joins" => "LEFT JOIN locations B ON A.destination = B.id INNER JOIN client_profile C ON A.client_id = C.client_id INNER JOIN clients D ON A.client_id = D.id"
 		]);
 	}

@@ -33,7 +33,7 @@
                               <span class="text-white badge-pill badge-danger px-1 notification-indicator"><?= count($pending) ?></span>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                   <?php foreach ($pending as $p) { ?>
-                                      <a class="dropdown-item" href="/admin/orders/details?orderid=<?= $p["id"] ?>">
+                                      <a class="dropdown-item" href="/admin/orders/details?type=pending&orderid=<?= $p["id"] ?>">
                                           New Order with ID #<?= $p["id"] ?>
                                       </a>
                                       <hr />
