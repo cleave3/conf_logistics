@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   let waybillitems = [];
   const deliveryfee = await getdeliveryfee();
   const itemlist = await getitems();
-  console.log(itemlist);
   let extracharge = 0;
   let waybillfee = 0;
   let bckwaybill = 0;

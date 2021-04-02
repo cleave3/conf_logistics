@@ -45,7 +45,7 @@ include_once "common/header.php";
                         </div>
                     <?php } ?>
                     <h3 class="text-center m-2"><i class="fa fa-user-circle-o"></i> Create Account</h3>
-                    <form id="clientregisterform">
+                    <form id="clientregisterform" class="needs-validation" novalidate>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">

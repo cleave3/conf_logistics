@@ -19,6 +19,23 @@ class PublicController extends Controller
 		}
 	}
 
+	public function allstates()
+	{
+		return $this->findAll(["tablename" => "states"]);
+	}
+
+	public function state()
+	{
+		try {
+			$id = $this->query["stateid"];
+			$states = $this->findOne(["tablename" => "states", "condition" => "id = :id", "bindparam" => [":id" => $id]]);
+
+			return Response::json(["status" => true, "data" => $states]);
+		} catch (\Exception $error) {
+			return Response::json(["status" => false, "message" => $error->getMessage()]);
+		}
+	}
+
 	public function getBankList()
 	{
 		try {

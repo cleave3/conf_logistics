@@ -17,7 +17,6 @@ const setEditDetails = async (type, id) => {
     }
 
     const result = await getRequest(`config/${url}`);
-    console.log(result);
 
     if (result.status) {
       if (type === "pricing") {

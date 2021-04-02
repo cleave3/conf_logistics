@@ -6,23 +6,6 @@ use App\utils\Http;
 
 class TransactionController extends Controller
 {
-
-	public function index()
-	{
-	}
-
-	public function add()
-	{
-	}
-
-	public function edit()
-	{
-	}
-
-	public function delete()
-	{
-	}
-
 	function paystackverify($ref)
 	{
 		$headers = array(

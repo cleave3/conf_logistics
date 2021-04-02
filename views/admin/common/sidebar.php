@@ -25,6 +25,12 @@
                     <p>WayBills</p>
                 </a>
             </li>
+            <li class="<?= $currentnav == "waybill" ? "active" : "" ?>">
+                <a href="/admin/waybillrequests">
+                    <i class="nc-icon nc-send"></i>
+                    <p>WayBill Requests</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "clients" ? "active" : "" ?>">
                 <a href="/admin/clients">
                     <i class="nc-icon nc-satisfied"></i>
