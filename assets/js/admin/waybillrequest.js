@@ -16,6 +16,7 @@ const updateWaybillRequest = async () => {
 
     if (result.status) {
       toastr.success(result.message);
+      window.location.reload();
     } else {
       toastr.error(result.message);
     }

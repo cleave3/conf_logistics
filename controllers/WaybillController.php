@@ -300,17 +300,38 @@ class WaybillController extends Controller
 			$drivernumber = Sanitize::string($this->body["drivernumber"]);
 			$transportcompany = Sanitize::string($this->body["transportcompany"]);
 			$status = Sanitize::string($this->body["status"]);
+			$extra = Sanitize::integer($this->body["extra"]);
 
 			$waybill = 	$this->findOne(["tablename" => "waybill", "condition" => "id = :id", "bindparam" => [":id" => $id]]);
 			if (!$waybill) throw new \Exception("waybill not found");
 
 			if ($waybill["status"] !== "pending") throw new \Exception("unabled to update, item has already been " . $waybill["status"]);
 
-			$this->updatewaybill($id, ["status" => $status, "drivernumber" => $drivernumber, "transportcompany" => $transportcompany]);
+			$fee = floatval($waybill["fee"]) + $extra;
+
+			$this->updatewaybill($id, ["status" => $status, "drivernumber" => $drivernumber, "transportcompany" => $transportcompany, "fee" => $fee]);
 
 			if ($status === "sent") {
 				// reduce the items
+				$waybillItems = $this->findAll(["tablename" => "waybill_item", "condition" => "waybill_id =:id", "bindparam" => [":id" => $id]]);
+
+				for ($i = 0; $i < count($waybillItems); $i++) {
+					$itemid = $waybillItems[$i]["item_id"];
+					$quantity = $waybillItems[$i]["quantity"];
+
+					$this->create([
+						"tablename" => "package_item",
+						"fields" => "`item_id`,`quantity`",
+						"values" => ":itemid,:quantity",
+						"bindparam" => [":itemid" => $itemid, ":quantity" => "-" . $quantity]
+					]);
+				}
 				//notify client
+
+				if ($waybill["payment_source"] === "SENDER") {
+					$description = "debit of " . number_format($fee) . " for items waybill to " . $waybill["destination"];
+					//if payment source == sender, debit client
+				}
 			}
 
 			exit(Response::json(["status" => true, "message" => "waybill updated successfully"]));

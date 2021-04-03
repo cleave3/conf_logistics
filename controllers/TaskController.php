@@ -158,9 +158,19 @@ class TaskController extends Controller
 
 			if ($status === "delivered") {
 				//get order items
+				$orderitems = $this->findAll(["tablename" => "order_items", "condition" => "order_id =:id", "bindparam" => [":id" => $orderid]]);
 
-				//for each order item 
-				// deduct items from package items
+				for ($i = 0; $i < count($orderitems); $i++) {
+					$itemid = $orderitems[$i]["item_id"];
+					$quantity = $orderitems[$i]["quantity"];
+
+					$this->create([
+						"tablename" => "package_item",
+						"fields" => "`item_id`,`quantity`",
+						"values" => ":itemid,:quantity",
+						"bindparam" => [":itemid" => $itemid, ":quantity" => "-" . $quantity]
+					]);
+				}
 				//notify client when status = delivered
 			}
 

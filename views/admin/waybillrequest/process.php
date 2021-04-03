@@ -33,7 +33,7 @@ $statuses = [["value" => "sent", "label" => ucwords("sent")], ["value" => "pendi
                             <div class="card-body">
                                 <h6 class="text-center">THIS WAYBILL HAS BEEN <?= strtoupper($waybill["status"]) ?></h6>
                                 <div class="d-flex justify-content-center">
-                                    <a class="my-2 btn btn-dark" href="/clients/waybill"><i class="fa fa-chevron-left" aria-hidden="true"></i> Go Back</a>
+                                    <a class="my-2 btn btn-dark" href="/admin/waybillrequests"><i class="fa fa-chevron-left" aria-hidden="true"></i> Go Back</a>
                                 </div>
                             </div>
                         </div>
@@ -49,21 +49,9 @@ $statuses = [["value" => "sent", "label" => ucwords("sent")], ["value" => "pendi
                                     </div>
                                     <form id="processwaybillform" class="needs-validation" novalidate>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Driver Number <small class="text-muted">(optional)</small></label>
-                                                    <input type="text" class="form-control" placeholder="Enter Driver number" value="<?= $waybill["driver_number"] ?>" name="drivernumber">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Transport Company</label>
-                                                    <input type="text" class="form-control" placeholder="Enter transport company name" value="<?= $waybill["transport_company"] ?>" name="transportcompany" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="status" class="mx-1">Update Order status</label>
+                                                    <label for="status" class="mx-1 text-danger font-weight-bold">*status</label>
                                                     <select name="status" class="custom-select" required>
                                                         <?php foreach ($statuses as $status) { ?>
                                                             <?php if ($waybill["status"] === $status["value"]) { ?>
@@ -75,20 +63,44 @@ $statuses = [["value" => "sent", "label" => ucwords("sent")], ["value" => "pendi
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>State</label>
-                                                    <input type="text" class="form-control" value="<?= $waybill["destination"] ?>" name="state" value="<?= $waybill["state"] ?>" readonly>
+                                                    <label>Driver Number <small class="text-muted">(optional)</small></label>
+                                                    <input type="text" class="form-control" placeholder="Enter Driver number" value="<?= $waybill["driver_number"] ?>" name="drivernumber">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Transport Company</label>
+                                                    <input type="text" class="form-control" placeholder="Enter transport company name" value="<?= $waybill["transport_company"] ?>" name="transportcompany" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Additional Charge</label>
+                                                    <input type="number" class="form-control" placeholder="Enter any extra charge" name="extra" value="0">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Waybill Fee</label>
+                                                    <input type="text" class="form-control" name="state" value="<?= number_format($waybill["fee"]) ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>State</label>
+                                                    <input type="text" class="form-control" name="state" value="<?= $waybill["state"] ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Destination city</label>
                                                     <input type="text" class="form-control" value="<?= $waybill["destination"] ?>" name="destination" readonly>
                                                     <input type="hidden" value="<?= $waybill["id"] ?>" name="waybillid" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Payment Source</label>
                                                     <input type="text" class="form-control" value="<?= $waybill["payment_source"] ?>" name="payment_source" readonly>
