@@ -61,8 +61,14 @@
                     <p>Delivery Tasks</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
-                <a href="/admin/payments">
+            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+                <a href="/admin/transactions">
+                    <i class="nc-icon nc-bank"></i>
+                    <p>Transactions</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "paymentsubmission" ? "active" : "" ?>">
+                <a href="/admin/paymentsubmission">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Payment Submission</p>
                 </a>

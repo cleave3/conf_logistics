@@ -257,7 +257,7 @@ class OrderController extends Controller
 			return $this->findAll([
 				"tablename" => "orders A",
 				"condition" => "A.status =:status AND A.payment_status = :paystatus ORDER BY A.updated_at DESC",
-				"joins" => "LEFT JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
+				"joins" => "INNER JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
 				"fields" => "A.*, B.id as taskid, B.sendpayment,B.sendpayment_status,B.payment_method,B.proof,B.agentpayment, CONCAT(C.firstname,' ',C.lastname) as agent",
 				"bindparam" => [":status" => "delivered", ":paystatus" => $this->query["status"]]
 			]);
@@ -266,7 +266,7 @@ class OrderController extends Controller
 		return $this->findAll([
 			"tablename" => "orders A",
 			"condition" => "A.status =:status ORDER BY A.updated_at DESC",
-			"joins" => "LEFT JOIN tasks B ON A.id = B.order_id LEFT JOIN agents C ON B.agent_id = C.id",
+			"joins" => "INNER JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
 			"fields" => "A.*, B.id as taskid,B.sendpayment,B.sendpayment_status,B.payment_method,B.proof,B.agentpayment, CONCAT(C.firstname,' ',C.lastname) as agent",
 			"bindparam" => [":status" => "delivered"]
 		]);
