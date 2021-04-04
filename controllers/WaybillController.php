@@ -3,12 +3,21 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\Response;
 use App\utils\Sanitize;
 use App\utils\Session;
 
 class WaybillController extends Controller
 {
+	protected $config;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->config = new ConfigController();
+	}
 
 	protected function insertwaybill($clientid, $fee, $description, $state, $destination, $driver, $transportcompany, $paymentsource)
 	{
@@ -61,8 +70,17 @@ class WaybillController extends Controller
 				}
 			}
 
+			echo Response::json(["status" => true, "message" => "waybill submitted successfully"]);
 			//notify admin
-			exit(Response::json(["status" => true, "message" => "waybill submitted successfully"]));
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::waybillrequest();
+					MailService::sendMail($email, "Waybill Request", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -99,7 +117,6 @@ class WaybillController extends Controller
 
 			$this->insertwaybillitems($waybillid, $itemid, $quantity);
 
-			//notify admin
 			exit(Response::json(["status" => true, "data" => $this->waybillitem($this->lastId()), "message" => "item added successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
@@ -284,18 +301,37 @@ class WaybillController extends Controller
 
 			$this->updatewaybill($waybillid, ["status" => "cancelled"]);
 
-			// notify admin
+			echo Response::json(["status" => true, "message" => "waybill cancelled successfully"]);
+			//notify admin
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
 
-			exit(Response::json(["status" => true, "message" => "waybill cancelled successfully"]));
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::waybillrequestcancelled($waybillid);
+					MailService::sendMail($email, "Waybill Request cancelled", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
+	}
+
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator, $status = "complete")
+	{
+		return $this->create([
+			"tablename" => "transactions",
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`,`status`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator,:status",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator, ":status" => $status]
+		]);
 	}
 
 	public function processwaybill()
 	{
 		try {
 			Auth::checkAuth("userid");
+			$userid = Session::get("userid");
 			$id = Sanitize::string($this->body["waybillid"]);
 			$drivernumber = Sanitize::string($this->body["drivernumber"]);
 			$transportcompany = Sanitize::string($this->body["transportcompany"]);
@@ -331,10 +367,20 @@ class WaybillController extends Controller
 				if ($waybill["payment_source"] === "SENDER") {
 					$description = "debit of " . number_format($fee) . " for items waybill to " . $waybill["destination"];
 					//if payment source == sender, debit client
+					//debit delivery fee
+					$type = "waybill_charge";
+					$reference = "CONF/" . date("YmdHms") . "/" . strtoupper($type);
+					$this->registerTransaction($waybill["client_id"], $type, $reference, 0, $fee, $description, $userid);
 				}
 			}
 
-			exit(Response::json(["status" => true, "message" => "waybill updated successfully"]));
+			echo Response::json(["status" => true, "message" => "waybill updated successfully"]);
+
+			$client = $this->findOne(["tablename" => "clients", "condition" => "id = :id", "bindparam" => [":id" => $waybill["client_id"]]]);
+
+			// notify client of changes
+			$template = EmailTemplate::waybillsent($waybill["destination"]);
+			MailService::sendMail($client["email"], "Waybill Sent", $template);
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

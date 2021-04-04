@@ -3,6 +3,8 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\Response;
 use App\utils\Sanitize;
 
@@ -175,8 +177,19 @@ class OrderController extends Controller
 
 			//register order history
 			$this->addOrderHistory($orderid, "sent", "Order sent");
+
+			echo Response::json(["status" => true, "message" => "Order sent successfully"]);
+
 			//send email here
-			exit(Response::json(["status" => true, "message" => "Order sent successfully"]));
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::neworder();
+					MailService::sendMail($email, "New Order Notification", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -203,8 +216,17 @@ class OrderController extends Controller
 
 			$this->addOrderHistory($orderid, "cancelled", "Order was cancelled by " . $order["companyname"]);
 
+			echo Response::json(["status" => true, "message" => "Order cancelled successfully"]);
 			//send email here
-			exit(Response::json(["status" => true, "message" => "Order cancelled successfully"]));
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::cancelorder($orderid);
+					MailService::sendMail($email, "New Order Notification", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

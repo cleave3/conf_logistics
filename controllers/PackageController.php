@@ -5,6 +5,8 @@ namespace App\controllers;
 
 use App\utils\Session;
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\File;
 use App\utils\Response;
 use App\utils\Sanitize;
@@ -243,7 +245,7 @@ class PackageController extends Controller
 					if ($packageitem) {
 						$quantity = Sanitize::integer($quantities[$i]) ?? $packageitem["quantity"];
 						//update package_item
-						$q = $this->update([
+						$this->update([
 							"tablename" => "package_item",
 							"fields" => "quantity =:quantity",
 							"condition" => "id = :id",
@@ -252,8 +254,7 @@ class PackageController extends Controller
 					}
 				}
 			}
-			// notify client of changes
-			// notify admin of changes
+
 			exit(Response::json(["status" => true, "message" => "changes saved successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
@@ -277,9 +278,13 @@ class PackageController extends Controller
 				"bindparam" => [":status" => "received", ":id" => $packageid]
 			]);
 
+			$client = $this->findOne(["tablename" => "clients", "condition" => "id = :id", "bindparam" => [":id" => $package["client_id"]]]);
+
+			echo Response::json(["status" => true, "message" => "waybill marked as received successfully"]);
+
 			// notify client of changes
-			// notify admin of changes
-			exit(Response::json(["status" => true, "message" => "waybill marked as received successfully"]));
+			$template = EmailTemplate::waybillrecieved();
+			MailService::sendMail($client["email"], "Waybill package recieved", $template);
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}

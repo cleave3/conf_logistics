@@ -45,7 +45,7 @@ const confirmRecieve = id => {
 };
 
 const confirmChanges = () => {
-  toastr.confirm("Have you informed the seller of these changes ? <br/> Seller and Administrator would be notified of changes", {
+  toastr.confirm("Have you informed the seller of these changes ?", {
     yes: () => saveChanges(),
   });
 };

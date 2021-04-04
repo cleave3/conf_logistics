@@ -3,6 +3,8 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\File;
 use App\utils\Response;
 use App\utils\Sanitize;
@@ -114,11 +116,12 @@ class TaskController extends Controller
 
 			if ($submitted === 0) throw new \Exception("No tasks was assigned to agent");
 
-			//send notifcation to agent
-
-
 			$message = "$submitted orders were assigned to agent " . $agent["firstname"] . " " . $agent["lastname"] . " successfully";
-			exit(Response::json(["status" => true, "message" => $message]));
+			echo Response::json(["status" => true, "message" => $message]);
+
+			//send notifcation to agent
+			$template = EmailTemplate::task($submitted);
+			MailService::sendMail($agent["email"], "Delivery Tasks", $template);
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -185,8 +188,8 @@ class TaskController extends Controller
 				// add transaction
 				$type = "delivered_order";
 				$feetype = "delivery_charge";
-				$reference = $reference = "CONF/" . date("YmdHms") . "/" . strtoupper($type) . "/" . $order["id"];
-				$feereference = $reference = "CONF/" . date("YmdHms") . "/" . strtoupper($feetype) . "/" . $order["id"];
+				$reference = "CONF/" . date("YmdHms") . "/" . strtoupper($type) . "/" . $order["id"];
+				$feereference = "CONF/" . date("YmdHms") . "/" . strtoupper($feetype) . "/" . $order["id"];
 				$desc = "Delivered order -" . $order["id"];
 				$descf = "Delivery fee for -" . $order["id"];
 
@@ -197,9 +200,29 @@ class TaskController extends Controller
 				$this->registerTransaction($order["client_id"], $feetype, $feereference, 0, floatval($order["delivery_fee"]), $descf, "confidebat_automation");
 
 				//notify client when status = delivered
+
 			}
 
-			exit(Response::json(["status" => true, "message" => "order updated successfully"]));
+			echo Response::json(["status" => true, "message" => "order updated successfully"]);
+
+			if ($status === "delivered") {
+				$client = $this->findOne(["tablename" => "clients", "condition" => "id = :id", "bindparam" => [":id" => $orderid]]);
+
+				$template = EmailTemplate::deliveredorder($orderid);
+
+				//send email here
+				MailService::sendMail($client["email"], "Order Delivered", $template);
+
+				$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+				if (count($emails) > 0) {
+					for ($i = 0; $i < count($emails); $i++) {
+						$email = trim($emails[$i]);
+						$template = EmailTemplate::deliveredorder($orderid);
+						MailService::sendMail($email, "Order Delivered", $template);
+					}
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
