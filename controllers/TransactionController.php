@@ -269,6 +269,18 @@ class TransactionController extends Controller
 		}
 	}
 
+	public function getClientBalances()
+	{
+		Auth::checkAuth("userid");
+		return $this->exec_query("SELECT DISTINCT A.entity_id, (SUM(A.credit)-SUM(A.debit)) as balance, B.telephone as sellertelephone, C.companyname as seller FROM `transactions` A INNER JOIN clients B ON A.entity_id = B.id INNER JOIN client_profile C ON B.id = C.client_id WHERE A.entity_id IN (SELECT id FROM clients) AND A.status IN ('complete', 'verified') GROUP BY A.entity_id");
+	}
+
+	public function getAgentBalances()
+	{
+		Auth::checkAuth("userid");
+		return $this->exec_query("SELECT DISTINCT A.entity_id, (SUM(A.credit)-SUM(A.debit)) as balance, B.telephone, CONCAT(firstname, ' ', lastname) as agentname FROM `transactions` A INNER JOIN agents B ON A.entity_id = B.id  WHERE A.entity_id IN (SELECT id FROM agents) AND A.status IN ('complete', 'verified') GROUP BY A.entity_id");
+	}
+
 	public function search()
 	{
 		try {

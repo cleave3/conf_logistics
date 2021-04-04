@@ -88,6 +88,30 @@ include_once "common/header.php";
                             </div>
                         </a>
                     </div>
+                    <div class="col-md-6 col-sm-6">
+                        <a class="text-muted card-link" href="/admin/transactions/clientbalances">
+                            <div class="card light-blue">
+                                <div class="card-body">
+                                    <div class="w-100 d-flex justify-content-center">
+                                        <img src="/assets/icons/financial-statement.svg" class="img-fluid" height="100px" />
+                                    </div>
+                                    <div class="text-center p-2 font-weight-bold">Client Balances</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <a class="text-muted card-link" href="/admin/transactions/agentbalances">
+                            <div class="card light-blue">
+                                <div class="card-body">
+                                    <div class="w-100 d-flex justify-content-center">
+                                        <img src="/assets/icons/account-balance.svg" class="img-fluid" height="100px" />
+                                    </div>
+                                    <div class="text-center p-2 font-weight-bold">Agent Balances</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <?php include_once "common/footer.php" ?>
