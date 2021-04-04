@@ -43,7 +43,7 @@ include_once "common/header.php";
               <div class="card-footer ">
                 <hr>
                 <div class="stats">
-                  <a class="text-muted" href="/clients/payments">See details &rarr;</a>
+                  <a class="text-muted" href="#">See details &rarr;</a>
                 </div>
               </div>
             </div>
