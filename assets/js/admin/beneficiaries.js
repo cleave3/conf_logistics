@@ -57,7 +57,6 @@ async function verifyAccountNumber() {
     const data = new FormData(beneficiaryform);
 
     const result = await postRequest(`transaction/verifybankdetails`, data);
-    console.log(result);
 
     if (result.status) {
       document.getElementById("accountname").value = result.data.account_name;

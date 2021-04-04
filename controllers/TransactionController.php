@@ -40,6 +40,16 @@ class TransactionController extends Controller
 		return Http::get("https://api.paystack.co/bank/resolve?account_number=" . $accountnumber . "&bank_code=" . $bankcode, $headers);
 	}
 
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description)
+	{
+		return $this->create([
+			"tablename" => "transactions",
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description]
+		]);
+	}
+
 	public function getBeneficiaries()
 	{
 		try {
@@ -160,6 +170,35 @@ class TransactionController extends Controller
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
 	}
+
+	public function addtransaction()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$entityid = Sanitize::string($this->body["entity"]);
+			$types = $this->body["type"];
+			$reference = "CONF/" . date("YmdHms");
+			$amount = $this->body["amount"];
+			$description = $this->body["description"];
+
+			if (count($amount) < 1 || count($description) < 1 || count($types) < 1) throw new \Exception("incompleted parameters");
+
+			for ($i = 0; $i < count($amount); $i++) {
+				$debit = in_array($types[$i], ['delivery_charge', 'waybill_charge', 'other_debit', 'payment']) ? Sanitize::integer($amount[$i]) : 0;
+				$credit = in_array($types[$i], ['delivered_order', 'other_credit']) ? Sanitize::integer($amount[$i]) : 0;
+				$type = $types[$i];
+				$desc = $description[$i];
+				$ref = $reference . "/" . strtoupper($type);
+
+				$this->registerTransaction($entityid, $type, $ref, $credit, $debit, $desc);
+			}
+
+			exit(Response::json(["status" => true, "message" => "Transaction submitted successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
 
 	function initiateTransfer($amount, $recepient, $reason)
 	{
