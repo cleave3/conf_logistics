@@ -106,22 +106,23 @@ class DashboardController extends Controller
 	public function clientpaymentscountbystatus($clientid, $status)
 	{
 		return $this->getCount([
-			"tablename" => "orders",
-			"condition" => "client_id =:clientid AND status =:status AND payment_status =:paymentstatus",
-			"bindparam" => [":clientid" => $clientid, ":status" => "delivered", ":paymentstatus" => $status]
+			"tablename" => "transactions",
+			"condition" => "entity_id =:clientid AND status =:status AND type = 'payment'",
+			"bindparam" => [":clientid" => $clientid, ":status" => $status]
 		]);
 	}
 
 	public function clientpaymentsamountbystatus($clientid, $status)
 	{
-		$payment = $this->findAll([
-			"tablename" => "orders",
-			"fields" => "(SUM(totalamount) - SUM(delivery_fee)) as amount",
-			"condition" => "client_id =:clientid AND status =:status AND payment_status =:paymentstatus",
-			"bindparam" => [":clientid" => $clientid, ":status" => "delivered", ":paymentstatus" => $status]
-		]);
+		$payment = $this->exec_query("SELECT SUM(credit) as amount FROM transactions WHERE type = 'payment' AND entity_id = '$clientid' AND status ='$status'");
 
 		return floatval($payment[0]["amount"]);
+	}
+
+	public function getClientBalance($clientid)
+	{
+		$balance = $this->exec_query("SELECT SUM(credit) - SUM(debit) as balance FROM transactions WHERE entity_id = '$clientid' AND status IN ('complete', 'verfied')");
+		return floatval($balance[0]["balance"]);
 	}
 
 
@@ -158,13 +159,12 @@ class DashboardController extends Controller
 			"intransitwaybills" => $this->clientwaybillcountbystaus($clientid, "sent"),
 			"pendingwaybills" => $this->clientwaybillcountbystaus($clientid, "pending"),
 			"recievedwaybills" => $this->clientwaybillcountbystaus($clientid, "received"),
-			"unpaidpayments" => $this->clientpaymentsamountbystatus($clientid, "unpaid"),
 			"paidpayments" => $this->clientpaymentsamountbystatus($clientid, "paid"),
 			"verifiedpayments" => $this->clientpaymentsamountbystatus($clientid, "verified"),
-			"unpaidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "unpaid"),
 			"paidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "paid"),
 			"verifiedpaymentscount" => $this->clientpaymentscountbystatus($clientid, "verified"),
-			"period" => $this->periodrange()
+			"period" => $this->periodrange(),
+			"balance" => $this->getClientBalance($clientid)
 		];
 	}
 
