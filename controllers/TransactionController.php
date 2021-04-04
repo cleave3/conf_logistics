@@ -15,7 +15,7 @@ class TransactionController extends Controller
 	{
 		Auth::checkAuth("userid");
 		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
 			"Cache-Control: no-cache",
 		);
 
@@ -34,27 +34,84 @@ class TransactionController extends Controller
 	{
 		Auth::checkAuth("userid");
 		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
 			"Cache-Control: no-cache",
 		);
 		return Http::get("https://api.paystack.co/bank/resolve?account_number=" . $accountnumber . "&bank_code=" . $bankcode, $headers);
 	}
 
-	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator)
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator, $status = "complete")
 	{
 		return $this->create([
 			"tablename" => "transactions",
-			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`",
-			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator",
-			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator]
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`,`status`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator,:status",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator, ":status" => $status]
 		]);
+	}
+
+	protected function updateTransactionStatus($reference, $status)
+	{
+		return $this->update([
+			"tablename" => "transactions",
+			"fields" => "`status`=:status",
+			"condition" => "reference =:reference",
+			"bindparam" => [":reference" => $reference, ":status" => $status]
+		]);
+	}
+
+	protected function getRecipient($id)
+	{
+		Auth::checkAuth("userid");
+
+		return $this->findOne([
+			"tablename" => "recipients A",
+			"condition" => "A.entity_id = :id AND C.status IN ('complete', 'verified')",
+			"fields" => "A.bankcode, A.accountnumber, A.accountname, A.recipient_id, A.entity_id, B.bankname, (SUM(C.credit) - SUM(C.debit)) as balance",
+			"joins" => "INNER JOIN banklist B ON A.bankcode = B.bankcode LEFT JOIN transactions C ON A.entity_id = C.entity_id",
+			"bindparam" => [":id" => $id]
+		]);
+	}
+
+	protected function initiateTransfer($amount, $recepient, $reason)
+	{
+		Auth::checkAuth("userid");
+		$headers = array(
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
+			"Cache-Control: no-cache",
+		);
+
+		$fields = [
+			'source' => "balance",
+			'amount' => $amount,
+			'recipient' => $recepient,
+			'reason' => $reason
+		];
+
+		return Http::post("https://api.paystack.co/transfer", $fields, $headers);
+	}
+
+	protected function finalizeTransfer($otp, $tcode)
+	{
+		Auth::checkAuth("userid");
+		$headers = array(
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
+			"Cache-Control: no-cache",
+		);
+
+		$fields = [
+			"transfer_code" => $tcode,
+			"otp" => $otp
+		];
+
+		return Http::post("https://api.paystack.co/transfer/finalize_transfer", $fields, $headers);
 	}
 
 	public function getBeneficiaries()
 	{
 		try {
 			Auth::checkAuth("userid");
-			return $this->exec_query("SELECT A.recipient_id, A.accountnumber, A.accountname,A.bankcode,A.created_at, (SELECT bankname FROM banklist WHERE A.bankcode = banklist.bankcode) as bankname, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client, (SELECT CONCAT(firstname,' ',lastname) FROM users WHERE A.user_id = users.id) as creator  FROM `recipients` A");
+			return $this->exec_query("SELECT A.entity_id, A.recipient_id, A.accountnumber, A.accountname,A.bankcode,A.created_at, (SELECT bankname FROM banklist WHERE A.bankcode = banklist.bankcode) as bankname, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client, (SELECT CONCAT(firstname,' ',lastname) FROM users WHERE A.user_id = users.id) as creator  FROM `recipients` A");
 		} catch (\Exception $e) {
 			return $e->getMessage();
 		}
@@ -63,7 +120,7 @@ class TransactionController extends Controller
 	function paystackverify($ref)
 	{
 		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
+			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
 			"Cache-Control: no-cache",
 		);
 		return Http::get("https://api.paystack.co/transaction/verify/" . $ref, $headers);
@@ -111,6 +168,23 @@ class TransactionController extends Controller
 				"condition" => "agent_id =:id",
 				"bindparam" => [":id" => $id]
 			]);
+
+			if (!$account) throw new \Exception("account record not found");
+
+
+			exit(Response::json(["status" => true, "data" => $account]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
+
+	public function recipientdetail()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$id = $this->query["id"];
+
+			$account = $this->getRecipient($id);
 
 			if (!$account) throw new \Exception("account record not found");
 
@@ -241,76 +315,88 @@ class TransactionController extends Controller
 		}
 	}
 
-	function initiateTransfer($amount, $recepient, $reason)
+	public function inittransfer()
 	{
-		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
-			"Cache-Control: no-cache",
-		);
+		try {
+			Auth::checkAuth("userid");
+			$id = Sanitize::string($this->body["entity"]);
+			$amount = Sanitize::integer($this->body["amount"]);
+			$initiator = Session::get("username");
+			$purpose = Sanitize::string($this->body["purpose"]);
 
-		$fields = [
-			'source' => "balance",
-			'amount' => $amount,
-			'recipient' => $recepient,
-			'reason' => $reason
-		];
+			$recepient = $this->getRecipient($id);
 
-		return Http::post("https://api.paystack.co/transfer", $fields, $headers);
+			if (!$recepient) throw new \Exception("Recipient not found");
+
+			if ($amount > floatval($recepient["balance"])) throw new \Exception("Amount exceeds recipients outstanding balance");
+
+
+			$transfer = json_decode($this->initiateTransfer($amount, $recepient["recipient_id"], $purpose));
+
+			if (!$transfer->status) throw new \Exception("failed to initiate transfer");
+
+			if (!in_array($transfer->data->status, ["success", "otp"])) throw new \Exception("transfer initiation unsuccessful");
+
+			if ($transfer->data->status === "success") {
+				$ref = $transfer->data->transfer_code;
+				$this->registerTransaction($id, "payment", $ref, 0, $amount, $purpose, $initiator, "pending");
+			}
+
+			exit(Response::json($transfer));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "data" => [], "message" => $error->getMessage()]));
+		}
 	}
 
-	protected function finalizeTransfer($otp, $tcode)
+	public function completetransfer()
 	{
-		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c",
-			"Cache-Control: no-cache",
-		);
+		try {
+			Auth::checkAuth("userid");
+			$otp = Sanitize::string($this->body["otp"]);
+			$code = Sanitize::integer($this->body["transfercode"]);
+			if (!$otp) throw new \Exception("otp is required");
 
-		$fields = [
-			"transfer_code" => $tcode,
-			"otp" => $otp
-		];
+			$transfer = json_decode($$this->finalizeTransfer($otp, $code));
 
-		return Http::post("https://api.paystack.co/transfer/finalize_transfer", $fields, $headers);
+			if ($transfer->data->status === "success") {
+				$id = Sanitize::string($this->body["entity"]);
+				$ref = $transfer->data->transfer_code;
+				$amount = $transfer->data->amount;
+				$initiator = Session::get("username");
+				$purpose = Sanitize::string($this->body["purpose"]);
+
+				$this->registerTransaction($id, "payment", $ref, 0, $amount, $purpose, $initiator, "pending");
+			}
+
+			exit(Response::json($transfer));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "data" => [], "message" => $error->getMessage()]));
+		}
 	}
 
-	function webhook()
+	function hook()
 	{
 		// only a post with paystack signature header gets our attention
-
-		if ((strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') || !array_key_exists('x-paystack-signature', $_SERVER))
-
-			exit();
+		if ((strtoupper($_SERVER['REQUEST_METHOD']) != 'POST') || !array_key_exists('x-paystack-signature', $_SERVER)) exit();
 
 		// Retrieve the request's body
-
 		$input = @file_get_contents("php://input");
 
-		define('PAYSTACK_SECRET_KEY', 'sk_test_50b66536190e93b64a7ce87e9b6f80e98650c89c');
+		define('PAYSTACK_SECRET_KEY', 'sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b');
 
 		// validate event do all at once to avoid timing attack
-
-		if ($_SERVER['HTTP_X_PAYSTACK_SIGNATURE'] !== hash_hmac('sha512', $input, PAYSTACK_SECRET_KEY))
-
-			exit();
+		if ($_SERVER['HTTP_X_PAYSTACK_SIGNATURE'] !== hash_hmac('sha512', $input, PAYSTACK_SECRET_KEY)) exit();
 
 		http_response_code(200);
 
-		// parse event (which is json string) as object
-
-		// Do something - that will not take long - with $event
-
 		$event = json_decode($input);
 
-		if ($event->event === "transfer.success") {
-			// mark payment as paid
-			// notify admin 
-			// notify reciepient
-		}
+		$status = "";
 
-
-
+		if ($event->event === "transfer.success") $status = "complete";
+		if ($event->$event == "transfer.failed") $status = "failed";
+		if ($event->$event == "transfer.reversed") $status = "reversed";
+		$this->updateTransactionStatus($event->data->transfer_code, $status);
 		exit();
 	}
 }

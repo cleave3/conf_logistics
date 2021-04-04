@@ -23,7 +23,7 @@ include_once "common/header.php";
                                     <div class="w-100 d-flex justify-content-center">
                                         <img src="/assets/icons/add-group.svg" class="img-fluid" height="100px" />
                                     </div>
-                                    <div class="text-center p-2 font-weight-bold">New Beneficiaries</div>
+                                    <div class="text-center p-2 font-weight-bold">New Beneficiary</div>
                                 </div>
                             </div>
                         </a>
