@@ -162,9 +162,9 @@ class TaskController extends Controller
 				"bindparam" => [":status" => $status, ":orderid" => $orderid]
 			]);
 
-			$order = new OrderController();
+			$oc = new OrderController();
 
-			$order->addOrderHistory($orderid, $status, "order status was updated to $status");
+			$oc->addOrderHistory($orderid, $status, "order status was updated to $status");
 
 			if ($status === "delivered") {
 				//get order items
