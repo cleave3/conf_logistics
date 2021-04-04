@@ -2,22 +2,33 @@
 
 namespace App\controllers;
 
+use App\config\DotEnv;
 use App\middleware\Auth;
 use App\utils\Http;
 use App\utils\Response;
 use App\utils\Sanitize;
 use App\utils\Session;
 
+
 class TransactionController extends Controller
 {
+	protected function pk()
+	{
+		(new DotEnv(__DIR__ . '/../.env'))->load();
+		return getenv("SECRET_KEY");
+	}
+
+	protected function sk()
+	{
+		return [
+			"Authorization: Bearer " . $this->pk(),
+			"Cache-Control: no-cache",
+		];
+	}
 
 	protected function transferRecipient($name, $accountnumber, $bankcode)
 	{
 		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
-			"Cache-Control: no-cache",
-		);
 
 		$fields = [
 			'type' => "nuban",
@@ -27,17 +38,13 @@ class TransactionController extends Controller
 			'currency' => "NGN"
 		];
 
-		return Http::post("https://api.paystack.co/transferrecipient", $fields, $headers);
+		return Http::post("https://api.paystack.co/transferrecipient", $fields, $this->sk());
 	}
 
 	protected function resolveBankDetails($accountnumber, $bankcode)
 	{
 		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
-			"Cache-Control: no-cache",
-		);
-		return Http::get("https://api.paystack.co/bank/resolve?account_number=" . $accountnumber . "&bank_code=" . $bankcode, $headers);
+		return Http::get("https://api.paystack.co/bank/resolve?account_number=" . $accountnumber . "&bank_code=" . $bankcode, $this->sk());
 	}
 
 	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator, $status = "complete")
@@ -76,10 +83,6 @@ class TransactionController extends Controller
 	protected function initiateTransfer($amount, $recepient, $reason)
 	{
 		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
-			"Cache-Control: no-cache",
-		);
 
 		$fields = [
 			'source' => "balance",
@@ -88,23 +91,19 @@ class TransactionController extends Controller
 			'reason' => $reason
 		];
 
-		return Http::post("https://api.paystack.co/transfer", $fields, $headers);
+		return Http::post("https://api.paystack.co/transfer", $fields, $this->sk());
 	}
 
 	protected function finalizeTransfer($otp, $tcode)
 	{
 		Auth::checkAuth("userid");
-		$headers = array(
-			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
-			"Cache-Control: no-cache",
-		);
 
 		$fields = [
 			"transfer_code" => $tcode,
 			"otp" => $otp
 		];
 
-		return Http::post("https://api.paystack.co/transfer/finalize_transfer", $fields, $headers);
+		return Http::post("https://api.paystack.co/transfer/finalize_transfer", $fields, $this->sk());
 	}
 
 	public function getBeneficiaries()
@@ -119,11 +118,7 @@ class TransactionController extends Controller
 
 	function paystackverify($ref)
 	{
-		$headers = array(
-			"Authorization: Bearer sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b",
-			"Cache-Control: no-cache",
-		);
-		return Http::get("https://api.paystack.co/transaction/verify/" . $ref, $headers);
+		return Http::get("https://api.paystack.co/transaction/verify/" . $ref, $this->sk());
 	}
 
 	public function entities()
@@ -382,7 +377,7 @@ class TransactionController extends Controller
 		// Retrieve the request's body
 		$input = @file_get_contents("php://input");
 
-		define('PAYSTACK_SECRET_KEY', 'sk_test_fbaf59877da4249e8bb7cdb429400c2f117aca6b');
+		define('PAYSTACK_SECRET_KEY', $this->pk());
 
 		// validate event do all at once to avoid timing attack
 		if ($_SERVER['HTTP_X_PAYSTACK_SIGNATURE'] !== hash_hmac('sha512', $input, PAYSTACK_SECRET_KEY)) exit();
