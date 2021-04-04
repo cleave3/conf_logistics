@@ -14,7 +14,6 @@ $types = [
     ["label" => "Payment", "value" => "payment"],
     ["label" => "Other Credit", "value" => "other_credit"],
     ["label" => "Other Debit", "value" => "other_debit"],
-    ["label" => "Agent payment", "value" => "agent_payment"],
 ];
 ?>
 

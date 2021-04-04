@@ -83,7 +83,7 @@ class ClientController extends Controller
 	public function register()
 	{
 		try {
-			$id = uniqid("conf-" . rand(10000, 99999) . "-");
+			$id = uniqid("client-" . rand(10000, 99999));
 			$email = Sanitize::string($this->body["email"]);
 			$telephone = Sanitize::string($this->body["telephone"]);
 			$password = Sanitize::string($this->body["password"]);

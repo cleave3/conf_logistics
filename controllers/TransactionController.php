@@ -40,13 +40,13 @@ class TransactionController extends Controller
 		return Http::get("https://api.paystack.co/bank/resolve?account_number=" . $accountnumber . "&bank_code=" . $bankcode, $headers);
 	}
 
-	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description)
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator)
 	{
 		return $this->create([
 			"tablename" => "transactions",
-			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`",
-			"values" => ":entityid,:type,:reference,:credit,:debit,:description",
-			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description]
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator]
 		]);
 	}
 
@@ -189,8 +189,9 @@ class TransactionController extends Controller
 				$type = $types[$i];
 				$desc = $description[$i];
 				$ref = $reference . "/" . strtoupper($type);
+				$initiator = Session::get("username");
 
-				$this->registerTransaction($entityid, $type, $ref, $credit, $debit, $desc);
+				$this->registerTransaction($entityid, $type, $ref, $credit, $debit, $desc, $initiator);
 			}
 
 			exit(Response::json(["status" => true, "message" => "Transaction submitted successfully"]));
@@ -199,6 +200,46 @@ class TransactionController extends Controller
 		}
 	}
 
+	public function search()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$status = $this->query["status"] === "all" ? "%" : Sanitize::string($this->query["status"]);
+			$startdate = empty($this->query["startdate"]) ? "2000-01-01 00:00:00" : trim($this->query["startdate"]) . " 00:00:00";
+			$enddate = empty($this->query["enddate"]) ? date("Y-m-d") . " 23:59:59" : trim($this->query["enddate"]) . " 23:59:59";
+			$target = $this->query["target"];
+			$type = $this->query["type"] === "all" ? "%" : Sanitize::string($this->query["type"]);
+
+			if ($target === "all") {
+				$transactions = $this->exec_query("SELECT A.*, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client FROM transactions A WHERE status LIKE '%$status%' AND type LIKE '%$type%' AND created_at BETWEEN '$startdate' AND '$enddate'");
+			} else {
+				$transactions = $this->exec_query("SELECT A.*, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client FROM transactions A WHERE status LIKE '%$status%' AND type LIKE '%$type%' AND created_at BETWEEN '$startdate' AND '$enddate' AND entity_id = '$target'");
+			}
+			exit(Response::json(["status" => true, "data" => $transactions, "message" => count($transactions) . " results found for search"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "data" => [], "message" => $error->getMessage()]));
+		}
+	}
+
+	public function payments()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$status = $this->query["status"] === "all" ? "%" : Sanitize::string($this->query["status"]);
+			$startdate = empty($this->query["startdate"]) ? "2000-01-01 00:00:00" : trim($this->query["startdate"]) . " 00:00:00";
+			$enddate = empty($this->query["enddate"]) ? date("Y-m-d") . " 23:59:59" : trim($this->query["enddate"]) . " 23:59:59";
+			$target = $this->query["target"];
+
+			if ($target === "all") {
+				$transactions = $this->exec_query("SELECT A.*, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client FROM transactions A WHERE status LIKE '%$status%' AND type = 'payment' AND created_at BETWEEN '$startdate' AND '$enddate'");
+			} else {
+				$transactions = $this->exec_query("SELECT A.*, (SELECT CONCAT(firstname,' ',lastname) FROM agents WHERE A.entity_id = agents.id) as agent, (SELECT companyname FROM client_profile WHERE A.entity_id = client_profile.client_id) as client FROM transactions A WHERE status LIKE '%$status%' AND type = 'payment' AND created_at BETWEEN '$startdate' AND '$enddate' AND entity_id = '$target'");
+			}
+			exit(Response::json(["status" => true, "data" => $transactions, "message" => count($transactions) . " results found for search"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "data" => [], "message" => $error->getMessage()]));
+		}
+	}
 
 	function initiateTransfer($amount, $recepient, $reason)
 	{

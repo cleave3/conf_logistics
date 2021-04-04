@@ -65,7 +65,7 @@ include_once "common/header.php";
                         </a>
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <a class="text-muted card-link" href="/admin/transactions/payments/new">
+                        <a class="text-muted card-link" href="/admin/transactions/newpayment">
                             <div class="card light-blue">
                                 <div class="card-body">
                                     <div class="w-100 d-flex justify-content-center">
@@ -77,7 +77,7 @@ include_once "common/header.php";
                         </a>
                     </div>
                     <div class="col-md-6 col-sm-6">
-                        <a class="text-muted card-link" href="/admin/transactions/payments/history">
+                        <a class="text-muted card-link" href="/admin/transactions/paymenthistory">
                             <div class="card light-blue">
                                 <div class="card-body">
                                     <div class="w-100 d-flex justify-content-center">

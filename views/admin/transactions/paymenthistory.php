@@ -43,12 +43,12 @@ include_once $base . "common/header.php";
                     <li class="breadcrumb-item">
                         <a href="/admin/transactions">Transactions</a>
                     </li>
-                    <li class="breadcrumb-item active">History</li>
+                    <li class="breadcrumb-item active">Payments</li>
                 </ol>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="target">Select Target</label>
+                            <label for="target">Select Recipient</label>
                             <select id="target" class="custom-select">
                                 <option value="all">All</option>
                                 <?php foreach ($entities as $entity) { ?>
@@ -57,17 +57,7 @@ include_once $base . "common/header.php";
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="type">Type</label>
-                            <select id="type" class="custom-select">
-                                <?php foreach ($types as $type) { ?>
-                                    <option value="<?= $type["value"] ?>"><?= $type["label"] ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select id="status" class="custom-select">
@@ -77,13 +67,13 @@ include_once $base . "common/header.php";
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="startdate">Start Date</label>
                             <input type="date" id="startdate" class="form-control" value="<?= date("Y-m-d", strtotime("-1month")) ?>">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="enddate">End Date</label>
                             <input type="date" id="enddate" class="form-control" value="<?= date("Y-m-d") ?>">
@@ -91,7 +81,7 @@ include_once $base . "common/header.php";
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary mx-0 w-25" id="searchbtn">search <i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button class="btn btn-primary mx-0 w-25" id="searchpayment">search Payments <i class="fa fa-search" aria-hidden="true"></i></button>
                 </div>
                 <div id="result-container" class="responsivetable table-responsive"></div>
             </div>
