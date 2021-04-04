@@ -114,14 +114,14 @@ class DashboardController extends Controller
 
 	public function clientpaymentsamountbystatus($clientid, $status)
 	{
-		$payment = $this->exec_query("SELECT SUM(credit) as amount FROM transactions WHERE type = 'payment' AND entity_id = '$clientid' AND status ='$status'");
+		$payment = $this->exec_query("SELECT SUM(debit) as amount FROM transactions WHERE type = 'payment' AND entity_id = '$clientid' AND status ='$status'");
 
 		return floatval($payment[0]["amount"]);
 	}
 
 	public function getClientBalance($clientid)
 	{
-		$balance = $this->exec_query("SELECT SUM(credit) - SUM(debit) as balance FROM transactions WHERE entity_id = '$clientid' AND status IN ('complete', 'verfied')");
+		$balance = $this->exec_query("SELECT SUM(credit) - SUM(debit) as balance FROM transactions WHERE entity_id = '$clientid' AND status IN ('complete', 'verified')");
 		return floatval($balance[0]["balance"]);
 	}
 
@@ -159,9 +159,9 @@ class DashboardController extends Controller
 			"intransitwaybills" => $this->clientwaybillcountbystaus($clientid, "sent"),
 			"pendingwaybills" => $this->clientwaybillcountbystaus($clientid, "pending"),
 			"recievedwaybills" => $this->clientwaybillcountbystaus($clientid, "received"),
-			"paidpayments" => $this->clientpaymentsamountbystatus($clientid, "paid"),
+			"paidpayments" => $this->clientpaymentsamountbystatus($clientid, "complete"),
 			"verifiedpayments" => $this->clientpaymentsamountbystatus($clientid, "verified"),
-			"paidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "paid"),
+			"paidpaymentscount" => $this->clientpaymentscountbystatus($clientid, "complete"),
 			"verifiedpaymentscount" => $this->clientpaymentscountbystatus($clientid, "verified"),
 			"period" => $this->periodrange(),
 			"balance" => $this->getClientBalance($clientid)
