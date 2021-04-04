@@ -92,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await getRequest(`task/search?status=${status}&agent=${agent}&startdate=${startdate}&enddate=${enddate}`);
       renderResults(result.data);
     } catch ({ message: error }) {
-      resultcontainer.innerHTML = "There was an error getting your results, Try again. If error persists, contact your administrator";
+      document.getElementById("result-container").innerHTML =
+        "There was an error getting your results, Try again. If error persists, contact your administrator";
     } finally {
       searchbtn.disabled = false;
       hideLoader();

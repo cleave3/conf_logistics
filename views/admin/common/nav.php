@@ -27,14 +27,21 @@
                             use App\controllers\DashboardController;
 
                             $dc = new DashboardController();
-                            $pending = $dc->pendingorders();
+                            $pendingorders = $dc->pendingorders();
+                            $pendingwaybills = $dc->pendingwaybillrequest();
                             ?>
-                          <?php if (count($pending) > 0) { ?>
-                              <span class="text-white badge-pill badge-danger px-1 notification-indicator"><?= count($pending) ?></span>
+                          <?php if (count($pendingorders) > 0 || count($pendingwaybills) > 0) { ?>
+                              <span class="text-white badge-pill badge-danger px-1 notification-indicator"><?= count($pendingorders) + count($pendingwaybills) ?></span>
                               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                  <?php foreach ($pending as $p) { ?>
-                                      <a class="dropdown-item" href="/admin/orders/details?orderid=<?= $p["id"] ?>">
+                                  <?php foreach ($pendingorders as $p) { ?>
+                                      <a class="dropdown-item" href="/admin/orders/details?type=pending&orderid=<?= $p["id"] ?>">
                                           New Order with ID #<?= $p["id"] ?>
+                                      </a>
+                                      <hr />
+                                  <?php } ?>
+                                  <?php foreach ($pendingwaybills as $p) { ?>
+                                      <a class="dropdown-item" href="/admin/waybillrequest/details?id=<?= $p["id"] ?>">
+                                          New waybill request with ID #<?= $p["id"] ?>
                                       </a>
                                       <hr />
                                   <?php } ?>

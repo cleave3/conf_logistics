@@ -17,7 +17,6 @@ const setEditDetails = async (type, id) => {
     }
 
     const result = await getRequest(`config/${url}`);
-    console.log(result);
 
     if (result.status) {
       if (type === "pricing") {
@@ -50,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const editpricingform = document.getElementById("editpricingform");
   const editlocationform = document.getElementById("editlocationform");
   const configurationforms = document.querySelectorAll("#configuration form");
+  const waybillforms = document.querySelectorAll("#waybill form");
 
   changebtn.addEventListener("click", e => {
     e.preventDefault();
@@ -271,6 +271,35 @@ document.addEventListener("DOMContentLoaded", async () => {
           showLoader();
           const data = new FormData(e.target);
           const result = await postRequest(`config/updateconfig`, data);
+
+          if (result.status) {
+            toastr.success(result.message);
+          } else {
+            toastr.error(result.message);
+          }
+        } catch ({ message: error }) {
+          toastr.error(error);
+          console.trace(error);
+        } finally {
+          hideLoader();
+        }
+      });
+    });
+  }
+
+  if (waybillforms.length > 0) {
+    waybillforms.forEach(form => {
+      form.addEventListener("submit", async e => {
+        try {
+          e.preventDefault();
+          e.currentTarget.classList.add("was-validated");
+          if (!e.currentTarget.checkValidity()) {
+            toastr.warning("Amount must be a number. no commas (,) allowed");
+            return;
+          }
+          showLoader();
+          const data = new FormData(e.target);
+          const result = await postRequest(`config/waybillfee`, data);
 
           if (result.status) {
             toastr.success(result.message);

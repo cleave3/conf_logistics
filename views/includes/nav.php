@@ -19,7 +19,7 @@ $auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]) || isset($_SE
                     <div class="col-lg-7 top-content-right">
                         <div class="row">
                             <div class="col-md-6 callnumber text-left">
-                                <h6>Call Us : <span>1234567890</span></h6>
+                                <h6>Call Us : <span> <a href="tel:09029069437">09029069437</a>, <a href="tel:09063727152">09063727152</a> , <a href="tel:08148971890">08148971890</a></span></h6>
                             </div>
                             <div class="col-md-6 top-social-icons p-0">
                                 <ul class="social-icons d-flex justify-content-end">
@@ -39,7 +39,7 @@ $auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]) || isset($_SE
                 <div class="logo text-left">
                     <h1>
                         <a class="navbar-brand" href="/home">
-                            Shipment</a>
+                            Confidebat</a>
                     </h1>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,12 +54,6 @@ $auth = isset($_SESSION["clientid"]) || isset($_SESSION["userid"]) || isset($_SE
                         <li class="<?= $title == "Home" ? $activenav : $nav ?>">
                             <a class="nav-link" href="/">Home
                             </a>
-                        </li>
-                        <li class="<?= $title == "About Us" ? $activenav : $nav ?>">
-                            <a class="nav-link" href="/about">About</a>
-                        </li>
-                        <li class="<?= $title == "Contact Us" ? $activenav : $nav ?>">
-                            <a class="nav-link" href="/contact">Contact</a>
                         </li>
                         <?php if (!$auth) { ?>
                             <li class="<?= $title == "Login" ? $activenav : $nav ?>">

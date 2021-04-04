@@ -214,3 +214,27 @@ input:disabled {
     text-align: center;
   }
 }
+
+.light-blue {
+  background-color: #a3e1f4 !important;
+  transition: all 0.5s ease-in-out;
+  text-decoration: none !important;
+}
+
+.light-blue:hover {
+  background-color: #56afca !important;
+  transform: scale(0.98);
+  color: #fff !important;
+}
+/* @media (min-width: 768px) {
+  .settings-label {
+    height: calc(100vh - 200px);
+    overflow-y: auto;
+    position: fixed;
+  }
+
+  .settings-main {
+    margin-left: 28% !important;
+    width: 100% !important;
+  }
+} */

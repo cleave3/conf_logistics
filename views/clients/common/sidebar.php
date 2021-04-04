@@ -19,6 +19,12 @@
                     <p>WayBill Package</p>
                 </a>
             </li>
+            <li class="<?= $currentnav == "waybill" ? "active" : "" ?>">
+                <a href="/clients/waybill">
+                    <i class="nc-icon nc-send"></i>
+                    <p>WayBill Requests</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "orders" ? "active" : "" ?>">
                 <a href="/clients/orders">
                     <i class="nc-icon nc-cart-simple"></i>
@@ -41,6 +47,12 @@
                 <a href="/clients/payments">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Payments</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+                <a href="/clients/transactions">
+                    <i class="nc-icon nc-bank"></i>
+                    <p>Transaction History</p>
                 </a>
             </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">

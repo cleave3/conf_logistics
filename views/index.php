@@ -13,21 +13,13 @@ require("includes/header.php");
                     <div class="slide-caption">
                         <p>The right choice</p>
                         <h3>Propel <span>yourself</span> into the future.</h3>
-                        <div class="cont-btn">
-                            <a class="btn text-uppercase" href="contact">
-                                Contact</a>
-                        </div>
 
                     </div>
                 </div>
                 <div class="slide slide2">
                     <div class="slide-caption">
                         <p>Ready to go</p>
-                        <h3>Premium Worldwide <span>Logistics</span> Network </h3>
-                        <div class="cont-btn">
-                            <a class="btn text-uppercase" href="contact">
-                                Contact</a>
-                        </div>
+                        <h3>Premium <span>Delivery</span> Service </h3>
 
                     </div>
                 </div>
@@ -35,10 +27,6 @@ require("includes/header.php");
                     <div class="slide-caption">
                         <p>The right choice.</p>
                         <h3>Propel <span>yourself</span> into the future.</h3>
-                        <div class="cont-btn">
-                            <a class="btn text-uppercase" href="contact">
-                                Contact</a>
-                        </div>
 
                     </div>
                 </div>
@@ -61,14 +49,6 @@ require("includes/header.php");
     </div>
     <!-- end of main image slider container -->
     <!-- banner-text -->
-    <!-- ab -->
-    <section class="container p-2">
-        <h3 class="title text-center mb-md-5 mb-4">How It Works</h3>
-        <div class="flex flex-wrap justify-content-center">
-
-        </div>
-    </section>
-    <!-- //ab -->
     <!-- banner-bottom-w3ls -->
     <section class="banner-bottom-w3ls py-lg-5 py-md-5 py-3">
         <div class="container-fluid">
@@ -77,13 +57,8 @@ require("includes/header.php");
                 </div>
                 <div class="col-lg-6 about-right">
                     <h4>Who We Are</h4>
-                    <h3>We give you complete control of your shipments.</h3>
-                    <p class="my-4">Lorem ipsum dolor sit amet Neque porro quisquam est qui dolorem Lorem int ipsum dolor sit amet when an unknown printer took a galley of type.Vivamus id tempor felis. Cras sagittis mi sit amet malesuada mollis. Mauris porroinit consectetur cursus tortor vel interdum.</p>
-
-                    <div class="log-in mt-md-5 mt-3">
-                        <a class="btn text-uppercase" href="about">
-                            Read More</a>
-                    </div>
+                    <h3>Confidebat Communication Services</h3>
+                    <p class="my-4">Confidebat Communictaion Services is a professional service company that provide you with world class services in e-commerce, product importation and package deliveries </p>
 
                 </div>
             </div>
@@ -101,7 +76,7 @@ require("includes/header.php");
                             <div class="card-body">
                                 <i class="fas fa-archive mb-2"></i>
                                 <h5 class="card-title my-3">Storage</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing.
+                                <p class="card-text">We keep your items until they are ready to be delivered
                                 </p>
                             </div>
                         </div>
@@ -110,8 +85,8 @@ require("includes/header.php");
                         <div class="card">
                             <div class="card-body">
                                 <i class="fas fa-signal mb-2"></i>
-                                <h5 class="card-title my-3">Trucking Services</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing.
+                                <h5 class="card-title my-3">Delivery Services</h5>
+                                <p class="card-text">Super fast product deliveries accross multiple states in Nigeria
                                 </p>
                             </div>
                         </div>
@@ -121,7 +96,7 @@ require("includes/header.php");
                             <div class="card-body">
                                 <i class="fas fa-users mb-2"></i>
                                 <h5 class="card-title my-3">Expert Staff</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing.
+                                <p class="card-text">Our expect staffs ensures that you recieve the best possible service
                                 </p>
                             </div>
                         </div>

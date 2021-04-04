@@ -306,4 +306,22 @@ class ConfigController extends Controller
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
 	}
+
+	public function waybillfee()
+	{
+		try {
+			Auth::checkAuth("userid");
+			$id = $this->body["id"];
+			$fee = Sanitize::integer($this->body["fee"]);
+			$this->update([
+				"tablename" => "states",
+				"fields" => "`waybill_charge`=:fee",
+				"condition" => "id =:id",
+				"bindparam" => [":id" => $id, ":fee" => $fee]
+			]);
+			exit(Response::json(["status" => true, "message" => "waybill fee updated successfully"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
+		}
+	}
 }

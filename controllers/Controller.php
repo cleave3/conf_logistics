@@ -280,7 +280,7 @@ abstract class Controller
      * 
      * ]
      * 
-     * @return array
+     * @return boolean
      */
     public function destroy(array $argument)
     {

@@ -5,6 +5,8 @@ namespace App\controllers;
 
 use App\utils\Session;
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\File;
 use App\utils\Response;
 use App\utils\Sanitize;
@@ -42,7 +44,7 @@ class PackageController extends Controller
 		return $this->findAll([
 			"tablename" => "package A",
 			"condition" => "A.status IN ('sent', 'received') ORDER BY created_at DESC",
-			"fields" => "A.*, B.location, c.companyname, D.telephone",
+			"fields" => "A.*, B.location, C.companyname, D.telephone",
 			"joins" => "LEFT JOIN locations B ON A.destination = B.id INNER JOIN client_profile C ON A.client_id = C.client_id INNER JOIN clients D ON A.client_id = D.id"
 		]);
 	}
@@ -243,7 +245,7 @@ class PackageController extends Controller
 					if ($packageitem) {
 						$quantity = Sanitize::integer($quantities[$i]) ?? $packageitem["quantity"];
 						//update package_item
-						$q = $this->update([
+						$this->update([
 							"tablename" => "package_item",
 							"fields" => "quantity =:quantity",
 							"condition" => "id = :id",
@@ -252,8 +254,7 @@ class PackageController extends Controller
 					}
 				}
 			}
-			// notify client of changes
-			// notify admin of changes
+
 			exit(Response::json(["status" => true, "message" => "changes saved successfully"]));
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
@@ -277,9 +278,13 @@ class PackageController extends Controller
 				"bindparam" => [":status" => "received", ":id" => $packageid]
 			]);
 
+			$client = $this->findOne(["tablename" => "clients", "condition" => "id = :id", "bindparam" => [":id" => $package["client_id"]]]);
+
+			echo Response::json(["status" => true, "message" => "waybill marked as received successfully"]);
+
 			// notify client of changes
-			// notify admin of changes
-			exit(Response::json(["status" => true, "message" => "waybill marked as received successfully"]));
+			$template = EmailTemplate::waybillrecieved();
+			MailService::sendMail($client["email"], "Waybill package recieved", $template);
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -320,9 +325,9 @@ class PackageController extends Controller
 		$id = $this->getClientId();
 		return $this->findAll([
 			"tablename" => "package_item A",
-			"condition" => "B.client_id =:id GROUP BY A.item_id",
-			"joins" => "INNER JOIN package B ON A.package_id = B.id INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id INNER JOIN locations E ON A.location = E.id",
-			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity, B.package_title,B.weight,B.description,B.image,B.status,B.destination,B.driver_number,B.transport_company,B.instructions,C.name,C.unit_cost,C.unit_measure,C.description,D.*, E.state_id as itemstate_id, E.location,E.status, E.amount as waybillfee",
+			"condition" => "C.client_id =:id GROUP BY A.item_id",
+			"joins" => "INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id",
+			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity,C.name,C.unit_cost,C.unit_measure,C.description,D.*",
 			"bindparam" => [":id" => $id]
 		]);
 	}
@@ -333,8 +338,8 @@ class PackageController extends Controller
 		return $this->findAll([
 			"tablename" => "package_item A",
 			"condition" => "1 GROUP BY A.item_id",
-			"joins" => "INNER JOIN package B ON A.package_id = B.id INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id INNER JOIN locations E ON A.location = E.id INNER JOIN clients F ON F.id = B.client_id",
-			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity, B.package_title,B.weight,B.description,B.image,B.status,B.destination,B.driver_number,B.transport_company,B.instructions,C.name,C.unit_cost,C.unit_measure,C.description,D.*, E.state_id as itemstate_id, E.location,E.status, E.amount as waybillfee, F.telephone"
+			"joins" => "INNER JOIN catalog C ON A.item_id = C.id INNER JOIN client_profile D ON C.client_id = D.client_id INNER JOIN clients F ON F.id = C.client_id",
+			"fields" => "DISTINCT A.item_id, A.location, SUM(A.quantity) as quantity,C.name,C.unit_cost,C.unit_measure,C.description,D.*, F.telephone"
 		]);
 	}
 

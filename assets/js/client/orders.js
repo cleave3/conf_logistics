@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   let waybillitems = [];
   const deliveryfee = await getdeliveryfee();
   const itemlist = await getitems();
-  console.log(itemlist);
   let extracharge = 0;
   let waybillfee = 0;
   let bckwaybill = 0;
@@ -36,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (e.target.id === "verifybtn") {
       toastr.confirm("Have you recieved this payment ?", {
-        yes: () => verifyPayment(e.target.getAttribute("data-orderid")),
+        yes: () => verifyPayment(e.target.getAttribute("data-reference")),
       });
     }
   });
@@ -276,10 +275,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  const verifyPayment = async id => {
+  const verifyPayment = async reference => {
     try {
       showLoader();
-      const result = await getRequest(`order/verifypayment?orderid=${id}`);
+      const result = await getRequest(`transaction/verifypayment?reference=${reference}`);
 
       if (result.status) {
         toastr.success(result.message);

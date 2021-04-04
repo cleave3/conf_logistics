@@ -30,17 +30,6 @@ include $base . "common/header.php";
                 <button type="button" class="btn btn-primary btn-sm mx-1" data-toggle="modal" data-target="#orderhistorymodal">
                     <img src="/assets/icons/history.svg" width="15px" height="15px" /> Order history
                 </button>
-                <?php if (!in_array($order["order"]["status"], ["delivered", "intransit", "cancelled"])) { ?>
-                    <button type="button" class="btn btn-danger btn-sm mx-1" id="cancelbtn" data-orderid="<?= $order["order"]["id"] ?>">
-                        <img src="/assets/icons/forbidden.svg" width="15px" height="15px" /> Cancel Order
-                    </button>
-                <?php } ?>
-
-                <?php if (in_array($order["order"]["payment_status"], ["paid"])) { ?>
-                    <button type="button" class="btn btn-transparent btn-sm mx-1" id="verifybtn" data-orderid="<?= $order["order"]["id"] ?>">
-                        <img src="/assets/icons/money.svg" width="15px" height="15px" /> Verify Payment
-                    </button>
-                <?php } ?>
                 <div class="order print-container">
                     <div class="card">
                         <div class="card-header">
