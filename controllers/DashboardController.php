@@ -393,6 +393,15 @@ class DashboardController extends Controller
 		]);
 	}
 
+	public function pendingwaybillrequest()
+	{
+		Auth::checkAuth("userid");
+		return $this->findAll([
+			"tablename" => "waybill",
+			"condition" => "status = 'pending' ORDER BY created_at DESC",
+		]);
+	}
+
 	public function agentDashboardStats()
 	{
 		$agent = new AgentController();

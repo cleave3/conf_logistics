@@ -179,7 +179,7 @@ class TransactionController extends Controller
 		return Http::post("https://api.paystack.co/transfer", $fields, $headers);
 	}
 
-	function finalizeTransfer($otp)
+	protected function finalizeTransfer($otp, $tcode)
 	{
 		Auth::checkAuth("userid");
 		$headers = array(
@@ -188,7 +188,7 @@ class TransactionController extends Controller
 		);
 
 		$fields = [
-			"transfer_code" => "TRF_vsyqdmlzble3uii",
+			"transfer_code" => $tcode,
 			"otp" => $otp
 		];
 
