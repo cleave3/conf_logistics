@@ -9,7 +9,7 @@ $ac = new AuthController();
 $user = $ac->profile();
 $pc = new PublicController();
 $states =  $pc->states()["data"];
-$cities = $pc->cityobject($user["state"])["data"];
+$cities = $pc->cityobject($user["state"]);
 
 $title = "Client Profile";
 $currentnav = "profile";

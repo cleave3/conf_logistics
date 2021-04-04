@@ -3,7 +3,6 @@
 namespace App\controllers;
 
 use App\utils\Response;
-use App\utils\Validator;
 use App\utils\Sanitize;
 use App\middleware\Auth;
 use App\utils\Session;
@@ -142,11 +141,6 @@ class InventoryController extends Controller
 				$data = $this->getInventoryItem($ids[$i]);
 				if ($data["client_id"] !== $clientid) throw new \Exception("You are to allowed to perform this operation");
 
-				// $this->destroy([
-				// 	"tablename" => "catalog",
-				// 	"condition" => "id = :id",
-				// 	"bindparam" => [":id" => $ids[$i]]
-				// ]);
 				$this->update([
 					"tablename" => "catalog",
 					"fields" => "status = :status",

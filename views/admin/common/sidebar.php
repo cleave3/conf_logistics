@@ -25,6 +25,12 @@
                     <p>WayBills</p>
                 </a>
             </li>
+            <li class="<?= $currentnav == "waybill" ? "active" : "" ?>">
+                <a href="/admin/waybillrequests">
+                    <i class="nc-icon nc-send"></i>
+                    <p>WayBill Requests</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "clients" ? "active" : "" ?>">
                 <a href="/admin/clients">
                     <i class="nc-icon nc-satisfied"></i>
@@ -55,8 +61,14 @@
                     <p>Delivery Tasks</p>
                 </a>
             </li>
-            <li class="<?= $currentnav == "payments" ? "active" : "" ?>">
-                <a href="/admin/payments">
+            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+                <a href="/admin/transactions">
+                    <i class="nc-icon nc-bank"></i>
+                    <p>Transactions</p>
+                </a>
+            </li>
+            <li class="<?= $currentnav == "paymentsubmission" ? "active" : "" ?>">
+                <a href="/admin/paymentsubmission">
                     <i class="nc-icon nc-credit-card"></i>
                     <p>Payment Submission</p>
                 </a>

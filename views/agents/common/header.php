@@ -26,21 +26,23 @@
 function determineClass($status)
 {
     switch ($status) {
-        case 'onhand':
-        case 'pending':
-        case 'processing':
-        case 'noresponse':
+        case "onhand":
+        case "pending":
+        case "processing":
+        case "noresponse":
             return "warning";
-        case 'sent':
+        case "sent":
         case "paid":
+        case "confirmed":
         case "submitted":
         case "intransit":
-        case "confirmed":
+        case "reversed":
             return "primary";
         case "recieved":
         case "active":
         case "delivered":
         case "verified":
+        case "complete":
         case "received":
         case "YES":
             return "success";
@@ -49,6 +51,7 @@ function determineClass($status)
         case "inactive":
         case "unpaid":
         case "cancelled":
+        case "reversed":
         case "NO":
             return "danger";
         default:

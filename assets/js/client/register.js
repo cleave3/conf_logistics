@@ -5,8 +5,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   city.innerHTML = await loadcities(state.value);
 
   document.getElementById("clientregisterform").addEventListener("submit", async e => {
-    e.preventDefault();
     try {
+      e.preventDefault();
+      e.currentTarget.classList.add("was-validated");
+      if (!e.target.checkValidity()) return;
       const password = document.getElementById("password").value;
       const cpassword = document.getElementById("cpassword").value;
 

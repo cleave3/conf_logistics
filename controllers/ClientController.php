@@ -66,7 +66,7 @@ class ClientController extends Controller
 			"condition" => "A.id = :id",
 			"bindparam" => [":id" => $id],
 			"fields" => "A.id,A.email,A.telephone,A.profile_complete,A.email_verified,A.status,A.created_at,A.updated_at, B.*,C.bankcode,C.accountnumber,C.accountname, D.bankname ",
-			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id LEFT JOIN client_account C ON A.id = C.client_id INNER JOIN banklist D ON C.bankcode = D.bankcode"
+			"joins" => "INNER JOIN client_profile B ON A.id = B.client_id LEFT JOIN client_account C ON A.id = C.client_id LEFT JOIN banklist D ON C.bankcode = D.bankcode"
 		]);
 	}
 
@@ -83,7 +83,7 @@ class ClientController extends Controller
 	public function register()
 	{
 		try {
-			$id = uniqid("conf-" . rand(10000, 99999) . "-");
+			$id = uniqid("client-" . rand(10000, 99999));
 			$email = Sanitize::string($this->body["email"]);
 			$telephone = Sanitize::string($this->body["telephone"]);
 			$password = Sanitize::string($this->body["password"]);

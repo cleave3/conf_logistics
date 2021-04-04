@@ -3,6 +3,8 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\Response;
 use App\utils\Sanitize;
 
@@ -175,8 +177,19 @@ class OrderController extends Controller
 
 			//register order history
 			$this->addOrderHistory($orderid, "sent", "Order sent");
+
+			echo Response::json(["status" => true, "message" => "Order sent successfully"]);
+
 			//send email here
-			exit(Response::json(["status" => true, "message" => "Order sent successfully"]));
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::neworder();
+					MailService::sendMail($email, "New Order Notification", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -203,8 +216,17 @@ class OrderController extends Controller
 
 			$this->addOrderHistory($orderid, "cancelled", "Order was cancelled by " . $order["companyname"]);
 
+			echo Response::json(["status" => true, "message" => "Order cancelled successfully"]);
 			//send email here
-			exit(Response::json(["status" => true, "message" => "Order cancelled successfully"]));
+			$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+			if (count($emails) > 0) {
+				for ($i = 0; $i < count($emails); $i++) {
+					$email = trim($emails[$i]);
+					$template = EmailTemplate::cancelorder($orderid);
+					MailService::sendMail($email, "New Order Notification", $template);
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -257,7 +279,7 @@ class OrderController extends Controller
 			return $this->findAll([
 				"tablename" => "orders A",
 				"condition" => "A.status =:status AND A.payment_status = :paystatus ORDER BY A.updated_at DESC",
-				"joins" => "LEFT JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
+				"joins" => "INNER JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
 				"fields" => "A.*, B.id as taskid, B.sendpayment,B.sendpayment_status,B.payment_method,B.proof,B.agentpayment, CONCAT(C.firstname,' ',C.lastname) as agent",
 				"bindparam" => [":status" => "delivered", ":paystatus" => $this->query["status"]]
 			]);
@@ -266,7 +288,7 @@ class OrderController extends Controller
 		return $this->findAll([
 			"tablename" => "orders A",
 			"condition" => "A.status =:status ORDER BY A.updated_at DESC",
-			"joins" => "LEFT JOIN tasks B ON A.id = B.order_id LEFT JOIN agents C ON B.agent_id = C.id",
+			"joins" => "INNER JOIN tasks B ON A.id = B.order_id INNER JOIN agents C ON B.agent_id = C.id",
 			"fields" => "A.*, B.id as taskid,B.sendpayment,B.sendpayment_status,B.payment_method,B.proof,B.agentpayment, CONCAT(C.firstname,' ',C.lastname) as agent",
 			"bindparam" => [":status" => "delivered"]
 		]);

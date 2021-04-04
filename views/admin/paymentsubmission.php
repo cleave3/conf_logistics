@@ -4,7 +4,7 @@ use App\controllers\OrderController;
 
 include_once "common/authheader.php";
 $title = "Payment Submission";
-$currentnav = "payments";
+$currentnav = "paymentsubmission";
 $oc = new OrderController();
 $payments = $oc->getAllPayments();
 

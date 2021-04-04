@@ -1,12 +1,13 @@
 <?php
 
-use App\controllers\OrderController;
+use App\controllers\TransactionController;
 
 include_once "common/authheader.php";
 $title = "Payment History";
 $currentnav = "payments";
-$oc = new OrderController();
-$payments = $oc->getClientPayments();
+
+$tc = new TransactionController();
+$payments = $tc->getClienPayments();
 
 include_once "common/header.php";
 ?>
@@ -25,12 +26,12 @@ include_once "common/header.php";
                         <table role="table" id="resulttable" class="table table-sm table-striped table-hover" style="font-size: 13px;">
                             <thead role="rowgroup">
                                 <tr role="row">
-                                    <th>ORDER ID</th>
+                                    <th>S/N</th>
+                                    <th>REFERENCE</th>
                                     <th>AMOUNT</th>
-                                    <th>DELIVERY&nbsp;FEE</th>
-                                    <th>BALANCE</th>
                                     <th>STATUS</th>
-                                    <th>UPDATED&nbsp;AT</th>
+                                    <th>DESCRIPTIOM</th>
+                                    <th>DATE</th>
                                     <th>ACTIONS</th>
                                 </tr>
                             </thead>
@@ -40,28 +41,22 @@ include_once "common/header.php";
                                 foreach ($payments as $payment) {
                                 ?>
                                     <tr role="row">
-                                        <td role="cell" data-label="ORDER ID">
-                                            #<?= $payment["id"] ?>
+                                        <td role="cell" data-label="SN"><?= $sn ?></td>
+                                        <td role="cell" data-label="REFERENCE"><?= strtoupper($payment["reference"]) ?></td>
+                                        <td role="cell" data-label="AMOUNT : "><?= number_format($payment["debit"], 2) ?></td>
+                                        <td class="text-uppercase" role="cell" data-label="STATUS : ">
+                                            <span class="badge badge-<?= determineClass($payment["status"]) ?> p-2"><?= $payment["status"] ?></span>
                                         </td>
-                                        <td role="cell" data-label="AMOUNT : "><?= number_format($payment["totalamount"], 2) ?></td>
-                                        <td role="cell" data-label="DELIVERY FEE : "><?= number_format($payment["delivery_fee"], 2) ?></td>
-                                        <td role="cell" data-label="BALANCE : ">
-                                            <?= number_format(($payment["totalamount"] - $payment["delivery_fee"]), 2) ?>
-                                        </td>
-                                        <td class="text-uppercase" role="cell" data-label="PAYMENT STATUS : ">
-                                            <span class="badge badge-<?= determineClass($payment["payment_status"]) ?> p-2"><?= $payment["payment_status"] ?></span>
-                                        </td>
-                                        <td role="cell" data-label="UPDATED AT : ">
-                                            <?= empty($payment["updated_at"]) ? "never" : date("Y-m-d, H:m:s a", strtotime($payment["updated_at"])) ?>
-                                        </td>
+                                        <td role="cell" data-label="DESCRIPTION : "> <?= $payment["description"] ?> </td>
+                                        <td role="cell" data-label="DATE : "> <?= $payment["created_at"] ?> </td>
                                         <td>
-                                            <?php if ($payment["payment_status"] === "paid") { ?>
-                                                <button type="button" class="btn btn-transparent btn-sm mx-1" id="verifybtn" data-orderid="<?= $payment["id"] ?>">
-                                                    <img src="/assets/icons/money.svg" width="15px" height="15px" /> Verify Payment
+                                            <?php if ($payment["status"] === "complete") { ?>
+                                                <button type="button" class="btn btn-primary btn-sm mx-1" id="verifybtn" data-reference="<?= $payment["reference"] ?>">
+                                                    verify&nbsp;<i class="fas fa-check    "></i>
                                                 </button>
                                             <?php } else { ?>
-                                                <button type="button" class="btn btn-transparent btn-sm mx-1" disabled>
-                                                    <img src="/assets/icons/money.svg" width="15px" height="15px" /> Verify Payment
+                                                <button type="button" class="btn btn-primary btn-sm mx-1" disabled>
+                                                    verify&nbsp;<i class="fas fa-check    "></i>
                                                 </button>
                                             <?php } ?>
                                         </td>

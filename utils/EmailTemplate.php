@@ -73,4 +73,52 @@ class EmailTemplate
     
           <p>Thanks,<br/>Confidebat Team</p>';
   }
+
+  public static function neworder()
+  {
+    return '<h3 style="text-align: center;">A New Order Delivery Request has been recieved</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function cancelorder($id)
+  {
+    return '<h3 style="text-align: center;">Order #' . $id . ' has been cancelled</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function waybillrecieved()
+  {
+    return '<h3 style="text-align: center;">Your waybill pacakage has been recieved</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function deliveredorder($id)
+  {
+    return '<h3 style="text-align: center;">Order #' . $id . ' has been delivered</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function waybillrequest()
+  {
+    return '<h3 style="text-align: center;">Your have a new waybill request</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function task($count)
+  {
+    return '<h3 style="text-align: center;">' . $count . ' Deliveries has been assigned to you</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function waybillsent($destination)
+  {
+    return '<h3 style="text-align: center;">Your items has been sent to ' . $destination . ' as instructed</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
+
+  public static function waybillrequestcancelled($id)
+  {
+    return '<h3 style="text-align: center;">Waybill request with ID - ' . $id . ' has been cancelled by client</h3>
+    <p>Thanks,<br/>Confidebat Team</p>';
+  }
 }

@@ -25,17 +25,19 @@ include_once "common/header.php";
             <div class="content">
                 <h4 class="card-title">SETTINGS</h4>
                 <div class="row">
-                    <div class="col-md-3 col-12">
+                    <div class="col-lg-2 col-md-3 col-12 settings-label">
                         <div class="nav d-flex d-md-block nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                             <a class="nav-link active" id="basic-tab" data-toggle="pill" href="#basic" role="tab" aria-controls="basic" aria-selected="true">Basic Settings</a>
                             <a class="nav-link" id="configuration-tab" data-toggle="pill" href="#configuration" role="tab" aria-controls="configuration" aria-selected="false">Configurations</a>
                             <a class="nav-link" id="pricing-tab" data-toggle="pill" href="#pricing" role="tab" aria-controls="pricing" aria-selected="false">Pricing</a>
-                            <a class="nav-link" id="location-tab" data-toggle="pill" href="#location" role="tab" aria-controls="location" aria-selected="false">Waybill locations</a>
+                            <a class="nav-link" id="location-tab" data-toggle="pill" href="#location" role="tab" aria-controls="location" aria-selected="false">Item locations</a>
+                            <a class="nav-link" id="waybill-tab" data-toggle="pill" href="#waybill" role="tab" aria-controls="waybill" aria-selected="false">Waybill Charges</a>
                         </div>
                     </div>
-                    <div class="col-md-9 col-12" style="/*overflow-y: auto; height: calc(100vh - 100px)*/">
+                    <div class="col-lg-10 col-md-9 col-12 settings-main" style="/*overflow-y: auto; height: calc(100vh - 100px)*/">
                         <div class="tab-content" id="v-pills-tabContent">
                             <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                                <h6 class="text-center">Basic Settings</h6>
                                 <form id="basicsettingsform">
                                     <div class="d-flex justify-content-end">
                                         <button type="submit" class="btn btn-primary m-0" id="savebasics" title="save changes">Save <i class="fa fa-upload" aria-hidden="true"></i></button>
@@ -98,6 +100,8 @@ include_once "common/header.php";
                                 <?php } ?>
                             </div>
                             <div class="tab-pane fade" id="pricing" role="tabpanel" aria-labelledby="pricing-tab">
+                                <h6 class="text-center">Delivery Pricing</h6>
+                                <div class="text-center">Delivery coverage areas and any extra charge (besides the base fee)</div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary m-1" data-toggle="modal" data-target="#addpricingmodal" title="Add new">Add&nbsp;New&nbsp;<i class="fa fa-book"></i></button>
                                 </div>
@@ -138,6 +142,8 @@ include_once "common/header.php";
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
+                                <h6 class="text-center">Item Locations</h6>
+                                <div class="text-center">Office location where items are recieved</div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary m-1" data-toggle="modal" data-target="#addlocationmodal" title="save changes">Add&nbsp;<i class="fa fa-book"></i></button>
                                 </div>
@@ -178,6 +184,21 @@ include_once "common/header.php";
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="waybill" role="tabpanel" aria-labelledby="waybill-tab">
+                                <h6 class="text-center">Waybill Charges</h6>
+                                <div class="text-center">This is used when sellers request that their items be sent to other location</div>
+                                <?php foreach ($states as $state) { ?>
+                                    <form class="form-inline needs-validation" novalidate>
+                                        <div class="form-group w-100">
+                                            <label class="text-left" style="width: 20%;"><?= $state["state"] ?></label>
+                                            <input type="hidden" name="id" value="<?= $state["id"] ?>">
+                                            <input style="width: 70%;" type="number" min="0" name="fee" class="form-control" value="<?= $state["waybill_charge"] ?>" required>
+                                            <button type="submit" class="btn btn-primary">save</button>
+                                        </div>
+                                    </form>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

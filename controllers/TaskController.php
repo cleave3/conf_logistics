@@ -3,6 +3,8 @@
 namespace App\controllers;
 
 use App\middleware\Auth;
+use App\services\MailService;
+use App\utils\EmailTemplate;
 use App\utils\File;
 use App\utils\Response;
 use App\utils\Sanitize;
@@ -114,11 +116,12 @@ class TaskController extends Controller
 
 			if ($submitted === 0) throw new \Exception("No tasks was assigned to agent");
 
-			//send notifcation to agent
-
-
 			$message = "$submitted orders were assigned to agent " . $agent["firstname"] . " " . $agent["lastname"] . " successfully";
-			exit(Response::json(["status" => true, "message" => $message]));
+			echo Response::json(["status" => true, "message" => $message]);
+
+			//send notifcation to agent
+			$template = EmailTemplate::task($submitted);
+			MailService::sendMail($agent["email"], "Delivery Tasks", $template);
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
@@ -130,6 +133,16 @@ class TaskController extends Controller
 		$agentid = Session::get("agentid");
 
 		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.sendpayment_status,B.payment_method,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' ORDER BY B.created_at DESC");
+	}
+
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator, $status = "complete")
+	{
+		return $this->create([
+			"tablename" => "transactions",
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`,`status`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator,:status",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator, ":status" => $status]
+		]);
 	}
 
 	public function updateorderstatus()
@@ -152,19 +165,64 @@ class TaskController extends Controller
 				"bindparam" => [":status" => $status, ":orderid" => $orderid]
 			]);
 
-			$order = new OrderController();
+			$oc = new OrderController();
 
-			$order->addOrderHistory($orderid, $status, "order status was updated to $status");
+			$oc->addOrderHistory($orderid, $status, "order status was updated to $status");
 
 			if ($status === "delivered") {
 				//get order items
+				$orderitems = $this->findAll(["tablename" => "order_items", "condition" => "order_id =:id", "bindparam" => [":id" => $orderid]]);
 
-				//for each order item 
-				// deduct items from package items
+				for ($i = 0; $i < count($orderitems); $i++) {
+					$itemid = $orderitems[$i]["item_id"];
+					$quantity = $orderitems[$i]["quantity"];
+
+					$this->create([
+						"tablename" => "package_item",
+						"fields" => "`item_id`,`quantity`",
+						"values" => ":itemid,:quantity",
+						"bindparam" => [":itemid" => $itemid, ":quantity" => "-" . $quantity]
+					]);
+				}
+
+				// add transaction
+				$type = "delivered_order";
+				$feetype = "delivery_charge";
+				$reference = "CONF/" . date("YmdHms") . "/" . strtoupper($type) . "/" . $order["id"];
+				$feereference = "CONF/" . date("YmdHms") . "/" . strtoupper($feetype) . "/" . $order["id"];
+				$desc = "Delivered order -" . $order["id"];
+				$descf = "Delivery fee for -" . $order["id"];
+
+				//credit total amount of order
+				$this->registerTransaction($order["client_id"], $type, $reference, floatval($order["totalamount"]), 0, $desc, "confidebat_automation");
+
+				//debit delivery fee
+				$this->registerTransaction($order["client_id"], $feetype, $feereference, 0, floatval($order["delivery_fee"]), $descf, "confidebat_automation");
+
 				//notify client when status = delivered
+
 			}
 
-			exit(Response::json(["status" => true, "message" => "order updated successfully"]));
+			echo Response::json(["status" => true, "message" => "order updated successfully"]);
+
+			if ($status === "delivered") {
+				$client = $this->findOne(["tablename" => "clients", "condition" => "id = :id", "bindparam" => [":id" => $orderid]]);
+
+				$template = EmailTemplate::deliveredorder($orderid);
+
+				//send email here
+				MailService::sendMail($client["email"], "Order Delivered", $template);
+
+				$emails = explode(",", $this->config->getConfig("NOTIFICATION EMAILS"));
+
+				if (count($emails) > 0) {
+					for ($i = 0; $i < count($emails); $i++) {
+						$email = trim($emails[$i]);
+						$template = EmailTemplate::deliveredorder($orderid);
+						MailService::sendMail($email, "Order Delivered", $template);
+					}
+				}
+			}
 		} catch (\Exception $error) {
 			exit(Response::json(["status" => false, "message" => $error->getMessage()]));
 		}
