@@ -331,6 +331,25 @@ class TransactionController extends Controller
 		}
 	}
 
+	public function clienttransactions()
+	{
+		try {
+			Auth::checkAuth("clientid");
+			$clientid = Session::get("clientid");
+
+			$status = $this->query["status"] === "all" ? "%" : Sanitize::string($this->query["status"]);
+			$startdate = empty($this->query["startdate"]) ? "2000-01-01 00:00:00" : trim($this->query["startdate"]) . " 00:00:00";
+			$enddate = empty($this->query["enddate"]) ? date("Y-m-d") . " 23:59:59" : trim($this->query["enddate"]) . " 23:59:59";
+			$type = $this->query["type"] === "all" ? "%" : Sanitize::string($this->query["type"]);
+
+			$transactions = $this->exec_query("SELECT * FROM transactions A WHERE status LIKE '%$status%' AND type LIKE '%$type%' AND created_at BETWEEN '$startdate' AND '$enddate' AND entity_id = '$clientid' ORDER BY created_at DESC");
+
+			exit(Response::json(["status" => true, "data" => $transactions, "message" => count($transactions) . " results found for search"]));
+		} catch (\Exception $error) {
+			exit(Response::json(["status" => false, "data" => [], "message" => $error->getMessage()]));
+		}
+	}
+
 	public function payments()
 	{
 		try {

@@ -49,6 +49,12 @@
                     <p>Payments</p>
                 </a>
             </li>
+            <li class="<?= $currentnav == "transactions" ? "active" : "" ?>">
+                <a href="/clients/transactions">
+                    <i class="nc-icon nc-bank"></i>
+                    <p>Transaction History</p>
+                </a>
+            </li>
             <li class="<?= $currentnav == "profile" ? "active" : "" ?>">
                 <a href="/clients/profile">
                     <i class="nc-icon nc-circle-10"></i>
