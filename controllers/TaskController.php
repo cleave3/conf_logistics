@@ -132,6 +132,16 @@ class TaskController extends Controller
 		return $this->exec_query("SELECT A.customer,A.telephone as customertelephone,A.address as deliveryaddress, A.totalamount,A.delivery_fee,A.status as orderstatus,A.description,A.id as order_id,B.id,B.agentfee,B.sendpayment,B.agentpayment,B.sendpayment_status,B.payment_method,B.created_at,B.updated_at, C.state, D.city, E.telephone as sellertelephone, F.companyname as seller, (SELECT CONCAT(firstname, ' ', lastname) FROM users WHERE id = B.user_id) assigner, (SELECT CONCAT(firstname,' ', lastname) FROM agents WHERE id = B.agent_id) as assignee FROM `orders` A INNER JOIN tasks B ON A.id = B.order_id INNER JOIN states C ON A.state_id = C.id INNER JOIN cities D ON A.city_id = D.id INNER JOIN clients E ON A.client_id = E.id INNER JOIN client_profile F ON A.client_id = F.client_id WHERE B.agent_id = '$agentid' ORDER BY B.created_at DESC");
 	}
 
+	protected function registerTransaction($entityid, $type, $reference, $credit, $debit, $description, $initiator, $status = "complete")
+	{
+		return $this->create([
+			"tablename" => "transactions",
+			"fields" => " `entity_id`, `type`, `reference`, `credit`, `debit`, `description`,`initiator`,`status`",
+			"values" => ":entityid,:type,:reference,:credit,:debit,:description,:initiator,:status",
+			"bindparam" => [":entityid" => $entityid, ":type" => $type, ":reference" => $reference, ":credit" => $credit, ":debit" => $debit, ":description" => $description, ":initiator" => $initiator, ":status" => $status]
+		]);
+	}
+
 	public function updateorderstatus()
 	{
 		try {
@@ -171,6 +181,21 @@ class TaskController extends Controller
 						"bindparam" => [":itemid" => $itemid, ":quantity" => "-" . $quantity]
 					]);
 				}
+
+				// add transaction
+				$type = "delivered_order";
+				$feetype = "delivery_charge";
+				$reference = $reference = "CONF/" . date("YmdHms") . "/" . strtoupper($type) . "/" . $order["id"];
+				$feereference = $reference = "CONF/" . date("YmdHms") . "/" . strtoupper($feetype) . "/" . $order["id"];
+				$desc = "Delivered order -" . $order["id"];
+				$descf = "Delivery fee for -" . $order["id"];
+
+				//credit total amount of order
+				$this->registerTransaction($order["client_id"], $type, $reference, floatval($order["totalamount"]), 0, $desc, "confidebat_automation");
+
+				//debit delivery fee
+				$this->registerTransaction($order["client_id"], $feetype, $feereference, 0, floatval($order["delivery_fee"]), $descf, "confidebat_automation");
+
 				//notify client when status = delivered
 			}
 
