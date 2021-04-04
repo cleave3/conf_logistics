@@ -18,22 +18,20 @@ include_once "common/header.php";
             <div class="content">
                 <h3>DASHBOARD</h3>
                 <div class="row">
-                    <!--payments -->
+                    <!--Entities -->
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="card card-stats">
                             <div class="card-body ">
                                 <div class="row">
                                     <div class="col-5 col-md-4">
                                         <div class="icon-big text-center icon-warning">
-                                            <i class="nc-icon nc-money-coins text-success"></i>
+                                            <i class="nc-icon nc-single-02 text-dark"></i>
                                         </div>
                                     </div>
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
-                                            <p class="card-category">Verified Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["verifiedpayments"]) ?>
-                                            <p>
-                                            <p class="card-title"><?= $stats["verifiedpaymentscount"] ?>
+                                            <p class="card-category">Total Users</p>
+                                            <p class="card-title"><?= number_format($stats["totalusers"]) ?>
                                             <p>
                                         </div>
                                     </div>
@@ -42,7 +40,7 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments?status=verified">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/users">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -53,15 +51,13 @@ include_once "common/header.php";
                                 <div class="row">
                                     <div class="col-5 col-md-4">
                                         <div class="icon-big text-center icon-warning">
-                                            <i class="nc-icon nc-money-coins text-primary"></i>
+                                            <i class="nc-icon nc-satisfied text-dark"></i>
                                         </div>
                                     </div>
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
-                                            <p class="card-category">Unverified Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["paidpayments"]) ?>
-                                            <p>
-                                            <p class="card-title"><?= $stats["paidpaymentscount"] ?>
+                                            <p class="card-category">Total Clients</p>
+                                            <p class="card-title"><?= number_format($stats["totalclients"]) ?>
                                             <p>
                                         </div>
                                     </div>
@@ -70,7 +66,7 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments?status=paid">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/clients">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -81,15 +77,13 @@ include_once "common/header.php";
                                 <div class="row">
                                     <div class="col-5 col-md-4">
                                         <div class="icon-big text-center icon-warning">
-                                            <i class="nc-icon nc-money-coins text-danger"></i>
+                                            <i class="nc-icon nc-user-run text-dark"></i>
                                         </div>
                                     </div>
                                     <div class="col-7 col-md-8">
                                         <div class="numbers">
-                                            <p class="card-category">Unpaid Payments</p>
-                                            <p class="card-title">₦ <?= number_format($stats["unpaidpayments"]) ?>
-                                            <p>
-                                            <p class="card-title"><?= $stats["unpaidpaymentscount"] ?>
+                                            <p class="card-category">Total Agents</p>
+                                            <p class="card-title"><?= number_format($stats["totalagents"]) ?>
                                             <p>
                                         </div>
                                     </div>
@@ -98,13 +92,12 @@ include_once "common/header.php";
                             <div class="card-footer ">
                                 <hr>
                                 <div class="stats">
-                                    <a class="text-muted" href="/admin/payments?status=unpaid">See details &rarr;</a>
+                                    <a class="text-muted" href="/admin/agents">See details &rarr;</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!--payments -->
+                    <!--Entities -->
                     <!-- Orders -->
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="card card-stats">

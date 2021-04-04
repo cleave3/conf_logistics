@@ -4,7 +4,6 @@ namespace App\controllers;
 
 use App\middleware\Auth;
 use App\utils\Response;
-use CURLFile;
 
 class DashboardController extends Controller
 {
@@ -185,17 +184,14 @@ class DashboardController extends Controller
 			"intransitwaybills" => $this->waybillcountbystaus("sent"),
 			"pendingwaybills" => $this->waybillcountbystaus("pending"),
 			"recievedwaybills" => $this->waybillcountbystaus("received"),
-			"unpaidpayments" => $this->paymentsamountbystatus("unpaid"),
-			"paidpayments" => $this->paymentsamountbystatus("paid"),
-			"verifiedpayments" => $this->paymentsamountbystatus("verified"),
-			"unpaidpaymentscount" => $this->paymentscountbystatus("unpaid"),
-			"paidpaymentscount" => $this->paymentscountbystatus("paid"),
-			"verifiedpaymentscount" => $this->paymentscountbystatus("verified"),
 			"period" => $this->periodrange(),
 			"total" => $this->totaltask(),
 			"totalcompleted" => $this->completedtaskcount(),
 			"totaluncompleted" => $this->uncompletedtaskcount(),
-			"uncompleted" => $this->uncompletedtask()
+			"uncompleted" => $this->uncompletedtask(),
+			"totalusers" => $this->getCount(["tablename" => "users"]),
+			"totalclients" => $this->getCount(["tablename" => "clients"]),
+			"totalagents" => $this->getCount(["tablename" => "agents"])
 		];
 	}
 
